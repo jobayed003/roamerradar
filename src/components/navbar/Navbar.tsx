@@ -1,16 +1,15 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import { Bell, User2 } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { User2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ThemeToggle } from '../ThemeToggler';
 import { Separator } from '../ui/separator';
-import Dropdown from './Dropdown';
+import LanguageDropdown from './LanguageDropdown';
+import NotificationDropdown from './NotificationDropdown';
+import OptionDropdown from './OptionDropdown';
 
 const Navbar = () => {
-  const { theme } = useTheme();
   return (
     <nav className='flex items-center justify-between w-full h-[80px] max-w-7xl mx-auto gap-x-8'>
       <div className='flex space-x-6 items-center'>
@@ -24,24 +23,24 @@ const Navbar = () => {
         <div className='h-8'>
           <Separator orientation='vertical' className='' />
         </div>
-        <Dropdown />
+        <OptionDropdown />
       </div>
       <div className='flex items-center space-x-6 justify-end'>
         <Link
           href={'/support'}
-          className={cn(
-            ' text-sm font-bold text-[#777E90] hover:text-black',
-            theme === 'dark' && 'text-[#777E90] hover:text-white'
-          )}
+          className={'text-sm font-bold text-[--text-primary] hover:text-black dark:hover:text-white'}
         >
           Support
         </Link>
 
-        <p>Language</p>
+        <LanguageDropdown />
 
-        <Bell />
+        <NotificationDropdown />
 
-        <User2 />
+        <div className='bg-green-500 p-2 rounded-full cursor-pointer'>
+          <User2 className='text-white' />
+        </div>
+
         <ThemeToggle />
       </div>
     </nav>
