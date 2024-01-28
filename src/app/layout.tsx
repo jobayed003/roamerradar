@@ -1,4 +1,5 @@
 import Navbar from '@/components/navbar/Navbar';
+import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/providers/theme-provider';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -18,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={inter.className}>
+      <body className={cn('max-w-7xl mx-auto', inter.className)}>
         <ThemeProvider attribute='class' defaultTheme='dark'>
           <Navbar />
           {children}

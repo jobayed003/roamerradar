@@ -31,18 +31,17 @@ const LANGUAGES = [
 
 type LanguageProps = {
   ref: Ref<HTMLDivElement> | undefined;
-  className?: string;
+
   language: string;
   onSelect: (value: string) => void;
 };
 
-const Language = ({ ref, className, language, onSelect }: LanguageProps) => {
+const Language = ({ ref, language, onSelect }: LanguageProps) => {
   return (
     <motion.div
-      className={cn(
-        'text-black w-[200px] p-4 absolute top-10 left-[-60px] right-0 items-start justify-start gap-y-4 rounded-2xl transition duration-200 dark:bg-[#141416] dark:text-white dark:hover:text-white shadow-lg  dark:bg-gradient-to-t from-[#23262F] to-[rgba(35, 38, 47, .7)]',
-        className
-      )}
+      className={
+        'text-black w-[200px] p-4 absolute top-10 left-[-60px] right-0 items-start justify-start gap-y-4 rounded-2xl transition duration-200 bg-white dark:text-white dark:hover:text-white shadow-lg dark:bg-transparent dark:bg-gradient-to-r from-[#23262F] to-[rgba(35, 38, 47, 0.7)] z-10'
+      }
       initial={{ y: 10 }}
       animate={{ y: 0 }}
       transition={{ duration: 0, ease: 'circIn' }}

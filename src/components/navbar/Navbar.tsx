@@ -5,13 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ThemeToggle } from '../ThemeToggler';
 import { Separator } from '../ui/separator';
-import LanguageDropdown from './LanguageDropdown';
 import NotificationDropdown from './NotificationDropdown';
 import OptionDropdown from './OptionDropdown';
 
 const Navbar = () => {
   return (
-    <nav className='flex items-center justify-between w-full h-[80px] max-w-7xl mx-auto gap-x-8'>
+    <nav className='flex items-center justify-between w-full h-[80px]  gap-x-8'>
       <div className='flex space-x-6 items-center'>
         <Link href={'/'}>
           <div className='flex items-center justify-center'>
@@ -33,7 +32,7 @@ const Navbar = () => {
           Support
         </Link>
 
-        <LanguageDropdown />
+        {/* <LanguageDropdown /> */}
 
         <NotificationDropdown />
 

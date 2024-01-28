@@ -30,19 +30,18 @@ export default OptionDropdown;
 const ITEMS = [
   { href: '/', icon: <Home />, label: 'Stays' },
   { href: '/flights', icon: <Plane />, label: 'Flights' },
-  { href: '/things', icon: <Medal />, label: 'Things to do' },
   { href: '/cars', icon: <CarIcon />, label: 'Cars' },
+  { href: '/things', icon: <Medal />, label: 'Things to do' },
 ];
 
-const Options = ({ ref, className }: { ref: Ref<HTMLDivElement> | undefined; className?: string }) => {
+const Options = ({ ref }: { ref: Ref<HTMLDivElement> | undefined }) => {
   const pathname = usePathname();
 
   return (
     <motion.div
-      className={cn(
-        'text-black bg-white w-[250px] p-4 absolute top-10 left-[-80px] right-0 flex-col items-start justify-start gap-y-4 rounded-2xl transition duration-200  dark:bg-[#141416] dark:text-[--text-primary] dark:hover:text-white shadow-lg',
-        className
-      )}
+      className={
+        'text-black bg-white w-[280px] p-4 absolute top-10 left-[-80px] right-0 flex-col items-start justify-start gap-y-4 rounded-2xl transition duration-200  dark:bg-[#141416] dark:text-[--text-primary] dark:hover:text-white shadow-lg z-10'
+      }
       ref={ref}
       initial={{ y: 10 }}
       animate={{ y: 0 }}
