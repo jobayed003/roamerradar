@@ -1,6 +1,6 @@
 'use client';
 
-import { DatePickerWithRange } from '@/components/ui/date-range';
+import { DatePickerWithRange } from '@/components/DatePicker';
 
 const Flights = () => {
   return (

@@ -12,7 +12,7 @@ const Panel = ({ children, className }: PanelProps) => {
   return (
     <div
       className={cn(
-        'absolute w-auto h-[200px] max-h-[200px] mx-20 z-40 bottom-0 left-0 right-0 bg-white dark:bg-[#23262F] rounded-3xl'
+        'absolute w-auto max-h-auto mx-20 z-40 bottom-0 left-0 right-0 bg-white dark:bg-[#23262F] rounded-3xl'
       )}
     >
       {children}

@@ -2,10 +2,10 @@ import Navbar from '@/components/navbar/Navbar';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/providers/theme-provider';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const poppins = Poppins({ subsets: ['latin'], weight: ['100', '200', '300', '400', '500', '600', '700'] });
 
 export const metadata: Metadata = {
   title: 'RoamerRadar',
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={cn('max-w-7xl mx-auto', inter.className)}>
+      <body className={cn('max-w-7xl mx-auto', poppins.className)}>
         <ThemeProvider attribute='class' defaultTheme='dark'>
           <Navbar />
           {children}

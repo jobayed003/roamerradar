@@ -1,10 +1,12 @@
+'use client';
+
 import Panel from '@/components/Panel';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { LINKS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 
 export default function Landing({
@@ -32,7 +34,11 @@ export default function Landing({
           <h1 className='font-bold text-8xl text-wrap text-ellipsis text-[#23262F] w-[600px]'>{heading}</h1>
           <p className='font-medium text-2xl text-[#23262F]'>Find and book a great experience</p>
 
-          <Button variant={'primary'} size={'lg'} className='rounded-full text-md text-white hover:bg-blue-800'>
+          <Button
+            variant={'primary'}
+            size={'lg'}
+            className='rounded-full text-md text-white hover:bg-[#0142eb] transition'
+          >
             Start Your Search
           </Button>
         </div>
@@ -41,8 +47,6 @@ export default function Landing({
         <Panel>
           <div className='flex flex-col p-10 space-y-6'>
             <Values />
-            <Separator className='bg-slate-200 dark:bg-gray-700' />
-
             {children}
           </div>
         </Panel>
@@ -52,11 +56,24 @@ export default function Landing({
 }
 
 const Values = () => {
+  const pathname = usePathname();
+
   return (
-    <div className='flex items-center space-x-10'>
+    <div className={'flex items-center space-x-10 drop-shadow-2xl shadow-3xl'}>
       {LINKS.map((value) => (
-        <Link href={value.href} key={value.label}>
-          <div className={cn('text-muted-foreground hover:text-foreground font-medium text-sm')}>{value.label}</div>
+        <Link
+          href={value.href}
+          key={value.label}
+          className={cn('pb-7', pathname === value.href && 'border-b border-black dark:border-white')}
+        >
+          <div
+            className={cn(
+              'text-muted-foreground hover:text-foreground font-medium text-sm',
+              pathname === value.href && 'text-foreground '
+            )}
+          >
+            {value.label}
+          </div>
         </Link>
       ))}
     </div>
