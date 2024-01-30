@@ -25,7 +25,7 @@ export default function Landing({
       <div className='relative h-[calc(100vh-80px)] w-full'>
         <div
           className={cn(
-            'min-h-[85vh] w-full absolute flex flex-col items-start text-[#23262F] p-20 pt-24 line space-y-6 flex-shrink',
+            'lg:h-[90%] w-full absolute flex flex-col items-start text-[#23262F] p-20 pt-24 line space-y-6 flex-shrink',
             className
           )}
         >
@@ -51,6 +51,8 @@ export default function Landing({
           </div>
         </Panel>
       </div>
+
+      <h1 className='h-[100vh]'>Hlw</h1>
     </>
   );
 }

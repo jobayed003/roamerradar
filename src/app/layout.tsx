@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={cn('max-w-7xl mx-auto', poppins.className)}>
+      <body className={cn('lg:max-w-7xl mx-auto', poppins.className)}>
         <ThemeProvider attribute='class' defaultTheme='dark'>
           <Navbar />
           {children}
@@ -28,3 +28,4 @@ export default function RootLayout({
     </html>
   );
 }
+//  2xl:max-w-[80%]
