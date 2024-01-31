@@ -28,4 +28,3 @@ export default function RootLayout({
     </html>
   );
 }
-//  2xl:max-w-[80%]

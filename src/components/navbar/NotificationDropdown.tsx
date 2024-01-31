@@ -32,7 +32,7 @@ const Notifications = ({ ref }: NotificationProps) => {
   return (
     <motion.div
       className={
-        'text-black bg-white w-[350px] p-6 absolute top-14 left-[-13rem] right-20 items-start justify-start gap-y-4 rounded-2xl transition duration-200  dark:text-white dark:hover:text-white shadow-lg dark:bg-gradient'
+        'text-black  w-[350px] p-6 absolute top-14 left-[-13rem] right-20 items-start justify-start gap-y-4 rounded-2xl transition duration-200  dark:text-white dark:hover:text-white shadow-lg dark:bg-gradient'
       }
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

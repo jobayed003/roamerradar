@@ -4,20 +4,20 @@ import { DatePickerWithRange } from '@/components/DatePicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { addDays, format } from 'date-fns';
-import { CalendarRange, Navigation } from 'lucide-react';
+import { format } from 'date-fns';
+import { CalendarRange, Navigation, User2 } from 'lucide-react';
 import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 
 const Stays = () => {
   const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(Date.now()),
-    to: addDays(new Date(2025, 0, 20), 20),
+    from: undefined,
+    to: undefined,
   });
 
   return (
-    <div className='flex p-4 px-10  flex-wrap'>
-      <div className='flex flex-col justify-center'>
+    <div className='flex p-4 px-10 space-x-8'>
+      <div className='flex flex-col justify-center w-[25%] '>
         <div className='relative'>
           <Input
             className={cn(
@@ -30,11 +30,11 @@ const Stays = () => {
 
         <p className='text-muted-foreground'>Where are you going?</p>
       </div>
-      <div className='flex flex-col justify-center'>
+      <div className='flex flex-col justify-center flex-grow'>
         {/* @ts-ignore */}
         <DatePickerWithRange setDate={setDate} date={date}>
-          <div className='grid grid-cols-2 gap-x-8 '>
-            <div className='flex flex-col items-start col-span-1'>
+          <div className='grid grid-cols-2'>
+            <div className='flex flex-col items-start '>
               <div className='flex items-center'>
                 <CalendarRange className='hidden lg:block w-6 h-6 text-muted-foreground font-bold' />
                 <Button
@@ -45,7 +45,7 @@ const Stays = () => {
                     !date && 'text-muted-foreground'
                   )}
                 >
-                  {date?.from && format(date?.from, 'LLL dd, y')}
+                  {date?.from ? format(date?.from, 'LLL dd, y') : 'Check in'}
                 </Button>
               </div>
               <p className='ml-10 text-muted-foreground'>Add date</p>
@@ -62,13 +62,29 @@ const Stays = () => {
                     !date && 'text-muted-foreground'
                   )}
                 >
-                  {date?.to && format(date?.to, 'LLL dd, y')}
+                  {date?.to ? format(date?.to, 'LLL dd, y') : 'Check out'}
                 </Button>
               </div>
               <p className='ml-10 text-muted-foreground'>Add date</p>
             </div>
           </div>
         </DatePickerWithRange>
+      </div>
+
+      <div className='flex grow-0'>
+        <div className='flex flex-col items-start'>
+          <div className='flex items-center'>
+            <User2 className='hidden lg:block w-6 h-6 text-muted-foreground font-bold' />
+            <Button
+              id='date'
+              variant={'transparent'}
+              className={cn('w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent text-2xl')}
+            >
+              Travelers
+            </Button>
+          </div>
+          <p className='ml-10 text-muted-foreground'>Travelers</p>
+        </div>
       </div>
     </div>
   );

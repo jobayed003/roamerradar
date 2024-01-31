@@ -15,6 +15,7 @@ const config = {
     extend: {
       backgroundImage: {
         gradient: 'linear-gradient(92.98deg, #23262F 3.54%, rgba(35, 38, 47, 0.7) 93.38%)',
+        gradient_light: 'linear-gradient(83.59deg, #FCFCFD 36.52%, rgba(252, 252, 253, 0.83) 98.8%)',
       },
       boxShadow: {
         '3xl': 'inset 0 -1px 0 0 rgba(119, 126, 144, 0.3)',
