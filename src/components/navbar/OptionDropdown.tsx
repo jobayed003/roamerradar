@@ -1,6 +1,6 @@
 import Dropdown from '@/components/ui/dropdown';
 import { cn } from '@/lib/utils';
-import { useOptionStore } from '@/store/useOptionsStore';
+import { useOptionStore } from '@/stores/useOptionsStore';
 import { motion } from 'framer-motion';
 import { CarIcon, ChevronDown, Home, Medal, Plane } from 'lucide-react';
 import Link from 'next/link';

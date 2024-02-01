@@ -1,22 +1,17 @@
 'use client';
 
 import * as React from 'react';
-import { DateRange } from 'react-day-picker';
 
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { useBookingDate } from '@/stores/useData';
 
-export const DatePickerWithRange = ({
-  className,
-  children,
-  date,
-  setDate,
-}: React.HTMLAttributes<HTMLDivElement> & {
-  date: { from: Date | undefined; to: Date | undefined };
-  setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
-}) => {
+export const DatePickerWithRange = ({ className, children }: React.HTMLAttributes<HTMLDivElement> & {}) => {
   const [isMounted, setIsMounted] = React.useState(false);
+
+  const date = useBookingDate((state) => state.date);
+  const setBookingDate = useBookingDate((state) => state.setBookingDate);
 
   React.useEffect(() => {
     setIsMounted(true);
@@ -34,7 +29,7 @@ export const DatePickerWithRange = ({
             mode='range'
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={setBookingDate}
             numberOfMonths={2}
           />
         </PopoverContent>

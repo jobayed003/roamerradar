@@ -1,5 +1,5 @@
 import Dropdown from '@/components/ui/dropdown';
-import { useNotificationStore } from '@/store/useNotificationStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import { motion } from 'framer-motion';
 import { Bell } from 'lucide-react';
 import { Ref, useRef } from 'react';
