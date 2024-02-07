@@ -7,17 +7,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { useBookingDate } from '@/stores/useData';
 
-export const DatePickerWithRange = ({ className, children }: React.HTMLAttributes<HTMLDivElement> & {}) => {
-  const [isMounted, setIsMounted] = React.useState(false);
-
+export const DateRangePicker = ({ className, children }: React.HTMLAttributes<HTMLDivElement>) => {
   const date = useBookingDate((state) => state.date);
   const setBookingDate = useBookingDate((state) => state.setBookingDate);
-
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
 
   return (
     <div className={cn('grid gap-2', className)}>

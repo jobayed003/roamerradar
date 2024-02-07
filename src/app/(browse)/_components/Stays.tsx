@@ -1,6 +1,6 @@
 'use client';
 
-import { DatePickerWithRange } from '@/components/DatePicker';
+import { DateRangePicker } from '@/components/DatePicker';
 import Guests from '@/components/Guests';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,16 +8,23 @@ import { cn } from '@/lib/utils';
 import { useBookingDate, useStaysStore } from '@/stores/useData';
 import { format } from 'date-fns';
 import { CalendarRange, Navigation, Search, User2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Stays = () => {
+  const [isMounted, setIsMounted] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
   const { location, setLocation } = useStaysStore();
   const { date } = useBookingDate();
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
+
   return (
-    <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 p-5 items-center'>
+    <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 px-5 pb-2 items-center'>
       <div className='w-[90%]'>
         <div className='flex items-start gap-x-4'>
           <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
@@ -30,10 +37,10 @@ const Stays = () => {
             onChange={(e) => setLocation(e.target.value)}
           />
         </div>
-        <p className='ml-10 text-nowrap text-muted-foreground'>Where are you going?</p>
+        <p className='ml-9 text-nowrap text-muted-foreground'>Where are you going?</p>
       </div>
 
-      <DatePickerWithRange className='col-span-2'>
+      <DateRangePicker className='col-span-2'>
         <div className='grid grid-cols-2'>
           <div className='flex flex-col items-start'>
             <div className='flex items-center'>
@@ -69,12 +76,12 @@ const Stays = () => {
             <p className='ml-10 text-muted-foreground'>Add date</p>
           </div>
         </div>
-      </DatePickerWithRange>
+      </DateRangePicker>
       <Guests>
         <div
           onClick={() => setIsClicked(!isClicked)}
           className={cn(
-            'relative cursor-pointer md:col-span-1 col-span-2 rounded-2xl p-4',
+            'relative cursor-pointer md:col-span-1 col-span-2 rounded-2xl lg:p-4',
             isClicked && 'lg:bg-[#141416]'
           )}
         >

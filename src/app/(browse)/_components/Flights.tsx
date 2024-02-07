@@ -1,6 +1,6 @@
 'use client';
 
-import { DatePickerWithRange } from '@/components/DatePicker';
+import { DateRangePicker } from '@/components/DatePicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -42,7 +42,7 @@ const Flights = () => {
       </div>
       <div className='flex flex-col justify-center'>
         {/* @ts-ignore */}
-        <DatePickerWithRange className='col-span-2'>
+        <DateRangePicker className='col-span-2'>
           <div className='grid grid-cols-2'>
             <div className='flex flex-col items-start '>
               <div className='flex items-center'>
@@ -78,7 +78,7 @@ const Flights = () => {
               <p className='ml-10 text-muted-foreground'>Add date</p>
             </div>
           </div>
-        </DatePickerWithRange>
+        </DateRangePicker>
       </div>
 
       <div className='flex relative px-8 mr-6'>
