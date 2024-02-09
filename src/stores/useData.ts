@@ -48,5 +48,6 @@ type FlightsStore = {
 export const useFlightStore = create<FlightsStore>((set) => ({
   flyingFrom: '',
   flyingTo: '',
+
   setLocations: (field, value) => set(() => ({ [field]: value })),
 }));
