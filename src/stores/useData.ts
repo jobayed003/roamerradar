@@ -1,5 +1,6 @@
 import { DateRange } from 'react-day-picker';
 import { create } from 'zustand';
+import { TripOptions } from '../../types';
 
 type TravelersStore = {
   adults: number;
@@ -9,9 +10,10 @@ type TravelersStore = {
 };
 
 export const useTravelers = create<TravelersStore>((set) => ({
-  adults: 0,
+  adults: 1,
   children: 0,
   toddlers: 0,
+
   setTravelers: (field, value) => set(() => ({ [field]: value })),
 }));
 
@@ -41,13 +43,17 @@ export const useStaysStore = create<StaysStore>((set) => ({
 type FlightsStore = {
   flyingFrom: string;
   flyingTo: string;
+  tripType: TripOptions;
 
+  setTripType: (value: TripOptions) => void;
   setLocations: (field: keyof Omit<FlightsStore, 'setLocations' | keyof BookingDate>, value: string) => void;
 };
 
 export const useFlightStore = create<FlightsStore>((set) => ({
   flyingFrom: '',
   flyingTo: '',
+  tripType: TripOptions.ROUND,
 
+  setTripType: (value) => set(() => ({ tripType: value })),
   setLocations: (field, value) => set(() => ({ [field]: value })),
 }));
