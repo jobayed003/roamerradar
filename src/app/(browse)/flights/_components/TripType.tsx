@@ -36,7 +36,7 @@ export const TripType = () => {
       </Button>
       <Guests>
         <Button variant={'transparent'} className='rounded-full border-2 border-[#E6E8EC] dark:border-[#777e90]'>
-          {totalTravelers} Guests
+          {totalTravelers} Travelers
         </Button>
       </Guests>
     </div>

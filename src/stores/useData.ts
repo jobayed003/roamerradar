@@ -6,7 +6,7 @@ type TravelersStore = {
   adults: number;
   children: number;
   toddlers: number;
-  setTravelers: (field: keyof Omit<TravelersStore, 'setTravelers'>, value: number) => void;
+  setTravelers: (field: keyof Omit<TravelersStore, 'setTravelers'>, type: string) => void;
 };
 
 export const useTravelers = create<TravelersStore>((set) => ({
@@ -14,7 +14,8 @@ export const useTravelers = create<TravelersStore>((set) => ({
   children: 0,
   toddlers: 0,
 
-  setTravelers: (field, value) => set(() => ({ [field]: value })),
+  setTravelers: (field, type) =>
+    set((state) => ({ [field]: type === 'INC' ? state[field] + 1 : type === 'DEC' && state[field] - 1 })),
 }));
 
 type BookingDate = {
@@ -27,6 +28,7 @@ export const useBookingDate = create<BookingDate>((set) => ({
     from: undefined,
     to: undefined,
   },
+
   setBookingDate: (range: DateRange | undefined) => set(() => ({ date: range })),
 }));
 
