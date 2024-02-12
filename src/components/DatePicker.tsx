@@ -10,11 +10,11 @@ import { useBookingDate } from '@/stores/useData';
 export const DateRangePicker = ({
   className,
   children,
-  isOneway,
+  isRange,
 }: {
   children: React.ReactNode;
   className: string;
-  isOneway: boolean;
+  isRange?: boolean;
 }) => {
   const date = useBookingDate((state) => state.date);
   const setBookingDate = useBookingDate((state) => state.setBookingDate);
@@ -24,17 +24,7 @@ export const DateRangePicker = ({
       <Popover>
         <PopoverTrigger>{children}</PopoverTrigger>
         <PopoverContent className='w-auto p-0' align='start'>
-          {isOneway && (
-            <Calendar
-              initialFocus
-              mode={'single'}
-              defaultMonth={date?.from}
-              selected={date?.from}
-              onSelect={(selectedDate) => setBookingDate({ from: selectedDate, to: undefined })}
-              numberOfMonths={1}
-            />
-          )}
-          {!isOneway && (
+          {isRange && (
             <Calendar
               initialFocus
               mode={'range'}
@@ -42,6 +32,16 @@ export const DateRangePicker = ({
               selected={date}
               onSelect={setBookingDate}
               numberOfMonths={2}
+            />
+          )}
+          {!isRange && (
+            <Calendar
+              initialFocus
+              mode={'single'}
+              defaultMonth={date?.from}
+              selected={date?.from}
+              onSelect={(selectedDate) => setBookingDate({ from: selectedDate, to: undefined })}
+              numberOfMonths={1}
             />
           )}
         </PopoverContent>

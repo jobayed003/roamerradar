@@ -48,7 +48,7 @@ type FlightsStore = {
   tripType: TripOptions;
 
   setTripType: (value: TripOptions) => void;
-  setLocations: (field: keyof Omit<FlightsStore, 'setLocations' | keyof BookingDate>, value: string) => void;
+  setLocations: (field: keyof Omit<FlightsStore, 'setLocations' | 'setTripType' | 'tripType'>, value: string) => void;
 };
 
 export const useFlightStore = create<FlightsStore>((set) => ({
@@ -58,4 +58,30 @@ export const useFlightStore = create<FlightsStore>((set) => ({
 
   setTripType: (value) => set(() => ({ tripType: value })),
   setLocations: (field, value) => set(() => ({ [field]: value })),
+}));
+
+type CarStore = {
+  pickupLocation: string;
+  returnLocation: string;
+  setLocations: (field: keyof Omit<CarStore, 'setLocations'>, value: string) => void;
+};
+
+export const useCarStore = create<CarStore>((set) => ({
+  pickupLocation: '',
+  returnLocation: '',
+
+  setLocations: (field, value) => set(() => ({ [field]: value })),
+}));
+
+type ThingsStore = {
+  location: string;
+  date: Date | undefined;
+  setValues: ({ location, date }: { location?: string; date?: Date }) => void;
+};
+
+export const useThingsStore = create<ThingsStore>((set) => ({
+  location: '',
+  date: undefined,
+
+  setValues: ({ location, date }) => set(() => ({ location, date })),
 }));

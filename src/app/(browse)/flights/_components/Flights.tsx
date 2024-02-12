@@ -8,7 +8,7 @@ import { useBookingDate, useFlightStore } from '@/stores/useData';
 import { format } from 'date-fns';
 import { CalendarRange, MapPin, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { TripOptions } from '../../../../types';
+import { TripOptions } from '../../../../../types';
 
 const Flights = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -20,8 +20,9 @@ const Flights = () => {
   const isOneWay = tripType === TripOptions.ONEWAY;
 
   useEffect(() => {
+    isOneWay && setBookingDate({ to: undefined, from: date?.from });
     setIsMounted(true);
-  }, []);
+  }, [isOneWay]);
 
   if (!isMounted) return null;
 
@@ -57,7 +58,7 @@ const Flights = () => {
         <p className='ml-9 text-nowrap text-muted-foreground'>Going to</p>
       </div>
 
-      <DateRangePicker className='col-span-2' isOneway={isOneWay}>
+      <DateRangePicker className='col-span-2' isRange={!isOneWay}>
         <div className='grid grid-cols-2'>
           <div className='flex flex-col items-start '>
             <div className='flex items-center'>
@@ -95,7 +96,7 @@ const Flights = () => {
       </DateRangePicker>
 
       <div className='lg:absolute right-0 top-2 rounded-full bg-blue-600 lg:p-5 p-3 cursor-pointer text-center lg:w-auto w-full col-span-2'>
-        <Search className='hidden lg:inline h-5 w-5 text-white' />
+        <Search className='hidden lg:inline h-5 w-6 text-white' />
         <h1 className='lg:hidden'>Search</h1>
       </div>
     </div>

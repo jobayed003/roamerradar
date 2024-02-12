@@ -1,17 +1,47 @@
 'use client';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 import { useTravelers } from '@/stores/useData';
-import { MinusCircle, PlusCircle } from 'lucide-react';
-import { ReactNode } from 'react';
+import { MinusCircle, PlusCircle, User2 } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from './ui/button';
 
-const Guests = ({ children }: { children: ReactNode }) => {
+const Guests = ({ children }: { children?: React.ReactNode }) => {
+  const [isClicked, setIsClicked] = useState(false);
+
   const { setTravelers, adults, children: child, toddlers } = useTravelers();
 
   return (
     <Popover>
-      <PopoverTrigger>{children}</PopoverTrigger>
+      <PopoverTrigger>
+        {!children && (
+          <div
+            onClick={() => setIsClicked(!isClicked)}
+            className={cn(
+              'relative cursor-pointer md:col-span-1 col-span-2 rounded-2xl lg:p-4',
+              isClicked && 'lg:bg-[#141416]'
+            )}
+          >
+            <div className='flex flex-col items-start'>
+              <div className='flex items-center '>
+                <User2 className='block w-6 h-6 text-muted-foreground font-bold' />
+                <Button
+                  id='date'
+                  variant={'transparent'}
+                  className={cn(
+                    'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent text-2xl'
+                  )}
+                >
+                  Travelers
+                </Button>
+              </div>
+              <p className='ml-10 text-muted-foreground'>Travelers</p>
+            </div>
+          </div>
+        )}
+        {children}
+      </PopoverTrigger>
       <PopoverContent className='w-[400px] p-4'>
         <div className='flex flex-col p-5 gap-y-8 px-4'>
           <div className='flex justify-between pb-2 border-b'>

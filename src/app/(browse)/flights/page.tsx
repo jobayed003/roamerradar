@@ -1,5 +1,5 @@
 import Landing from '@/components/landing';
-import Flights from '../_components/Flights';
+import Flights from './_components/Flights';
 import TripType from './_components/TripType';
 
 const FlightPage = () => {

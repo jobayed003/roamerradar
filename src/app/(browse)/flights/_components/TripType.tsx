@@ -17,7 +17,7 @@ export const TripType = () => {
         variant={tripType === TripOptions.ROUND ? 'default' : 'transparent'}
         className={cn(
           'rounded-full border-2 border-[#E6E8EC] dark:border-[#777e90]',
-          tripType === TripOptions.ROUND && 'border-none'
+          tripType === TripOptions.ROUND && 'border-transparent'
         )}
         onClick={() => setTripType(TripOptions.ROUND)}
       >
@@ -28,7 +28,7 @@ export const TripType = () => {
         className={cn(
           'rounded-full border-2 border-[#E6E8EC] dark:border-[#777e90]',
 
-          tripType === TripOptions.ONEWAY && 'border-none'
+          tripType === TripOptions.ONEWAY && 'border-transparent'
         )}
         onClick={() => setTripType(TripOptions.ONEWAY)}
       >
