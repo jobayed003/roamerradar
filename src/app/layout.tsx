@@ -9,7 +9,7 @@ const poppins = Poppins({ subsets: ['latin'], weight: ['100', '200', '300', '400
 
 export const metadata: Metadata = {
   title: 'RoamerRadar',
-  description: 'A travel guide app for booking hotels, flights and exploring places.',
+  description: 'A travel guide app for booking hotels, flights , renting cars and exploring places.',
 };
 
 export default function RootLayout({
@@ -22,7 +22,6 @@ export default function RootLayout({
       <body className={cn('lg:max-w-7xl mx-auto', poppins.className)}>
         <ThemeProvider attribute='class' defaultTheme='dark'>
           <Navbar />
-
           {children}
         </ThemeProvider>
       </body>

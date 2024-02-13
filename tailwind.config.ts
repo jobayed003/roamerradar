@@ -19,7 +19,7 @@ const config = {
       },
       boxShadow: {
         '3xl': 'inset 0 -1px 0 0 rgba(119, 126, 144, 0.3)',
-        custom_inner: '0 0 0 2px #E6E8EC dark:#777e90 inset',
+        custom: '0px 32px 32px 0 rgba(15, 15, 15, 0.08)',
       },
       colors: {
         border: 'hsl(var(--border))',

@@ -23,7 +23,7 @@ const Stays = () => {
   if (!isMounted) return null;
 
   return (
-    <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 px-5 pb-2 items-center relative'>
+    <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 pr-2 pl-4 pb-2 items-center relative'>
       <div className='w-[90%]'>
         <div className='flex items-start gap-x-4'>
           <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
