@@ -4,10 +4,12 @@ import { cn } from '@/lib/utils';
 export const CarouselProvider = ({
   children,
   buttonClasses,
+  className,
   options,
 }: {
   children: React.ReactNode;
   buttonClasses?: string;
+  className?: string;
   options?: any;
 }) => {
   return (
@@ -15,9 +17,11 @@ export const CarouselProvider = ({
       opts={{
         align: 'start',
         loop: true,
+        slidesToScroll: 1,
+        containScroll: 'trimSnaps',
         ...options,
       }}
-      className='w-full max-w-sm'
+      className={cn('', className)}
     >
       <CarouselContent className='-ml-1'>{children}</CarouselContent>
       <div className={cn('flex items-center gap-x-4 justify-center mt-5', buttonClasses)}>

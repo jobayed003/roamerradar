@@ -3,6 +3,8 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/providers/theme-provider';
 import type { Metadata } from 'next';
 import { DM_Sans, Poppins } from 'next/font/google';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 import './globals.css';
 
 const poppins = Poppins({
