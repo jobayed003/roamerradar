@@ -5,7 +5,7 @@ import Guests from '@/components/Guests';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { useThingsStore } from '@/stores/useData';
+import { useBookingDate, useThingsStore } from '@/stores/useData';
 import { format } from 'date-fns';
 import { CalendarRange, Navigation, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,8 @@ import { useEffect, useState } from 'react';
 const Things = () => {
   const [isMounted, setIsMounted] = useState(false);
 
-  const { location, date, setValues } = useThingsStore();
+  const { location, setValues } = useThingsStore();
+  const { date } = useBookingDate();
 
   useEffect(() => {
     setIsMounted(true);
@@ -28,7 +29,7 @@ const Things = () => {
           <Navigation className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
           <Input
             className={cn(
-              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] lg:text-2xl text-lg px-0 border-0'
+              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] lg:text-2xl text-lg px-0 border-0 text-foreground'
             )}
             placeholder='Location'
             value={location}
@@ -49,7 +50,7 @@ const Things = () => {
                 'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent lg:text-2xl text-lg'
               }
             >
-              {date ? format(date, 'LLL dd, y') : 'Date'}
+              {date?.from ? format(date?.from, 'LLL dd, y') : 'Date'}
             </Button>
           </div>
           <p className='ml-10 text-muted-foreground'>Add date</p>
@@ -66,43 +67,3 @@ const Things = () => {
 };
 
 export default Things;
-
-// <div className='flex items-center justify-between px-5 w-full'>
-//   <div>
-//     <div className='flex items-start gap-x-4'>
-//       <Navigation className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
-//       <Input
-//         className={cn(
-//           'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0'
-//         )}
-//         placeholder='Location'
-//         value={location}
-//         onChange={(e) => setValues({ location: e.target.value })}
-//       />
-//     </div>
-//     <p className='ml-9 text-nowrap text-muted-foreground'>Where are you going?</p>
-//   </div>
-//   <DateRangePicker className=''>
-//     <div className='flex flex-col items-start'>
-//       <div className='flex items-center'>
-//         <CalendarRange className='w-6 h-6 text-muted-foreground font-bold' />
-//         <Button
-//           id='date'
-//           variant={'transparent'}
-//           className={
-//             'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent  md:text-2xl text-lg'
-//           }
-//         >
-//           {date ? format(date, 'LLL dd, y') : 'Date'}
-//         </Button>
-//       </div>
-//       <p className='ml-10 text-muted-foreground'>Add date</p>
-//     </div>
-//   </DateRangePicker>
-//   <div className='flex items-center'>
-//     <Guests />
-//     <div className='rounded-full bg-blue-600 p-5 cursor-pointer text-center'>
-//       <Search className='h-6 w-6 text-white' />
-//     </div>
-//   </div>
-// </div>

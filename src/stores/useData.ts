@@ -75,13 +75,10 @@ export const useCarStore = create<CarStore>((set) => ({
 
 type ThingsStore = {
   location: string;
-  date: Date | undefined;
-  setValues: ({ location, date }: { location?: string; date?: Date }) => void;
+  setValues: ({ location }: { location?: string }) => void;
 };
 
 export const useThingsStore = create<ThingsStore>((set) => ({
   location: '',
-  date: undefined,
-
-  setValues: ({ location, date }) => set(() => ({ location, date })),
+  setValues: ({ location }) => set(() => ({ location })),
 }));

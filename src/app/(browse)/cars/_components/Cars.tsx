@@ -46,9 +46,9 @@ const Cars = () => {
           <div className='flex items-start gap-x-4'>
             <MapPin className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
             <Input
-              className={cn(
-                'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0'
-              )}
+              className={
+                'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0 text-foreground'
+              }
               placeholder='Pickup'
               value={pickupLocation}
               onChange={(e) => setLocations('pickupLocation', e.target.value)}
@@ -62,7 +62,7 @@ const Cars = () => {
             <MapPin className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
             <Input
               className={cn(
-                'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0'
+                'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0 text-foreground'
               )}
               placeholder='Return'
               value={!isSameLocation ? returnLocation : pickupLocation}
@@ -81,7 +81,7 @@ const Cars = () => {
                   id='date'
                   variant={'transparent'}
                   className={
-                    'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent  md:text-2xl text-lg'
+                    'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent md:text-2xl text-lg'
                   }
                 >
                   {date?.from ? format(date.from, 'LLL dd, y') : 'Check in'}

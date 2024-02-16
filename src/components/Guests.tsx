@@ -12,9 +12,8 @@ const Guests = ({ children }: { children?: React.ReactNode }) => {
   const [isClicked, setIsClicked] = useState(false);
   const ref = useRef(null);
   useOnClickOutside(ref, () => setIsClicked(false));
-
   const values = useTravelers();
-
+  const totalTravelers = values.adults + values.children + values.toddlers;
   return (
     <Popover>
       <PopoverTrigger ref={ref}>
@@ -22,7 +21,7 @@ const Guests = ({ children }: { children?: React.ReactNode }) => {
           <div
             onClick={() => setIsClicked(!isClicked)}
             className={cn(
-              'relative cursor-pointer md:col-span-1 col-span-2 rounded-2xl lg:p-4 ',
+              'relative cursor-pointer md:col-span-1 col-span-2 rounded-2xl lg:-ml-4 lg:p-4 lg:pr-20',
               isClicked && 'shadow-custom dark:shadow-none dark:lg:bg-[#141416]'
             )}
           >
@@ -36,7 +35,7 @@ const Guests = ({ children }: { children?: React.ReactNode }) => {
                     'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent md:text-2xl text-lg'
                   )}
                 >
-                  Travelers
+                  {totalTravelers} Travelers
                 </Button>
               </div>
               <p className='ml-10 text-muted-foreground'>Travelers</p>

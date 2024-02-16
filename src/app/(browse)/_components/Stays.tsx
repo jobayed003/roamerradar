@@ -23,13 +23,13 @@ const Stays = () => {
   if (!isMounted) return null;
 
   return (
-    <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 pr-2 pl-4 pb-2 items-center relative'>
+    <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 pr-1 pl-4 pb-2 items-center relative'>
       <div className='w-[90%]'>
         <div className='flex items-start gap-x-4'>
           <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
           <Input
             className={cn(
-              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0'
+              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0 text-foreground'
             )}
             placeholder='Location'
             value={location}
@@ -47,10 +47,9 @@ const Stays = () => {
               <Button
                 id='date'
                 variant={'transparent'}
-                className={cn(
-                  'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent text-2xl',
-                  !date && 'text-muted-foreground'
-                )}
+                className={
+                  'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent md:text-2xl text-lg'
+                }
               >
                 {date?.from ? format(date.from, 'LLL dd, y') : 'Check in'}
               </Button>
@@ -64,10 +63,9 @@ const Stays = () => {
               <Button
                 id='date'
                 variant={'transparent'}
-                className={cn(
-                  'w-auto bg-transparent justify-start text-left hover:bg-transparent text-2xl font-[600]',
-                  !date && 'text-muted-foreground'
-                )}
+                className={
+                  'w-auto bg-transparent justify-start text-left hover:bg-transparent font-[600] md:text-2xl text-lg'
+                }
               >
                 {date?.to ? format(date?.to, 'LLL dd, y') : 'Check out'}
               </Button>
@@ -76,7 +74,9 @@ const Stays = () => {
           </div>
         </div>
       </DateRangePicker>
-      <Guests />
+      <div className=''>
+        <Guests />
+      </div>
       <div className='lg:absolute right-4 top-4 rounded-full bg-blue-600 lg:p-5 p-3 cursor-pointer text-center lg:w-auto w-full col-span-2'>
         <Search className='hidden lg:inline h-5 w-6 text-white' />
         <h1 className='lg:hidden'>Search</h1>

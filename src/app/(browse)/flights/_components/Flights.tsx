@@ -33,7 +33,7 @@ const Flights = () => {
           <MapPin className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
           <Input
             className={cn(
-              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0'
+              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0 text-foreground'
             )}
             placeholder='Flying From'
             value={flyingFrom}
@@ -48,7 +48,7 @@ const Flights = () => {
           <MapPin className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
           <Input
             className={cn(
-              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0'
+              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0 text-foreground'
             )}
             placeholder='Flying to'
             value={flyingTo}

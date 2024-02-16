@@ -21,7 +21,7 @@ export const CarouselProvider = ({
         containScroll: 'trimSnaps',
         ...options,
       }}
-      className={cn('', className)}
+      className={cn('w-full', className)}
     >
       <CarouselContent className='-ml-1'>{children}</CarouselContent>
       <div className={cn('flex items-center gap-x-4 justify-center mt-5', buttonClasses)}>
