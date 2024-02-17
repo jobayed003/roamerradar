@@ -1,12 +1,13 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { ReactNode } from 'react';
+import CTAButton from '../CTAButton';
 import Panel from '../Panel';
 import { Places } from './Places';
 import { Routes } from './Routes';
+import Travel from './Travel';
 
 export default function Landing({
   img,
@@ -40,18 +41,11 @@ export default function Landing({
         </h1>
         <p className='font-medium lg:text-2xl md:text-xl text-lg text-[#23262F]'>Find and book a great experience</p>
 
-        <Button
-          variant={'primary'}
-          size={'lg'}
-          className='rounded-full text-md text-white hover:bg-[#0142eb] transition'
-        >
-          Start Your Search
-        </Button>
+        <CTAButton />
       </div>
 
-      <div>
-        <Places />
-      </div>
+      <Places />
+      <Travel />
     </div>
   );
 }
