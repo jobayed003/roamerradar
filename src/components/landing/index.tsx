@@ -8,6 +8,7 @@ import Panel from '../Panel';
 import { Places } from './Places';
 import { Routes } from './Routes';
 import Travel from './Travel';
+import Work from './Work';
 
 export default function Landing({
   img,
@@ -46,6 +47,7 @@ export default function Landing({
 
       <Places />
       <Travel />
+      <Work />
     </div>
   );
 }

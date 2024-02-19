@@ -15,7 +15,7 @@ const Travel = () => {
         </p>
       </div>
 
-      <div className='grid lg:grid-cols-2 grid-rows-2 md:gap-x-8 gap-y-8'>
+      <div className='grid lg:grid-cols-2 lg:grid-rows-1 grid-rows-2 md:gap-x-8 gap-y-8'>
         <div className='flex flex-col lg:justify-between justify-evenly lg:gap-y-5'>
           <div className='flex flex-col gap-y-5'>
             <span className='w-max px-2.5 rounded-full text-white text-md font-[500] bg-[#8BC5E5]'>01</span>
