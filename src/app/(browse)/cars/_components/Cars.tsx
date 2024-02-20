@@ -17,11 +17,11 @@ const Cars = () => {
 
   return (
     <div>
-      <div className='flex items-center gap-x-4 p-4 pt-2'>
+      <div className='flex items-center flex-wrap gap-y-4 gap-x-4 p-4 pt-2'>
         <Button
           variant={isSameLocation ? 'default' : 'transparent'}
           className={cn(
-            'rounded-full border-2 border-[#E6E8EC]  dark:border-[#777e90]  transition-all',
+            'rounded-full border-2 border-[#E6E8EC]  dark:border-[#777e90] transition-all sm:w-auto w-full',
             isSameLocation && 'border-transparent'
           )}
           onClick={() => setIsSameLocation(true)}
@@ -32,7 +32,7 @@ const Cars = () => {
         <Button
           variant={!isSameLocation ? 'default' : 'transparent'}
           className={cn(
-            'rounded-full border-2 border-[#E6E8EC] dark:border-[#777e90] transition-all',
+            'rounded-full border-2 border-[#E6E8EC] dark:border-[#777e90] transition-all sm:w-auto w-full',
             !isSameLocation && 'border-transparent'
           )}
           onClick={() => setIsSameLocation(false)}
@@ -41,7 +41,7 @@ const Cars = () => {
         </Button>
       </div>
 
-      <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 px-5 pb-2 items-center relative'>
+      <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 sm:px-5 pb-2 items-center relative'>
         <div className='w-[90%] lg:col-span-1 col-span-2'>
           <div className='flex items-start gap-x-4'>
             <MapPin className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
@@ -108,8 +108,8 @@ const Cars = () => {
           </div>
         </DateRangePicker>
 
-        <div className='lg:absolute right-0 top-2 rounded-full bg-blue-600 lg:p-5 p-3 cursor-pointer text-center lg:w-auto w-full col-span-2'>
-          <Search className='hidden lg:inline h-5 w-5 text-white' />
+        <div className='lg:absolute right-0 top-2 rounded-full bg-blue-600 lg:p-5 p-3 cursor-pointer text-center lg:w-auto w-full col-span-2 text-white'>
+          <Search className='hidden lg:inline h-5 w-5' />
           <h1 className='lg:hidden'>Search</h1>
         </div>
       </div>

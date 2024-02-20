@@ -12,11 +12,11 @@ export const TripType = () => {
 
   const totalTravelers = adults + children + toddlers;
   return (
-    <div className='flex items-center gap-x-4 p-4 pt-2'>
+    <div className='flex items-center md:gap-x-4 gap-x-1 md:p-4 pt-2 flex-wrap gap-y-4'>
       <Button
         variant={tripType === TripOptions.ROUND ? 'default' : 'transparent'}
         className={cn(
-          'rounded-full border-2 border-[#E6E8EC] dark:border-[#777e90]',
+          'rounded-full border-2 border-[#E6E8EC] dark:border-[#777e90] md:text-md text-xs',
           tripType === TripOptions.ROUND && 'border-transparent'
         )}
         onClick={() => setTripType(TripOptions.ROUND)}
@@ -26,8 +26,7 @@ export const TripType = () => {
       <Button
         variant={tripType === TripOptions.ONEWAY ? 'default' : 'transparent'}
         className={cn(
-          'rounded-full border-2 border-[#E6E8EC] dark:border-[#777e90]',
-
+          'rounded-full border-2 border-[#E6E8EC] dark:border-[#777e90] md:text-md text-xs',
           tripType === TripOptions.ONEWAY && 'border-transparent'
         )}
         onClick={() => setTripType(TripOptions.ONEWAY)}
