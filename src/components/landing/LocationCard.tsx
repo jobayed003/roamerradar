@@ -1,3 +1,4 @@
+import { addDays, format } from 'date-fns';
 import Image from 'next/image';
 
 type LocationCardProps = {
@@ -7,11 +8,12 @@ type LocationCardProps = {
   price: number;
   offerPrice: number;
   rating: number;
-  fromDate: number;
-  toDate: number;
+  availableDate: Date;
 };
 
-const LocationCard = ({ name, location, img, price, offerPrice, rating, fromDate, toDate }: LocationCardProps) => {
+const LocationCard = ({ name, location, img, price, offerPrice, rating, availableDate }: LocationCardProps) => {
+  const fromPlusDay = addDays(availableDate, 3);
+
   return (
     <div className='rounded-xl pb-8 bg-[#FCFCFD] dark:bg-[#23262F] shadow-sm'>
       <Image src={img} width={250} height={300} alt='location img' className='rounded-t-xl' />
@@ -28,7 +30,9 @@ const LocationCard = ({ name, location, img, price, offerPrice, rating, fromDate
       </div>
 
       <div className='flex justify-between pt-4 mx-4 border-t border-[#E6E8EC] dark:border-[#353945] text-xs text-[--text-primary]'>
-        <span>{fromDate}</span>-<span>{toDate}</span>
+        <p>
+          {format(availableDate, 'LLL dd, y')} - {format(fromPlusDay, 'LLL dd, y')}
+        </p>
         <p className='text-foreground font-semibold'>⭐{rating}</p>
       </div>
     </div>
