@@ -19,6 +19,7 @@ const config = {
       },
       boxShadow: {
         '3xl': 'inset 0 -1px 0 0 rgba(119, 126, 144, 0.3)',
+
         custom: '0px 32px 32px 0 rgba(15, 15, 15, 0.08)',
         active: 'inset 2px 0 0 #3B71FE',
       },

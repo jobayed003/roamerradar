@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import CTAButton from '../CTAButton';
 import Panel from '../Panel';
 import Live from './Live';
+import Locations from './Locations';
 import { Places } from './Places';
 import { Routes } from './Routes';
 import Travel from './Travel';
@@ -50,6 +51,8 @@ export default function Landing({
       <Travel />
       <Work />
       <Live />
+
+      <Locations />
     </div>
   );
 }

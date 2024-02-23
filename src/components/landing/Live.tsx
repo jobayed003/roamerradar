@@ -19,7 +19,7 @@ const Live = () => {
 
       <div className='flex flex-wrap justify-center items-center gap-x-8 gap-y-12'>
         {DETAILS.map((item) => (
-          <LiveItem key={item.img} title={item.title} img={item.img} content={item.content} />
+          <LiveItem key={item.img} {...item} />
         ))}
       </div>
     </div>
