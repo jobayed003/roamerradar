@@ -1,5 +1,6 @@
 import { addDays, format } from 'date-fns';
 import Image from 'next/image';
+import { useMediaQuery } from 'usehooks-ts';
 
 type LocationCardProps = {
   name: string;
@@ -12,11 +13,13 @@ type LocationCardProps = {
 };
 
 const LocationCard = ({ name, location, img, price, offerPrice, rating, availableDate }: LocationCardProps) => {
+  const matches = useMediaQuery('(max-width: 1024px)');
+
   const fromPlusDay = addDays(availableDate, 3);
 
   return (
     <div className='rounded-xl pb-8 bg-[#FCFCFD] dark:bg-[#23262F] shadow-sm'>
-      <Image src={img} width={250} height={300} alt='location img' className='rounded-t-xl' />
+      <Image src={img} width={matches ? 280 : 250} height={300} alt='location img' className='rounded-t-xl' />
       <div className='flex justify-between p-4'>
         <div>
           <h1 className='font-medium'>{name}</h1>

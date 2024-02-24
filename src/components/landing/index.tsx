@@ -53,6 +53,9 @@ export default function Landing({
       <Live />
 
       <Locations />
+      {/* 
+      <div className='mt-32 pb-32'>plan</div>
+      <div className=''>plan</div> */}
     </div>
   );
 }
