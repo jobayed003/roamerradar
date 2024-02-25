@@ -1,4 +1,5 @@
-import { addDays, format } from 'date-fns';
+import { dateFormat } from '@/lib/utils';
+import { addDays } from 'date-fns';
 import Image from 'next/image';
 import { useMediaQuery } from 'usehooks-ts';
 
@@ -34,7 +35,7 @@ const LocationCard = ({ name, location, img, price, offerPrice, rating, availabl
 
       <div className='flex justify-between pt-4 mx-4 border-t border-[#E6E8EC] dark:border-[#353945] text-xs text-[--text-primary]'>
         <p>
-          {format(availableDate, 'LLL dd, y')} - {format(fromPlusDay, 'LLL dd, y')}
+          {dateFormat(availableDate)} - {dateFormat(fromPlusDay)}
         </p>
         <p className='text-foreground font-semibold'>⭐{rating}</p>
       </div>

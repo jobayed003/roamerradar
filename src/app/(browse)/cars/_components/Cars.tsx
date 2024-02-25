@@ -3,9 +3,8 @@
 import { DateRangePicker } from '@/components/DatePicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useCarStore } from '@/stores/useData';
-import { format } from 'date-fns';
 import { CalendarRange, MapPin, Search } from 'lucide-react';
 import { useState } from 'react';
 
@@ -84,7 +83,7 @@ const Cars = () => {
                     'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent md:text-2xl text-lg'
                   }
                 >
-                  {date?.from ? format(date.from, 'LLL dd, y') : 'Check in'}
+                  {date?.from ? dateFormat(date.from) : 'Check in'}
                 </Button>
               </div>
               <p className='ml-10 text-muted-foreground'>Add date</p>
@@ -100,7 +99,7 @@ const Cars = () => {
                     'w-auto bg-transparent justify-start text-left hover:bg-transparent md:text-2xl text-lg  font-[600]'
                   }
                 >
-                  {date?.to ? format(date?.to, 'LLL dd, y') : 'Check out'}
+                  {date?.to ? dateFormat(date.to) : 'Check out'}
                 </Button>
               </div>
               <p className='ml-10 text-muted-foreground'>Add date</p>

@@ -4,9 +4,8 @@ import { DateRangePicker } from '@/components/DatePicker';
 import Guests from '@/components/Guests';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useThingsStore } from '@/stores/useData';
-import { format } from 'date-fns';
 import { CalendarRange, Navigation, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -50,7 +49,7 @@ const Things = () => {
                 'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent lg:text-2xl text-lg'
               }
             >
-              {date?.from ? format(date?.from, 'LLL dd, y') : 'Date'}
+              {date?.from ? dateFormat(date?.from) : 'Date'}
             </Button>
           </div>
           <p className='ml-10 text-muted-foreground'>Add date</p>

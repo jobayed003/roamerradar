@@ -27,6 +27,7 @@ export const DateRangePicker = ({
           {isRange && (
             <Calendar
               initialFocus
+              disabled={{ before: new Date() }}
               mode={'range'}
               defaultMonth={date?.from}
               selected={date}
@@ -38,6 +39,7 @@ export const DateRangePicker = ({
             <Calendar
               initialFocus
               mode={'single'}
+              disabled={{ before: new Date() }}
               defaultMonth={date?.from}
               selected={date?.from}
               onSelect={(selectedDate) => setBookingDate({ from: selectedDate, to: undefined })}

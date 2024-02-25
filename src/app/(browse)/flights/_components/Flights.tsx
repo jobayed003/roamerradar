@@ -3,7 +3,7 @@
 import { DateRangePicker } from '@/components/DatePicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useFlightStore } from '@/stores/useData';
 import { format } from 'date-fns';
 import { CalendarRange, MapPin, Search } from 'lucide-react';
@@ -70,7 +70,7 @@ const Flights = () => {
                   'w-auto bg-transparent justify-start text-left font-[600] hover:bg-transparent  md:text-2xl text-lg'
                 }
               >
-                {date?.from ? format(date.from, 'LLL dd, y') : 'Departure'}
+                {date?.from ? dateFormat(date?.from) : 'Departure'}
               </Button>
             </div>
             <p className='ml-10 text-muted-foreground'>Departure</p>
@@ -87,7 +87,7 @@ const Flights = () => {
                 }
                 disabled={tripType === TripOptions.ONEWAY}
               >
-                {date?.to ? format(date?.to, 'LLL dd, y') : 'Return'}
+                {date?.to ? dateFormat(date?.to) : 'Return'}
               </Button>
             </div>
             <p className='ml-10 text-muted-foreground'>Return</p>
