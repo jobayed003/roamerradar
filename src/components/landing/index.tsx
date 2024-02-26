@@ -7,6 +7,7 @@ import CTAButton from '../CTAButton';
 import Panel from '../Panel';
 import Live from './Live';
 import Locations from './Locations';
+import Nearby from './Nearby';
 import { Places } from './Places';
 import { Routes } from './Routes';
 import Travel from './Travel';
@@ -53,6 +54,8 @@ export default function Landing({
       <Live />
 
       <Locations />
+
+      <Nearby />
       {/* 
       <div className='mt-32 pb-32'>plan</div>
       <div className=''>plan</div> */}
