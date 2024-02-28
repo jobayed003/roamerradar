@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useThingsStore } from '@/stores/useData';
 import { CalendarRange, Navigation, Search } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const Things = () => {
@@ -58,9 +59,12 @@ const Things = () => {
 
       <Guests />
 
-      <div className='absolute right-7 lg:top-4 top-[10.4rem] rounded-full bg-blue-600 p-5 cursor-pointer text-center'>
+      <Link
+        href={'/category'}
+        className='absolute right-7 lg:top-4 top-[10.4rem] rounded-full bg-blue-600 p-5 cursor-pointer text-center'
+      >
         <Search className='h-6 w-6 text-white' />
-      </div>
+      </Link>
     </div>
   );
 };

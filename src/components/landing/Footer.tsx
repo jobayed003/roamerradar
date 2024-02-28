@@ -21,18 +21,18 @@ const Footer = () => {
               key={route.href}
               className='text-[--text-primary] hover:text-[#E6E8EC] font-bold text-sm transition'
             >
-              <div>{route.label}</div>
+              {route.label}
             </Link>
           ))}
           <Link href={'/support'} className='text-[--text-primary] hover:text-[#E6E8EC] font-bold text-sm transition'>
-            <div>Support</div>
+            Support
           </Link>
         </div>
       </div>
       <Separator />
 
-      <div className='text-[--text-primary] text-xs my-4'>
-        Copyright © {new Date().getFullYear()}. All rights reserved
+      <div className='text-[--text-primary] text-xs my-4 font-poppins'>
+        Copyright © {new Date().getFullYear()} RoamerRadar. All rights reserved
       </div>
     </div>
   );

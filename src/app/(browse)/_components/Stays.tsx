@@ -2,11 +2,12 @@
 
 import { DateRangePicker } from '@/components/DatePicker';
 import Guests from '@/components/Guests';
+import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useStaysStore } from '@/stores/useData';
-import { CalendarRange, Navigation, Search } from 'lucide-react';
+import { CalendarRange, Navigation } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const Stays = () => {
@@ -76,10 +77,8 @@ const Stays = () => {
       <div className=''>
         <Guests />
       </div>
-      <div className='lg:absolute right-4 top-4 rounded-full bg-blue-600 lg:p-5 p-3 cursor-pointer text-center lg:w-auto w-full col-span-2 text-white'>
-        <Search className='hidden lg:inline h-5 w-6' />
-        <h1 className='lg:hidden'>Search</h1>
-      </div>
+
+      <SearchIcon className='top-4' link='/stays-category' />
     </div>
   );
 };

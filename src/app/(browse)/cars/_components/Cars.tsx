@@ -1,11 +1,12 @@
 'use client';
 
 import { DateRangePicker } from '@/components/DatePicker';
+import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useCarStore } from '@/stores/useData';
-import { CalendarRange, MapPin, Search } from 'lucide-react';
+import { CalendarRange, MapPin } from 'lucide-react';
 import { useState } from 'react';
 
 const Cars = () => {
@@ -107,10 +108,7 @@ const Cars = () => {
           </div>
         </DateRangePicker>
 
-        <div className='lg:absolute right-0 top-2 rounded-full bg-blue-600 lg:p-5 p-3 cursor-pointer text-center lg:w-auto w-full col-span-2 text-white'>
-          <Search className='hidden lg:inline h-5 w-5' />
-          <h1 className='lg:hidden'>Search</h1>
-        </div>
+        <SearchIcon className='top-1 -right-2' link='/cars-category' />
       </div>
     </div>
   );
