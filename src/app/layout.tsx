@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={cn('lg:max-w-7xl mx-auto', poppins.variable, dmSans.className)}>
+      <body className={cn(poppins.variable, dmSans.className)}>
         <ThemeProvider attribute='class' defaultTheme='dark'>
           <Navbar />
           {children}

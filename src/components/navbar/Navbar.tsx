@@ -28,7 +28,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className='flex items-center justify-between w-full h-[80px] gap-x-8 select-none py-10 lg:py-1 px-4 '
+      className='flex items-center justify-between w-full h-[80px] gap-x-8 select-none py-10 lg:py-1 px-4  lg:max-w-7xl mx-auto '
       ref={navRef}
     >
       <div className='flex space-x-6 items-center'>
