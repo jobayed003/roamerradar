@@ -5,7 +5,7 @@ import { Separator } from '../ui/separator';
 
 const Footer = () => {
   return (
-    <div className='lg:max-w-7xl mx-auto py-8'>
+    <div className='lg:max-w-7xl mx-auto pt-8 pb-4'>
       <div className='flex justify-between py-16 items-center gap-x-8'>
         <Link href={'/'}>
           <div className='flex items-center justify-center'>
@@ -19,12 +19,15 @@ const Footer = () => {
             <Link
               href={route.href}
               key={route.href}
-              className='text-[--text-primary] hover:text-[#E6E8EC] font-bold text-sm transition'
+              className='text-[--text-primary] hover:text-[#23262F] dark:hover:text-[#E6E8EC]  font-bold text-sm transition'
             >
               {route.label}
             </Link>
           ))}
-          <Link href={'/support'} className='text-[--text-primary] hover:text-[#E6E8EC] font-bold text-sm transition'>
+          <Link
+            href={'/support'}
+            className='text-[--text-primary] hover:text-[#23262F] dark:hover:text-[#E6E8EC] font-bold text-sm transition'
+          >
             Support
           </Link>
         </div>

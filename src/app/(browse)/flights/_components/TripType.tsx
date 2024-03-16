@@ -8,9 +8,8 @@ import { TripOptions } from '../../../../../types';
 
 export const TripType = () => {
   const { tripType, setTripType } = useFlightStore();
-  const { adults, children, toddlers } = useTravelers();
+  const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
 
-  const totalTravelers = adults + children + toddlers;
   return (
     <div className='flex items-center md:gap-x-4 gap-x-1 md:p-4 pt-2 flex-wrap gap-y-4'>
       <Button
