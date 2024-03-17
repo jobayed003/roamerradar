@@ -7,7 +7,7 @@ export const routes = [
   { href: '/things', icon: Medal, label: 'Things to do' },
 ];
 
-export const Locations = {
+export const Places = {
   France: ['Eiffel Tower', 'Louvre Museum', 'Mont Saint Michel'],
   Italy: ['Colosseum', 'Leaning Tower of Pisa', 'Venice Canals'],
   USA: ['Statue of Liberty', 'Grand Canyon', 'Yellowstone National Park'],
@@ -19,3 +19,7 @@ export const Locations = {
   Australia: ['Sydney Opera House', 'Great Barrier Reef', 'Uluru'],
   Japan: ['Mount Fuji', 'Fushimi Inari Shrine', 'Tokyo Tower'],
 };
+
+// for (const country in Locations) {
+//   console.log(Locations[country].join(', '));
+// }

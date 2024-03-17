@@ -2,6 +2,7 @@
 
 import { DateRangePicker } from '@/components/DatePicker';
 import Guests from '@/components/Guests';
+import Locations from '@/components/Locations';
 import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +25,7 @@ const Stays = () => {
 
   return (
     <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 pr-1 pl-4 pb-2 items-center relative'>
+      <Locations />
       <div className='w-[90%]'>
         <div className='flex items-start gap-x-4'>
           <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
@@ -74,7 +76,7 @@ const Stays = () => {
           </div>
         </div>
       </DateRangePicker>
-      <div className=''>
+      <div>
         <Guests />
       </div>
 

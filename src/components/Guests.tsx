@@ -11,7 +11,9 @@ import { Button } from './ui/button';
 const Guests = ({ children }: { children?: React.ReactNode }) => {
   const [isClicked, setIsClicked] = useState(false);
   const ref = useRef(null);
+
   useOnClickOutside(ref, () => setIsClicked(false));
+
   const values = useTravelers();
   const totalTravelers = values.adults + values.children + values.toddlers;
   return (
