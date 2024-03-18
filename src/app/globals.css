@@ -65,3 +65,13 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+/* This class is only used for hiding the scrollbar from any element */
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hidden-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

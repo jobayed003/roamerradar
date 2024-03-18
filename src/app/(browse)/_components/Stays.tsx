@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 
 const Stays = () => {
   const [isMounted, setIsMounted] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   const { location, setLocation } = useStaysStore();
   const { date } = useBookingDate();
@@ -21,24 +22,30 @@ const Stays = () => {
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (location) setIsTyping(false);
+  }, [location]);
+
   if (!isMounted) return null;
 
   return (
     <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 pr-1 pl-4 pb-2 items-center relative'>
-      <Locations />
-      <div className='w-[90%]'>
-        <div className='flex items-start gap-x-4'>
-          <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
-          <Input
-            className={cn(
-              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0 text-foreground'
-            )}
-            placeholder='Location'
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-        </div>
-        <p className='ml-9 text-nowrap text-muted-foreground'>Where are you going?</p>
+      <div className={cn('w-[90%]')}>
+        <Locations isOpen={isTyping} setLocation={setLocation} location={location}>
+          <div className='flex items-start gap-x-4 '>
+            <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
+            <Input
+              className={cn(
+                'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] md:text-2xl text-lg px-0 border-0 text-foreground'
+              )}
+              placeholder='Location'
+              value={location}
+              onKeyUpCapture={() => setIsTyping(true)}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </div>
+          <p className='ml-1 text-nowrap text-muted-foreground'>Where are you going?</p>
+        </Locations>
       </div>
 
       <DateRangePicker className='col-span-2' isRange>

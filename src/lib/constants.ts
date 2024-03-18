@@ -7,19 +7,39 @@ export const routes = [
   { href: '/things', icon: Medal, label: 'Things to do' },
 ];
 
-export const Places = {
-  France: ['Eiffel Tower', 'Louvre Museum', 'Mont Saint Michel'],
-  Italy: ['Colosseum', 'Leaning Tower of Pisa', 'Venice Canals'],
-  USA: ['Statue of Liberty', 'Grand Canyon', 'Yellowstone National Park'],
-  Egypt: ['Pyramids of Giza', 'Luxor Temple', 'Valley of the Kings'],
-  China: ['Great Wall of China', 'Terracotta Army', 'Forbidden City'],
-  Mexico: ['Chichen Itza', 'Teotihuacan', 'Tulum'],
-  India: ['Taj Mahal', 'Jaipur', 'Hawa Mahal'],
-  Brazil: ['Christ the Redeemer', 'Sugarloaf Mountain', 'Iguazu Falls'],
-  Australia: ['Sydney Opera House', 'Great Barrier Reef', 'Uluru'],
-  Japan: ['Mount Fuji', 'Fushimi Inari Shrine', 'Tokyo Tower'],
-};
-
-// for (const country in Locations) {
-//   console.log(Locations[country].join(', '));
-// }
+export const Places = [
+  {
+    country: 'France',
+    places: ['Eiffel Tower', 'Louvre Museum', 'Mont Saint Michel'],
+  },
+  {
+    country: 'Italy',
+    places: ['Colosseum', 'Leaning Tower of Pisa', 'Venice Canals'],
+  },
+  {
+    country: 'USA',
+    places: ['Statue of Liberty', 'Grand Canyon', 'Yellowstone National Park'],
+  },
+  {
+    country: 'Egypt',
+    places: ['Pyramids of Giza', 'Luxor Temple', 'Valley of the Kings'],
+  },
+  {
+    country: 'China',
+    places: ['Great Wall of China', 'Terracotta Army', 'Forbidden City'],
+  },
+  { country: 'Mexico', places: ['Chichen Itza', 'Teotihuacan', 'Tulum'] },
+  { country: 'India', places: ['Taj Mahal', 'Jaipur', 'Hawa Mahal'] },
+  {
+    country: 'Brazil',
+    places: ['Christ the Redeemer', 'Sugarloaf Mountain', 'Iguazu Falls'],
+  },
+  {
+    country: 'Australia',
+    places: ['Sydney Opera House', 'Great Barrier Reef', 'Uluru'],
+  },
+  {
+    country: 'Japan',
+    places: ['Mount Fuji', 'Fushimi Inari Shrine', 'Tokyo Tower'],
+  },
+];
