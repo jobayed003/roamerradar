@@ -17,3 +17,8 @@ export function capitalizeFirstCharacter(str: string) {
     .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
+
+export function getCountryByPlaceName(placeName: string) {
+  const placeEntry = Places.find((place) => place.places.includes(placeName));
+  return placeEntry ? placeEntry.country : '';
+}

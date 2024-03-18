@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn, getCountryByPlaceName } from '@/lib/utils';
 import { useStaysStore } from '@/stores/useData';
 import Image from 'next/image';
 import { ReactNode } from 'react';
@@ -31,7 +31,7 @@ const HeroSection = ({ children, className, img }: HeroSectionProps) => {
         <h1 className='font-bold lg:text-8xl md:text-7xl text-5xl text-wrap text-ellipsis text-[#23262F]'>
           {location}
         </h1>
-        {/* <p className='font-medium lg:text-2xl md:text-xl text-lg text-[#23262F]'>Find and book a great experience</p> */}
+        <p className='font-medium lg:text-2xl md:text-xl text-lg text-[#23262F]'>{getCountryByPlaceName(location)}</p>
       </div>
     </div>
   );

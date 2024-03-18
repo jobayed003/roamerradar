@@ -6,10 +6,24 @@ import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
+import { getCountryByPlaceName } from '@/lib/utils';
 import { useStaysStore } from '@/stores/useData';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 const StayCategory = () => {
-  const state = useStaysStore();
+  const { location } = useStaysStore();
+  const searchParams = useSearchParams();
+
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.set('q', location);
+    router.push(`${pathname}?${params.toString()}`);
+  }, [location]);
+
   return (
     <div className='px-2 lg:max-w-7xl mx-auto'>
       <HeroSection img='images/main-2.jpg' className='mt-4 mb-32'>
@@ -27,8 +41,8 @@ const StayCategory = () => {
           <BreadcrumbProvider
             backroute='stays-category'
             originRoute=''
-            location={'Feni'}
-            searchedLocation={state?.location}
+            location={getCountryByPlaceName(location)}
+            searchedLocation={location}
           />
         </div>
       </div>
