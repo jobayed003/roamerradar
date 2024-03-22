@@ -22,6 +22,8 @@ const StayCategory = () => {
     const params = new URLSearchParams(searchParams);
     params.set('q', location);
     router.push(`${pathname}?${params.toString()}`);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   return (
