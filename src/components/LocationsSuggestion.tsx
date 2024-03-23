@@ -3,7 +3,7 @@ import { Places } from '@/lib/constants';
 import { Compass } from 'lucide-react';
 import { ReactNode } from 'react';
 
-const Locations = ({
+const LocationsSuggestion = ({
   children,
   isOpen,
   location,
@@ -43,4 +43,4 @@ const Locations = ({
   );
 };
 
-export default Locations;
+export default LocationsSuggestion;

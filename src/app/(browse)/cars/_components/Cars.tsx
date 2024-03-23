@@ -1,7 +1,6 @@
 'use client';
 
 import { DateRangePicker } from '@/components/DatePicker';
-import Locations from '@/components/Locations';
 import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -44,8 +43,6 @@ const Cars = () => {
 
       <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 sm:px-5 pb-2 items-center relative'>
         <div className='w-[90%] lg:col-span-1 col-span-2'>
-
-          
           <div className='flex items-start gap-x-4'>
             <MapPin className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
             <Input

@@ -1,9 +1,9 @@
 import Navbar from '@/components/navbar/Navbar';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/providers/theme-provider';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import type { Metadata } from 'next';
 import { DM_Sans, Poppins } from 'next/font/google';
-
 import './globals.css';
 
 const poppins = Poppins({

@@ -2,7 +2,8 @@
 
 import { DateRangePicker } from '@/components/DatePicker';
 import Guests from '@/components/Guests';
-import Locations from '@/components/Locations';
+import LocationsSuggestion from '@/components/LocationsSuggestion';
+
 import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,7 +32,7 @@ const Stays = () => {
   return (
     <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 pr-1 pl-4 pb-2 items-center relative'>
       <div className={cn('w-[90%]')}>
-        <Locations isOpen={isTyping} setLocation={setLocation} location={location}>
+        <LocationsSuggestion isOpen={isTyping} setLocation={setLocation} location={location}>
           <div className='flex items-start gap-x-4 '>
             <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
             <Input
@@ -45,7 +46,7 @@ const Stays = () => {
             />
           </div>
           <p className='ml-1 text-nowrap text-muted-foreground'>Where are you going?</p>
-        </Locations>
+        </LocationsSuggestion>
       </div>
 
       <DateRangePicker className='col-span-2' isRange>
