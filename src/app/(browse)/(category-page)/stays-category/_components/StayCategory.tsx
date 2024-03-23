@@ -7,6 +7,8 @@ import Link from 'next/link';
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import MapProvider from '@/components/map/MapProvider';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import { cn, getCountryByPlaceName } from '@/lib/utils';
 import { useBookingDate, useStaysStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
@@ -40,7 +42,7 @@ const StayCategory = () => {
       </HeroSection>
 
       <div className='px-20 pb-20'>
-        <div className='flex justify-between'>
+        <div className='flex items-center justify-between'>
           <Link href={'/'}>
             <Button variant={'outline'} className='rounded-full'>
               <ChevronLeft className='h-5 w-5 mr-3' />
@@ -66,7 +68,16 @@ const StayCategory = () => {
               </p>
             </div>
           </div>
-
+          <div className='relative'>
+            {isClicked && (
+              <div
+                className='absolute rounded-xl overflow-hidden -right-[28.5rem] w-[500px] h-[400px]'
+                style={{ top: '3rem' }}
+              >
+                <MapProvider />
+              </div>
+            )}
+          </div>
           <Button
             variant={'outline'}
             className={cn(
@@ -77,13 +88,52 @@ const StayCategory = () => {
           >
             Show Map
             <ChevronDown className={cn('ml-2 w-6 h-5 transition-all duration-200', isClicked && 'rotate-180')} />
-            {isClicked && (
-              <div className='absolute rounded-xl right-0 w-[500px] h-[400px]' style={{ top: '3rem' }}>
-                <MapProvider />
-              </div>
-            )}
           </Button>
         </div>
+
+        <Filters />
+      </div>
+    </div>
+  );
+};
+
+const filters = ['Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
+
+const Filters = () => {
+  const [selected, setSelected] = useState(filters[0]);
+
+  return (
+    <div className='py-8'>
+      <Separator className='bg-[#353945]' />
+
+      <div className='flex justify-between items-center mt-8'>
+        <div className='flex gap-x-2'>
+          {filters.map((item) => (
+            <div
+              key={item.length}
+              onClick={() => setSelected(item)}
+              className={cn(
+                'rounded-full px-2 py-1 font-bold text-sm bg-transparent text-[--text-primary] cursor-pointer hover:text-foreground transition-all select-none',
+                selected === item && 'bg-foreground text-[#23262F] hover:text-[#23262F]'
+              )}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <Select>
+          <SelectTrigger className='w-[180px] focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl'>
+            <SelectValue placeholder='On Sales' />
+          </SelectTrigger>
+          <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red'>
+            <SelectItem value='On Sales' className='hover:bg-[#23262F]'>
+              On Sales
+            </SelectItem>
+            <SelectItem value='On Delivery'>On Delivery</SelectItem>
+            <SelectItem value='In Exchange'>In Exchange</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

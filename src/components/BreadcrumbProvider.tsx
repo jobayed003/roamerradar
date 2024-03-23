@@ -23,20 +23,23 @@ const BreadcrumbProvider = ({
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <Link href='/' className='hover:text-white'>
+          <Link href='/' className=' text-[--text-primary] font-bold hover:text-[#3B71FE]'>
             Home
           </Link>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <Link href={`/${originRoute === '' ? '' : originRoute}`} className='hover:text-white'>
+          <Link
+            href={`/${originRoute === '' ? '' : originRoute}`}
+            className='text-[--text-primary] font-bold hover:text-[#3B71FE] '
+          >
             {originRoute === '' ? 'Stays' : ''}
             {capitalizeFirstCharacter(originRoute)}
           </Link>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <Link href={'/' + backroute} className='hover:text-white'>
+          <Link href={'/' + backroute} className='text-[--text-primary] font-bold hover:text-[#3B71FE] '>
             {location}
           </Link>
         </BreadcrumbItem>
