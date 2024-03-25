@@ -1,3 +1,4 @@
+import Footer from '@/components/Footer';
 import Navbar from '@/components/navbar/Navbar';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/providers/theme-provider';
@@ -34,6 +35,7 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='dark'>
           <Navbar />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

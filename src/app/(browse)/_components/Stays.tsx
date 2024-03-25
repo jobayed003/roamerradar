@@ -7,16 +7,20 @@ import LocationsSuggestion from '@/components/LocationsSuggestion';
 import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cn, dateFormat } from '@/lib/utils';
+import { dateFormat } from '@/lib/utils';
 import { useBookingDate, useStaysStore } from '@/stores/useData';
 import { CalendarRange, Navigation } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useOnClickOutside } from 'usehooks-ts';
 
 const Stays = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
 
+  const ref = useRef(null);
+
   const { location, setLocation } = useStaysStore();
+  useOnClickOutside(ref, () => setIsTyping(false));
   const { date } = useBookingDate();
 
   useEffect(() => {
@@ -29,24 +33,28 @@ const Stays = () => {
 
   if (!isMounted) return null;
 
+  const query = location !== '' ? `?q=${location}` : '';
+
   return (
     <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 pr-1 pl-4 pb-2 items-center relative'>
-      <div className={cn('w-[90%]')}>
-        <LocationsSuggestion isOpen={isTyping} setLocation={setLocation} location={location}>
-          <div className='flex items-start gap-x-4 '>
-            <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
-            <Input
-              className={cn(
-                'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-semibold md:text-2xl text-lg px-0 border-0 text-foreground'
-              )}
-              placeholder='Location'
-              value={location}
-              onKeyUpCapture={() => setIsTyping(true)}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
-          <p className='ml-1 text-nowrap text-muted-foreground'>Where are you going?</p>
-        </LocationsSuggestion>
+      <div className='w-[90%]'>
+        <div className='flex items-start gap-x-4' ref={ref}>
+          <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
+          <Input
+            className='bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-semibold md:text-2xl text-lg px-0 border-0 text-foreground relative'
+            placeholder='Location'
+            value={location}
+            onKeyUp={(e) => {
+              if (e.key === 'Escape') {
+                setIsTyping(false);
+              }
+            }}
+            onKeyUpCapture={() => setIsTyping(true)}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+          {isTyping && <LocationsSuggestion setLocation={setLocation} location={location} />}
+        </div>
+        <p className='ml-9 text-nowrap text-muted-foreground'>Where are you going?</p>
       </div>
 
       <DateRangePicker className='col-span-2' isRange>
@@ -88,7 +96,7 @@ const Stays = () => {
         <Guests />
       </div>
 
-      <SearchIcon className='top-4' link={`/stays-category?q=${location}`} />
+      <SearchIcon className='top-4' link={`/stays-category${query}`} />
     </div>
   );
 };
