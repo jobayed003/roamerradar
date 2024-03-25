@@ -28,7 +28,6 @@ export const useBookingDate = create<BookingDate>((set) => ({
     from: undefined,
     to: undefined,
   },
-
   setBookingDate: (range: DateRange | undefined) => set(() => ({ date: range })),
 }));
 

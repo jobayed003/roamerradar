@@ -43,3 +43,15 @@ export const Places = [
     places: ['Mount Fuji', 'Fushimi Inari Shrine', 'Tokyo Tower'],
   },
 ];
+
+export const products = [
+  { placesNumber: 1480, image: '/images/browse-4.jpg', title: 'Thompsonbury', time: '15 minutes drive' },
+  { placesNumber: 1500, image: '/images/live-2.png', title: 'Hudsontown', time: '55 minutes drive' },
+  { placesNumber: 1230, image: '/images/browse-1.jpg', title: 'New Keagon', time: '1 hour drive' },
+  { placesNumber: 1340, image: '/images/browse-3.jpg', title: 'North Justen', time: '30 minutes drive' },
+  { placesNumber: 1430, image: '/images/browse-4.jpg', title: 'Russelville', time: '40 minutes drive' },
+  { placesNumber: 1450, image: '/images/browse-4.jpg', title: 'Thompsonbury', time: '15 minutes drive' },
+  { placesNumber: 1750, image: '/images/travel-1.jpg', title: 'Hudsontown', time: '55 minutes drive' },
+  { placesNumber: 1540, image: '/images/browse-1.jpg', title: 'New Keagon', time: '1 hour drive' },
+  { placesNumber: 1760, image: '/images/browse-3.jpg', title: 'North Justen', time: '30 minutes drive' },
+];

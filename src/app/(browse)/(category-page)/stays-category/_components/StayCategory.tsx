@@ -2,18 +2,34 @@
 import Stays from '@/app/(browse)/_components/Stays';
 import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronLeft } from 'lucide-react';
+import { ChevronDown, ChevronLeft, Home } from 'lucide-react';
 import Link from 'next/link';
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
+import { CarouselProvider } from '@/components/CarouselProvider';
 import MapProvider from '@/components/map/MapProvider';
+import { CarouselItem } from '@/components/ui/carousel';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { cn, getCountryByPlaceName } from '@/lib/utils';
 import { useBookingDate, useStaysStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
+import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import StayProduct from './StayProduct';
+
+const houses = [
+  {
+    name: 'Entire serviced classy mountain house',
+    amenities: ['Free Wifi', 'Breakfast Included'],
+    img: '/images/live-2.png',
+    price: 543,
+    offerPrice: 325,
+    rating: 4.9,
+    reviews: 15,
+  },
+];
 
 const StayCategory = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -92,6 +108,18 @@ const StayCategory = () => {
         </div>
 
         <Filters />
+
+        <div className='py-8'>
+          <div className=''>
+            <h1 className='text-3xl font-bold'>Explore mountains in {location}</h1>
+          </div>
+          <BrowseCarousel />
+        </div>
+
+        <div className=''>
+          <h1 className='text-3xl font-bold'>Over 300 stays</h1>
+          <StayProduct />
+        </div>
       </div>
     </div>
   );
@@ -127,14 +155,47 @@ const Filters = () => {
             <SelectValue placeholder='On Sales' />
           </SelectTrigger>
           <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red'>
-            <SelectItem value='On Sales' className='hover:bg-[#23262F]'>
-              On Sales
-            </SelectItem>
+            <SelectItem value='On Sales'>On Sales</SelectItem>
             <SelectItem value='On Delivery'>On Delivery</SelectItem>
             <SelectItem value='In Exchange'>In Exchange</SelectItem>
           </SelectContent>
         </Select>
       </div>
+    </div>
+  );
+};
+
+const BrowseCarousel = () => {
+  return (
+    <div className='relative'>
+      <CarouselProvider buttonClasses='sm:absolute -top-[2.5rem] right-0'>
+        {Array.from({ length: 6 }).map((_, index) => (
+          <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2'>
+            <Link href={'/stays-category'}>
+              <div className='flex flex-col justify-center gap-y-5 my-20 relative'>
+                <Image
+                  className='rounded-3xl hover:scale-105 duration-500  transition-all'
+                  src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
+                  alt='nearby image'
+                  width={250}
+                  height={300}
+                />
+                <div className='absolute top-4 left-4 bg-foreground rounded-full text-[#23262F] shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
+                  30% off
+                </div>
+
+                <div>
+                  <h1 className='font-medium'>Mountain House</h1>
+                  <div className='flex items-center gap-1 text-[--text-primary] mt-1'>
+                    <Home className='h-4 w-4' />
+                    <p className='text-xs font-poppins font-semibold mt-1'>{(index + 23 * 32332).toLocaleString()}</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </CarouselItem>
+        ))}
+      </CarouselProvider>
     </div>
   );
 };
