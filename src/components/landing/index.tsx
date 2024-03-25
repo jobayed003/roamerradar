@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 import CTAButton from '../CTAButton';
 import Panel from '../Panel';
@@ -26,6 +27,8 @@ export default function Landing({
   className?: string;
   children: ReactNode;
 }) {
+  const pathname = usePathname().replace('/', '');
+
   return (
     <>
       <div className='px-2 lg:max-w-7xl mx-auto'>
@@ -48,7 +51,7 @@ export default function Landing({
           </h1>
           <p className='font-medium lg:text-2xl md:text-xl text-lg text-[#23262F]'>Find and book a great experience</p>
 
-          <CTAButton />
+          <CTAButton href={pathname === '' ? 'stays-category' : `${pathname}-category`} />
         </div>
 
         <Places />

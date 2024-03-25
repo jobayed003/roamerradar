@@ -19,18 +19,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import StayProduct from './StayProduct';
 
-const houses = [
-  {
-    name: 'Entire serviced classy mountain house',
-    amenities: ['Free Wifi', 'Breakfast Included'],
-    img: '/images/live-2.png',
-    price: 543,
-    offerPrice: 325,
-    rating: 4.9,
-    reviews: 15,
-  },
-];
-
 const StayCategory = () => {
   const [isClicked, setIsClicked] = useState(false);
 
@@ -86,10 +74,7 @@ const StayCategory = () => {
           </div>
           <div className='relative'>
             {isClicked && (
-              <div
-                className='absolute rounded-xl overflow-hidden -right-[28.5rem] w-[500px] h-[400px]'
-                style={{ top: '3rem' }}
-              >
+              <div className='absolute rounded-xl rounded-se-none overflow-hidden -right-[28.5rem] w-[600px] h-[500px] top-12 z-[1000] border-4 border-white'>
                 <MapProvider />
               </div>
             )}

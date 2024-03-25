@@ -1,10 +1,13 @@
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
-const CTAButton = () => {
+const CTAButton = ({ href }: { href: string }) => {
   return (
-    <Button variant={'primary'} size={'lg'} className='rounded-full text-md text-white hover:bg-[#0142eb] transition'>
-      Start Your Search
-    </Button>
+    <Link href={'/' + href}>
+      <Button variant={'primary'} size={'lg'} className='rounded-full text-md text-white hover:bg-[#0142eb] transition'>
+        Start Your Search
+      </Button>
+    </Link>
   );
 };
 
