@@ -157,14 +157,16 @@ const BrowseCarousel = () => {
         {Array.from({ length: 6 }).map((_, index) => (
           <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2'>
             <Link href={'/stays-category'}>
-              <div className='flex flex-col justify-center gap-y-5 my-20 relative'>
-                <Image
-                  className='rounded-3xl hover:scale-105 duration-500  transition-all'
-                  src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
-                  alt='nearby image'
-                  width={250}
-                  height={300}
-                />
+              <div className='flex flex-col justify-center gap-y-5 my-20 relative rounded-3xl'>
+                <div className='w-[250px] h-full overflow-hidden rounded-3xl'>
+                  <Image
+                    className='hover:scale-110 duration-500 transition-all'
+                    src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
+                    alt='nearby image'
+                    width={250}
+                    height={300}
+                  />
+                </div>
                 <div className='absolute top-4 left-4 bg-foreground rounded-full text-[#23262F] shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
                   30% off
                 </div>
