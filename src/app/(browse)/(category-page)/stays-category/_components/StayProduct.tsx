@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { LucideIcon, Pizza, Wifi } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -20,6 +21,8 @@ const houses = [
 ];
 
 const StayProduct = () => {
+  const { theme } = useTheme();
+
   return (
     <div className='flex flex-col items-center'>
       <div className='flex gap-x-6 gap-y-8 justify-center flex-wrap mt-8'>
@@ -29,7 +32,7 @@ const StayProduct = () => {
       </div>
 
       <Button variant={'outline'} className='my-8 border-2 border-[--text-primary] rounded-full'>
-        <ClipLoader color='white' size={25} /> Show More
+        <ClipLoader color={theme === 'dark' ? 'white' : 'black'} size={25} /> Show More
       </Button>
     </div>
   );

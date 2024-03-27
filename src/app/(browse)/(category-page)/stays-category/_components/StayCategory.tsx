@@ -2,13 +2,14 @@
 import Stays from '@/app/(browse)/_components/Stays';
 import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronLeft, Home } from 'lucide-react';
+import { ArrowRight, ChevronDown, ChevronLeft, Home } from 'lucide-react';
 import Link from 'next/link';
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import { CarouselProvider } from '@/components/CarouselProvider';
 import MapProvider from '@/components/map/MapProvider';
 import { CarouselItem } from '@/components/ui/carousel';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { cn, getCountryByPlaceName } from '@/lib/utils';
@@ -95,15 +96,45 @@ const StayCategory = () => {
         <Filters />
 
         <div className='py-8'>
-          <div className=''>
-            <h1 className='text-3xl font-bold'>Explore mountains in {location}</h1>
-          </div>
+          <h1 className='text-3xl font-bold'>Explore mountains in {location}</h1>
           <BrowseCarousel />
         </div>
 
-        <div className=''>
+        <div>
           <h1 className='text-3xl font-bold'>Over 300 stays</h1>
           <StayProduct />
+        </div>
+
+        <div className='flex justify-between items-center gap-x-4 '>
+          <div className='flex flex-col gap-y-4 max-w-[400px]'>
+            <h1 className='text-5xl font-bold'>Join our newsletter 🎉</h1>
+            <p className='text-[--text-primary] mb-10'>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur
+              adipisicing elit.
+            </p>
+
+            <div className='flex flex-col gap-y-4'>
+              <div className='flex gap-x-3'>
+                <h1 className='bg-[#58C27D] w-10 text-center rounded-xl'>01</h1>
+                <p>Get more discount</p>
+              </div>
+              <div className='flex gap-x-3'>
+                <h1 className='bg-[#92A5EF] w-10 text-center rounded-xl'>02</h1>
+                <p>Get premium travel magazine</p>
+              </div>
+            </div>
+            <div className='relative mt-8'>
+              <Input
+                placeholder='Enter your phone number'
+                className='max-w-[300px] border-[#353945]  bg-transparent outline-none focus-visible:ring-transparent focus-visible:ring-offset-0 rounded-full py-5'
+              />
+              <div className='absolute right-[6.7rem] top-2 p-1 bg-[#3B71FE] hover:bg-[#084cfe] rounded-full transition-all cursor-pointer'>
+                <ArrowRight className='w-5 h-5' />
+              </div>
+            </div>
+          </div>
+
+          <Image alt='newsletter pic' src='/images/newsletter-pic-1.png' width={500} height={500} />
         </div>
       </div>
     </div>
@@ -156,18 +187,18 @@ const BrowseCarousel = () => {
       <CarouselProvider buttonClasses='sm:absolute -top-[2.5rem] right-0'>
         {Array.from({ length: 6 }).map((_, index) => (
           <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2'>
-            <Link href={'/stays-category'}>
+            <Link href={'/stays-category'} className='hover:text-[#3B71FE] transition-all'>
               <div className='flex flex-col justify-center gap-y-5 my-20 relative rounded-3xl'>
                 <div className='w-[250px] h-full overflow-hidden rounded-3xl'>
                   <Image
-                    className='hover:scale-110 duration-500 transition-all'
+                    className='hover:scale-110 duration-500'
                     src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
                     alt='nearby image'
                     width={250}
                     height={300}
                   />
                 </div>
-                <div className='absolute top-4 left-4 bg-foreground rounded-full text-[#23262F] shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
+                <div className='absolute top-4 left-4 bg-foreground rounded-full text-white dark:text-[#23262F] shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
                   30% off
                 </div>
 
