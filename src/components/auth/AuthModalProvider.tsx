@@ -16,7 +16,7 @@ const AuthModalProvider = ({ children }: { children: ReactNode }) => {
             <div className='flex flex-col items-center gap-y-6 px-8 py-8'>
               <h1 className='text-4xl font-bold'>Sign up on RoamerRadar</h1>
               <div className='flex gap-x-3'>
-                <Button className='bg-[#3B71FE] rounded-full px-6 py-4 text-foreground'> Google</Button>
+                <Button className='bg-blue rounded-full px-6 py-4 text-foreground'> Google</Button>
                 <Button variant={'outline'} className='rounded-full bg-transparent'>
                   Github
                 </Button>
@@ -27,14 +27,14 @@ const AuthModalProvider = ({ children }: { children: ReactNode }) => {
                   placeholder='Enter your email'
                   className='border-[#353945]  bg-transparent outline-none focus-visible:ring-transparent focus-visible:ring-offset-0 rounded-full py-5'
                 />
-                <div className='absolute right-2 top-2 p-1 bg-[#3B71FE] hover:bg-[#084cfe] rounded-full transition-all cursor-pointer'>
+                <div className='absolute right-2 top-2 p-1 bg-blue hover:bg-blue rounded-full transition-all cursor-pointer'>
                   <ArrowRight className='w-5 h-5' />
                 </div>
               </div>
               <div>
                 <p className='text-xs font-poppins font-semibold'>
                   ALready have an account?{' '}
-                  <span className='text-[#3B71FE] cursor-pointer' onClick={() => setIsSignup(false)}>
+                  <span className='text-blue cursor-pointer' onClick={() => setIsSignup(false)}>
                     Login
                   </span>
                 </p>

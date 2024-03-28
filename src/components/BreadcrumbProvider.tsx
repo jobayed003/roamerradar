@@ -23,7 +23,7 @@ const BreadcrumbProvider = ({
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <Link href='/' className=' text-[--text-primary] font-bold hover:text-[#3B71FE]'>
+          <Link href='/' className=' text-[--text-primary] font-bold hover:text-blue'>
             Home
           </Link>
         </BreadcrumbItem>
@@ -31,22 +31,27 @@ const BreadcrumbProvider = ({
         <BreadcrumbItem>
           <Link
             href={`/${originRoute === '' ? '' : originRoute}`}
-            className='text-[--text-primary] font-bold hover:text-[#3B71FE] '
+            className='text-[--text-primary] font-bold hover:text-blue'
           >
             {originRoute === '' ? 'Stays' : ''}
             {capitalizeFirstCharacter(originRoute)}
           </Link>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <Link href={'/' + backroute} className='text-[--text-primary] font-bold hover:text-[#3B71FE] '>
-            {location}
-          </Link>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>{searchedLocation}</BreadcrumbPage>
-        </BreadcrumbItem>
+
+        {location && (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <Link href={'/' + backroute} className='text-[--text-primary] font-bold hover:text-blue '>
+                {location}
+              </Link>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{searchedLocation}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        )}
       </BreadcrumbList>
     </Breadcrumb>
   );

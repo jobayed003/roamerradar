@@ -23,6 +23,8 @@ const config = {
         active: 'inset 2px 0 0 #3B71FE',
       },
       colors: {
+        blue: '#3B71FE',
+        'blue-hover': '#084cfe',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

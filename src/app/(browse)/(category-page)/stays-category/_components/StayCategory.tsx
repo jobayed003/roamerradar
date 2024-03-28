@@ -73,9 +73,11 @@ const StayCategory = () => {
               </p>
             </div>
           </div>
+
+          {/* TODO- Replace in a separate file for reuse */}
           <div className='relative'>
             {isClicked && (
-              <div className='absolute rounded-xl rounded-se-none overflow-hidden -right-[28.5rem] w-[600px] h-[500px] top-12 z-[1000] border-4 border-white'>
+              <div className='absolute rounded-xl rounded-se-none overflow-hidden -right-[28.5rem] w-[600px] h-[500px] top-12 z-[1000] border-4 border-white '>
                 <MapProvider />
               </div>
             )}
@@ -83,8 +85,8 @@ const StayCategory = () => {
           <Button
             variant={'outline'}
             className={cn(
-              'rounded-full p-4 select-none font-bold relative',
-              isClicked && 'bg-blue-600 hover:bg-blue-600'
+              'rounded-full p-4 select-none font-bold relative focus:ring-0 focus:ring-offset-0 ring-offset-0 shadow-[inset_0_0_0_2px_#353945] border-0',
+              isClicked && 'bg-blue hover:bg-blue-hover'
             )}
             onClick={() => setIsClicked(!isClicked)}
           >
@@ -128,7 +130,7 @@ const StayCategory = () => {
                 placeholder='Enter your phone number'
                 className='max-w-[300px] border-[#353945]  bg-transparent outline-none focus-visible:ring-transparent focus-visible:ring-offset-0 rounded-full py-5'
               />
-              <div className='absolute right-[6.7rem] top-2 p-1 bg-[#3B71FE] hover:bg-[#084cfe] rounded-full transition-all cursor-pointer'>
+              <div className='absolute right-[6.7rem] top-2 p-1 bg-blue hover:bg-blue-hover rounded-full transition-all cursor-pointer'>
                 <ArrowRight className='w-5 h-5' />
               </div>
             </div>
@@ -187,7 +189,7 @@ const BrowseCarousel = () => {
       <CarouselProvider buttonClasses='sm:absolute -top-[2.5rem] right-0'>
         {Array.from({ length: 6 }).map((_, index) => (
           <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2'>
-            <Link href={'/stays-category'} className='hover:text-[#3B71FE] transition-all'>
+            <Link href={'/stays-category'} className='hover:text-blue transition-all'>
               <div className='flex flex-col justify-center gap-y-5 my-20 relative rounded-3xl'>
                 <div className='w-[250px] h-full overflow-hidden rounded-3xl'>
                   <Image
