@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 import { ThemeToggle } from '../ThemeToggler';
+import AuthModalProvider from '../auth/AuthModalProvider';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import NotificationDropdown from './NotificationDropdown';
@@ -54,12 +55,15 @@ const Navbar = () => {
           Support
         </Link>
 
-        {!isClicked && (
+        {matches && (
           <>
             <NotificationDropdown />
-            <div className='bg-green-500 p-2 rounded-full cursor-pointer'>
-              <User2 className='text-white h-6 w-6' />
-            </div>
+
+            <AuthModalProvider>
+              <div className='bg-green-500 hover:bg-[#41b168] p-2 rounded-full mt-2 cursor-pointer transition-all'>
+                <User2 className='text-white h-6 w-6' />
+              </div>
+            </AuthModalProvider>
           </>
         )}
 
