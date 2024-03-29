@@ -8,19 +8,10 @@ import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useThingsStore } from '@/stores/useData';
 import { CalendarRange, Navigation, Search } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 const Things = () => {
-  const [isMounted, setIsMounted] = useState(false);
-
   const { location, setValues } = useThingsStore();
   const { date } = useBookingDate();
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
 
   return (
     <div className='grid lg:grid-cols-3 md:grid-rows-1 grid-rows-3 gap-y-4 lg:px-5 pb-2 items-center relative'>

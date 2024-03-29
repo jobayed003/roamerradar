@@ -7,12 +7,10 @@ import { Input } from '@/components/ui/input';
 import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useFlightStore } from '@/stores/useData';
 import { CalendarRange, MapPin } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { TripOptions } from '../../../../../types';
 
 const Flights = () => {
-  const [isMounted, setIsMounted] = useState(false);
-
   const { tripType, flyingFrom, flyingTo, setLocations } = useFlightStore();
 
   const { date, setBookingDate } = useBookingDate();
@@ -21,10 +19,7 @@ const Flights = () => {
 
   useEffect(() => {
     isOneWay && setBookingDate({ to: undefined, from: date?.from });
-    setIsMounted(true);
   }, [isOneWay]);
-
-  if (!isMounted) return null;
 
   return (
     <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 px-5 pb-2 items-center relative'>

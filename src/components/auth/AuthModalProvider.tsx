@@ -1,4 +1,7 @@
+'use client';
+
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import useIsMounted from '@/hooks/useIsMounted';
 import { ArrowRight } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { Button } from '../ui/button';
@@ -6,6 +9,10 @@ import { Input } from '../ui/input';
 
 const AuthModalProvider = ({ children }: { children: ReactNode }) => {
   const [isSignup, setIsSignup] = useState(true);
+
+  const { isMounted } = useIsMounted();
+
+  if (!isMounted) return null;
 
   return (
     <div>

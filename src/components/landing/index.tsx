@@ -1,5 +1,6 @@
 'use client';
 
+import useIsMounted from '@/hooks/useIsMounted';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -25,7 +26,10 @@ export default function Landing({
   className?: string;
   children: ReactNode;
 }) {
+  const { isMounted } = useIsMounted();
   const pathname = usePathname().replace('/', '');
+
+  if (!isMounted) return null;
 
   return (
     <div className='px-2 lg:max-w-7xl mx-auto'>

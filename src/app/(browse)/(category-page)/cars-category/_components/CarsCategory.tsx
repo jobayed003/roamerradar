@@ -8,17 +8,13 @@ import { useCarStore } from '@/stores/useData';
 import { ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useIsMounted } from 'usehooks-ts';
 
 const CarsCategory = () => {
   const { pickupLocation } = useCarStore();
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useIsMounted();
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
+  if (!isMounted()) return null;
 
   return (
     <div className=''>

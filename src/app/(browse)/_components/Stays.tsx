@@ -14,24 +14,15 @@ import { useEffect, useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 
 const Stays = () => {
-  const [isMounted, setIsMounted] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-
   const ref = useRef(null);
-
   const { location, setLocation } = useStaysStore();
-  useOnClickOutside(ref, () => setIsTyping(false));
   const { date } = useBookingDate();
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
+  useOnClickOutside(ref, () => setIsTyping(false));
   useEffect(() => {
     if (location) setIsTyping(false);
   }, [location]);
-
-  if (!isMounted) return null;
 
   const query = location !== '' ? `?q=${location}` : '';
 

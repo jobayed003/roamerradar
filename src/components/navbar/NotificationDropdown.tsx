@@ -1,4 +1,5 @@
 import Dropdown from '@/components/ui/dropdown';
+import useIsMounted from '@/hooks/useIsMounted';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { motion } from 'framer-motion';
 import { Bell } from 'lucide-react';
@@ -9,8 +10,11 @@ import { useOnClickOutside } from 'usehooks-ts';
 const NotificationDropdown = () => {
   const { isClicked, onClose, onOpen, onOutsideClick } = useNotificationStore();
   const ref = useRef(null);
+  const { isMounted } = useIsMounted();
 
   useOnClickOutside(ref, onOutsideClick);
+
+  if (!isMounted) return null;
 
   return (
     <Dropdown isClicked={isClicked} onOutsideClick={onOutsideClick} onClose={onClose} onOpen={onOpen}>
