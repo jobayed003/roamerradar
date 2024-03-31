@@ -3,11 +3,11 @@
  * These routes do not require authentication
  * @type {string[]}
  **/
-export const publicRoutes: string[] = ['/', '/cars', '/flights', '/things'];
+export const publicRoutes: string[] = ['/', '/cars', '/flights', '/things', '/auth/verify-email'];
 
 /**
  * An array of routes that are used for authentication.
- * These routes will redirect logged in user to /settings
+ * These routes will redirect logged in user to home page
  * @type {string[]}
  **/
 export const authRoutes: string[] = ['/auth/register', '/auth/login'];

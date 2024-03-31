@@ -1,5 +1,6 @@
 'use client';
 
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { routes } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -14,11 +15,13 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import NotificationDropdown from './NotificationDropdown';
 import OptionDropdown from './OptionDropdown';
+import UserDropdown from './UserDropdown';
 
 const Navbar = () => {
   const [isClicked, setIsClicked] = useState(false);
   const matches = useMediaQuery('(min-width: 768px)');
   const pathname = usePathname();
+  const { user } = useCurrentUser();
 
   const navRef = useRef(null);
 
@@ -57,12 +60,16 @@ const Navbar = () => {
         {matches && (
           <>
             <NotificationDropdown />
-            <Link
-              href={'/auth/login'}
-              className='bg-green-500 hover:bg-[#41b168] p-2 rounded-full cursor-pointer transition-all'
-            >
-              <User2 className='text-white h-6 w-6' />
-            </Link>
+            {user ? (
+              <UserDropdown />
+            ) : (
+              <Link
+                href={'/auth/login'}
+                className='bg-green-500 hover:bg-[#41b168] p-2 rounded-full cursor-pointer transition-all'
+              >
+                <User2 className='text-white h-6 w-6' />
+              </Link>
+            )}
           </>
         )}
 

@@ -7,7 +7,7 @@ import LocationsSuggestion from '@/components/LocationsSuggestion';
 import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { dateFormat } from '@/lib/utils';
+import { createSearchParams, dateFormat } from '@/lib/utils';
 import { useBookingDate, useStaysStore } from '@/stores/useData';
 import { CalendarRange, Navigation } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -15,6 +15,7 @@ import { useOnClickOutside } from 'usehooks-ts';
 
 const Stays = () => {
   const [isTyping, setIsTyping] = useState(false);
+
   const ref = useRef(null);
   const { location, setLocation } = useStaysStore();
   const { date } = useBookingDate();
@@ -24,7 +25,7 @@ const Stays = () => {
     if (location) setIsTyping(false);
   }, [location]);
 
-  const query = location !== '' ? `?q=${location}` : '';
+  const url = createSearchParams({ baseUrl: '/stays-category', params: location });
 
   return (
     <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 pr-1 pl-4 pb-2 items-center relative'>
@@ -87,7 +88,7 @@ const Stays = () => {
         <Guests />
       </div>
 
-      <SearchIcon className='top-4' link={`/stays-category${query}`} />
+      <SearchIcon className='top-4' link={url} />
     </div>
   );
 };

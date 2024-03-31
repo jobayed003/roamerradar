@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { format } from 'date-fns';
+import qs from 'query-string';
 import { twMerge } from 'tailwind-merge';
 import { Places } from './constants';
 
@@ -21,4 +22,16 @@ export function capitalizeFirstCharacter(str: string) {
 export function getCountryByPlaceName(placeName: string) {
   const placeEntry = Places.find((place) => place.places.includes(placeName));
   return placeEntry ? placeEntry.country : '';
+}
+
+export function createSearchParams({ baseUrl, params }: { baseUrl: string; params: string }) {
+  const url = qs.stringifyUrl(
+    {
+      url: baseUrl,
+      query: { q: params },
+    },
+    { skipEmptyString: true }
+  );
+
+  return url;
 }

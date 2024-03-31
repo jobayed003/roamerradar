@@ -3,7 +3,7 @@ import VerificationForm from '@/components/auth/VerificationForm';
 
 const VerificationPage = () => {
   return (
-    <AuthWrapper headerLabel='Verify Email' backButtonHref='/' backButtonLabel='Back to home'>
+    <AuthWrapper headerLabel='Verify Email' backButtonHref='/auth/login' backButtonLabel='Back to login'>
       <VerificationForm />
     </AuthWrapper>
   );

@@ -8,16 +8,12 @@ import { useCarStore } from '@/stores/useData';
 import { ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useIsMounted } from 'usehooks-ts';
 
 const CarsCategory = () => {
   const { pickupLocation } = useCarStore();
-  const isMounted = useIsMounted();
-
-  if (!isMounted()) return null;
 
   return (
-    <div className=''>
+    <div>
       <div
         className={
           'h-60 w-full flex flex-col justify-center text-[#23262F] p-20 pt-24 flex-shrink relative mt-4 mb-32 '

@@ -12,29 +12,26 @@ import { CarouselItem } from '@/components/ui/carousel';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { cn, getCountryByPlaceName } from '@/lib/utils';
+import { cn, createSearchParams, getCountryByPlaceName } from '@/lib/utils';
 import { useBookingDate, useStaysStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import StayProduct from './StayProduct';
 
 const StayCategory = () => {
   const [isClicked, setIsClicked] = useState(false);
-
-  const { location } = useStaysStore();
-  const searchParams = useSearchParams();
-  const { date } = useBookingDate();
-  const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
-  const pathname = usePathname();
   const router = useRouter();
 
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    params.set('q', location);
-    router.push(`${pathname}?${params.toString()}`);
+  const { location } = useStaysStore();
+  const { date } = useBookingDate();
+  const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
 
+  useEffect(() => {
+    const url = createSearchParams({ baseUrl: '/stays-category', params: location });
+
+    router.push(url);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
