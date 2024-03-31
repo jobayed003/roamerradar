@@ -1,4 +1,5 @@
 'use client';
+import { login } from '@/actions/login';
 import { FormError } from '@/components/FormError';
 import { FormSuccess } from '@/components/FormSuccess';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
@@ -6,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { LoginSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -19,6 +21,7 @@ const LoginForm = () => {
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
+  const { status, data } = useSession();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -31,6 +34,21 @@ const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError('');
     setSuccess('');
+
+    startTransition(() => {
+      login(values)
+        .then((data) => {
+          if (data?.error) {
+            form.reset();
+            setError(data?.error);
+          }
+          if (data?.success) {
+            form.reset();
+            setSuccess(data?.success);
+          }
+        })
+        .catch(() => setError('Something went wrong!'));
+    });
   };
 
   return (
@@ -71,7 +89,12 @@ const LoginForm = () => {
 
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button variant={'fill'} className='bg-blue hover:bg-blue-hover mt-4 w-full border-0' type='submit'>
+          <Button
+            disabled={isPending}
+            variant={'fill'}
+            className='bg-blue hover:bg-blue-hover mt-4 w-full border-0'
+            type='submit'
+          >
             Sign in <ArrowRight className='w-4 h-4 ml-2' />
           </Button>
         </form>

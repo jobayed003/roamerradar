@@ -1,5 +1,6 @@
 'use client';
 
+import { register } from '@/actions/register';
 import { FormError } from '@/components/FormError';
 import { FormSuccess } from '@/components/FormSuccess';
 import { Button } from '@/components/ui/button';
@@ -34,7 +35,12 @@ const RegisterForm = () => {
     setError('');
     setSuccess('');
 
-    console.log(values);
+    startTransition(() => {
+      register(values).then((data) => {
+        setSuccess(data.success);
+        setError(data?.error);
+      });
+    });
   };
 
   return (
@@ -87,7 +93,12 @@ const RegisterForm = () => {
 
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button variant={'fill'} className='bg-blue hover:bg-blue-hover mt-4 w-full border-0' type='submit'>
+          <Button
+            disabled={isPending}
+            variant={'fill'}
+            className='bg-blue hover:bg-blue-hover mt-4 w-full border-0'
+            type='submit'
+          >
             Sign up <ArrowRight className='w-4 h-4 ml-2' />
           </Button>
         </form>
