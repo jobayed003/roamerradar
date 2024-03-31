@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/navbar/Navbar';
+import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/providers/theme-provider';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -35,11 +36,14 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang='en'>
-        <body className={cn(poppins.variable, dmSans.className)}>
+        <body className={cn('flex flex-col justify-between', poppins.variable, dmSans.className)}>
           <ThemeProvider attribute='class' defaultTheme='dark'>
             <Navbar />
             {children}
-            <Footer />
+            <div className='justify-self-end'>
+              <Separator />
+              <Footer />
+            </div>
           </ThemeProvider>
         </body>
       </html>

@@ -15,10 +15,10 @@ export const {
     async signIn({ user, account }) {
       if (account?.provider !== 'credentials') return true;
 
-      // const existingUser = await getUserById(user.id!);
+      const existingUser = await getUserById(user.id!);
 
       // Prevent sign in without email verified
-      // if (!existingUser?.emailVerified) return false;
+      if (!existingUser?.emailVerified) return false;
 
       return true;
     },

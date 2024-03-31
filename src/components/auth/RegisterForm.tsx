@@ -96,7 +96,7 @@ const RegisterForm = () => {
           <Button
             disabled={isPending}
             variant={'fill'}
-            className='bg-blue hover:bg-blue-hover mt-4 w-full border-0'
+            className='bg-blue hover:bg-blue-hover text-white mt-4 w-full border-0'
             type='submit'
           >
             Sign up <ArrowRight className='w-4 h-4 ml-2' />

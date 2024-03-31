@@ -6,9 +6,8 @@ import { Separator } from './ui/separator';
 const Footer = () => {
   return (
     <>
-      <Separator />
-      <div className='lg:max-w-7xl mx-auto pt-8 pb-4'>
-        <div className='flex justify-between py-16 items-center gap-x-8'>
+      <div className='lg:max-w-7xl w-full mx-auto pt-8 pb-4 mt-auto'>
+        <div className='flex justify-between py-4 items-center gap-x-8'>
           <Link href={'/'}>
             <div className='flex items-center justify-center'>
               <Image src='/logo.png' alt='app Logo' width={50} height={50} className='object-cover ' />

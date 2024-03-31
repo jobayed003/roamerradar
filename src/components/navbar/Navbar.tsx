@@ -10,7 +10,6 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 import { ThemeToggle } from '../ThemeToggler';
-import AuthModalProvider from '../auth/AuthModalProvider';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import NotificationDropdown from './NotificationDropdown';
@@ -29,7 +28,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className='flex items-center justify-between w-full h-[80px] gap-x-8 select-none py-10 lg:py-1 px-4  lg:max-w-7xl mx-auto '
+      className='flex items-center justify-between w-full h-[80px] gap-x-8 select-none py-10 lg:py-6 px-4 lg:max-w-7xl mx-auto '
       ref={navRef}
     >
       <div className='flex space-x-6 items-center'>
@@ -58,12 +57,12 @@ const Navbar = () => {
         {matches && (
           <>
             <NotificationDropdown />
-
-            <AuthModalProvider>
-              <div className='bg-green-500 hover:bg-[#41b168] p-2 rounded-full mt-2 cursor-pointer transition-all'>
-                <User2 className='text-white h-6 w-6' />
-              </div>
-            </AuthModalProvider>
+            <Link
+              href={'/auth/login'}
+              className='bg-green-500 hover:bg-[#41b168] p-2 rounded-full cursor-pointer transition-all'
+            >
+              <User2 className='text-white h-6 w-6' />
+            </Link>
           </>
         )}
 

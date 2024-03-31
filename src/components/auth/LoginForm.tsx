@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 import { LoginSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -21,7 +20,6 @@ const LoginForm = () => {
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
-  const { status, data } = useSession();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -92,7 +90,7 @@ const LoginForm = () => {
           <Button
             disabled={isPending}
             variant={'fill'}
-            className='bg-blue hover:bg-blue-hover mt-4 w-full border-0'
+            className='bg-blue hover:bg-blue-hover text-white mt-4 w-full border-0'
             type='submit'
           >
             Sign in <ArrowRight className='w-4 h-4 ml-2' />
