@@ -15,7 +15,7 @@ const PersonalInfoForm = () => {
     defaultValues: {
       display: '',
       real: '',
-      phone: 0,
+      phone: '',
       email: '',
       bio: '',
       website: '',
@@ -52,7 +52,7 @@ const PersonalInfoForm = () => {
                       <CustomInput
                         placeholder='Enter your display name'
                         props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-[#353945]'
+                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-[#353945] dark:focus:border-[--text-primary]'
                       />
                     </FormControl>
                   </FormItem>
@@ -85,7 +85,6 @@ const PersonalInfoForm = () => {
                     <FormControl>
                       <CustomInput
                         placeholder='Phone number'
-                        type='number'
                         props={field}
                         className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-[#353945]'
                       />
@@ -116,7 +115,7 @@ const PersonalInfoForm = () => {
               <Textarea
                 spellCheck={false}
                 placeholder='About yourself in a few words'
-                className='h-[140px] outline-none ring-0 resize-none focus-visible:ring-transparent focus-visible:ring-offset-0 transition-all border-2 border-[#e6e8ec] dark:border-[#353945] placeholder:text-[#B1B5C3] rounded-xl'
+                className='h-[140px] outline-none ring-0 resize-none focus-visible:ring-transparent focus-visible:ring-offset-0 transition-all border-2 border-[#e6e8ec] dark:border-[#353945] placeholder:text-[--text-primary] placeholder:font-semibold rounded-xl'
               />
             </div>
           </div>
@@ -162,7 +161,11 @@ const PersonalInfoForm = () => {
             <Button variant={'fill'} className='font-bold p-6 bg-blue hover:bg-blue-hover text-white'>
               Update profile
             </Button>
-            <Button variant={'transparent'} onClick={() => form.reset()}>
+            <Button
+              variant={'transparent'}
+              onClick={() => form.reset()}
+              className='text-[--text-primary] font-bold hover:text-blue-hover'
+            >
               <X className='w-4 h-4 mr-2' /> Clear all
             </Button>
           </div>

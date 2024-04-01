@@ -24,7 +24,7 @@ export const LoginSchema = z.object({
 export const PersonalInfoSchema = z.object({
   display: z.string().optional(),
   real: z.string().optional(),
-  phone: z.number().optional(),
+  phone: z.string().optional(),
   email: z.string().optional(),
   bio: z.string().optional(),
   website: z.string().optional(),

@@ -13,8 +13,7 @@ import * as z from 'zod';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 
-const inputClassNames =
-  'border-[#353945] bg-transparent outline-none focus-visible:ring-transparent focus-visible:ring-offset-0 py-5 mb-5';
+const inputClassNames = 'border-[#353945] bg-transparent py-5 mb-5';
 
 const LoginForm = () => {
   const [error, setError] = useState<string | undefined>('');

@@ -20,7 +20,7 @@ const Things = () => {
           <Navigation className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
           <Input
             className={cn(
-              'bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-[600] lg:text-2xl text-lg px-0 border-0 text-foreground'
+              'bg-transparent placeholder:text-foreground font-[600] lg:text-2xl text-lg px-0 border-0 text-foreground'
             )}
             placeholder='Location'
             value={location}

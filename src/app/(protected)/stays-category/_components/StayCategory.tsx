@@ -39,7 +39,7 @@ const StayCategory = () => {
 
   return (
     <div className='px-2 lg:max-w-7xl mx-auto'>
-      <HeroSection img='images/main-2.jpg' className='mt-4 mb-32'>
+      <HeroSection img='images/main-2.jpg' className='mb-32'>
         <Stays />
       </HeroSection>
 
@@ -125,7 +125,7 @@ const StayCategory = () => {
             <div className='relative mt-8'>
               <Input
                 placeholder='Enter your phone number'
-                className='max-w-[300px] border-[#353945]  bg-transparent outline-none focus-visible:ring-transparent focus-visible:ring-offset-0 rounded-full py-5'
+                className='max-w-[300px] border-[#353945] bg-transparent rounded-full py-5'
               />
               <div className='absolute right-[6.7rem] top-2 p-1 bg-blue hover:bg-blue-hover rounded-full transition-all cursor-pointer'>
                 <ArrowRight className='w-5 h-5' />

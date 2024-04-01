@@ -1,6 +1,6 @@
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useUserStore } from '@/stores/useUserStore';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Building2, Home, Mail, MessageCircleIcon, User2 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ const UserButton = () => {
         <User2 className='text-white h-6 w-6' />
       </div>
 
-      {user && isClicked && <ProifleOptions ref={ref} />}
+      <AnimatePresence>{user && isClicked && <ProifleOptions ref={ref} />}</AnimatePresence>
     </Dropdown>
   );
 };
@@ -44,11 +44,11 @@ const ProifleOptions = ({ ref }: ProfileProps) => {
   return (
     <motion.div
       className={
-        'text-black w-[250px] p-4 absolute top-20 sm:-left-[9.4rem] -left-[5rem] items-start justify-start gap-y-4 rounded-3xl dark:text-white dark:hover:text-white bg-background dark:bg-[#141416] z-50 shadow-custom'
+        'text-black w-[250px] p-4 absolute top-16 sm:-left-[9.4rem] -left-[5rem] items-start justify-start gap-y-4 rounded-3xl dark:text-white dark:hover:text-white bg-background dark:bg-[#141416] z-50 shadow-custom'
       }
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
+      exit={{ opacity: 0, y: 10 }}
       transition={{ duration: 0.2 }}
       ref={ref}
     >

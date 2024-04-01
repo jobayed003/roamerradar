@@ -14,7 +14,7 @@ const CustomInput = ({ props, placeholder, className, type = 'text' }: CustomInp
       {...props}
       type={type}
       className={cn(
-        'outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 rounded-xl placeholder:text-[#23262F] text-[#23262F] dark:text-white dark:placeholder:text-[#B1B5C3] py-4',
+        'rounded-xl placeholder:text-[#23262F] text-[#23262F] dark:text-white dark:placeholder:text-[--text-primary] placeholder:font-semibold py-4 focus:border-[--text-primary] dark:focus:border-[--text-primary]',
         className
       )}
       placeholder={placeholder}

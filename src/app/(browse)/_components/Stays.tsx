@@ -33,7 +33,7 @@ const Stays = () => {
         <div className='flex items-start gap-x-4' ref={ref}>
           <Navigation className='block  mt-3 w-6 h-6 text-muted-foreground font-bold' />
           <Input
-            className='bg-transparent outline-none ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-foreground font-semibold md:text-2xl text-lg px-0 border-0 text-foreground relative'
+            className='bg-transparent placeholder:text-foreground font-semibold md:text-2xl text-lg px-0 border-0 text-foreground relative'
             placeholder='Location'
             value={location}
             onKeyUp={(e) => {
