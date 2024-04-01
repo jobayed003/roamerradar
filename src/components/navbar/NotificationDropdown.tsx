@@ -2,9 +2,9 @@ import Dropdown from '@/components/ui/dropdown';
 import useIsMounted from '@/hooks/useIsMounted';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { motion } from 'framer-motion';
-import { Bell } from 'lucide-react';
 import Image from 'next/image';
 import { Ref, useRef } from 'react';
+import { IoNotificationsOutline } from 'react-icons/io5';
 import { useOnClickOutside } from 'usehooks-ts';
 
 const NotificationDropdown = () => {
@@ -18,11 +18,11 @@ const NotificationDropdown = () => {
 
   return (
     <Dropdown isClicked={isClicked} onOutsideClick={onOutsideClick} onClose={onClose} onOpen={onOpen}>
-      <div className='relative'>
-        <Bell className='h-5 w-5 text-[--text-primary] hover:text-black dark:hover:text-white' />
+      <div className='relative p-2 hover:text-black dark:hover:text-white '>
+        <IoNotificationsOutline className='h-6 w-6 text-[--text-primary] hover:text-black dark:hover:text-white' />
       </div>
 
-      <div className='absolute top-[-10px] left-3 w-3 h-3 bg-green-500 rounded-full ' />
+      <div className='absolute top-0 left-6 w-3 h-3 bg-green-500 rounded-full ' />
 
       {isClicked && <Notifications ref={ref} />}
     </Dropdown>
@@ -37,12 +37,12 @@ const Notifications = ({ ref }: NotificationProps) => {
   return (
     <motion.div
       className={
-        'text-black w-[350px] p-6 absolute top-14 sm:-left-[13rem] -left-[14rem] items-start justify-start gap-y-4 rounded-2xl transition duration-200  dark:text-white dark:hover:text-white shadow-lg dark:bg-gradient z-50'
+        'text-black w-[350px] p-6 absolute top-[4rem] -left-[12.2rem] items-start justify-start gap-y-4 rounded-3xl dark:text-white dark:hover:text-white shadow-lg bg-[#FCFCFD] dark:bg-gradient z-50'
       }
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.2 }}
       ref={ref}
     >
       <h1 className='text-2xl font-medium pt-4 font-poppins'>Notification</h1>

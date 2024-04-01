@@ -3,10 +3,9 @@ import { cn } from '@/lib/utils';
 import { useOptionStore } from '@/stores/useOptionsStore';
 import { motion } from 'framer-motion';
 import { CarIcon, ChevronDown, Home, Medal, Plane } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { Ref, useRef } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
+import LinkProvider from '../LinkProvider';
 
 const OptionDropdown = () => {
   const { isClicked, onOpen, onClose, onOutsideClick } = useOptionStore();
@@ -35,8 +34,6 @@ const ITEMS = [
 ];
 
 const Options = ({ ref }: { ref: Ref<HTMLDivElement> | undefined }) => {
-  const pathname = usePathname();
-
   return (
     <motion.div
       className={
@@ -49,18 +46,7 @@ const Options = ({ ref }: { ref: Ref<HTMLDivElement> | undefined }) => {
       transition={{ duration: 0.3 }}
     >
       {ITEMS.map((item) => (
-        <Link
-          href={item.href}
-          key={item.label}
-          className={cn(
-            'flex items-center justify-start w-full p-3  px-6 gap-x-2 rounded-3xl transition text-[--text-primary] hover:text-black dark:text-[--text-primary] dark:hover:text-white select-none',
-            pathname === item.href &&
-              'bg-[#23262F] text-white hover:text-white dark:bg-white dark:text-black dark:hover:text-black'
-          )}
-        >
-          {item.icon}
-          <p className='font-bold text-sm'>{item.label}</p>
-        </Link>
+        <LinkProvider key={item.label} {...item} />
       ))}
     </motion.div>
   );

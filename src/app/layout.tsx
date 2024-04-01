@@ -36,7 +36,7 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang='en'>
-        <body className={cn('flex flex-col justify-between', poppins.variable, dmSans.className)}>
+        <body className={cn('flex flex-col justify-between w-full', poppins.variable, dmSans.className)}>
           <ThemeProvider attribute='class' defaultTheme='dark'>
             <Navbar />
             {children}

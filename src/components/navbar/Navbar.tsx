@@ -15,7 +15,7 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import NotificationDropdown from './NotificationDropdown';
 import OptionDropdown from './OptionDropdown';
-import UserDropdown from './UserDropdown';
+import UserButton from './UserButton';
 
 const Navbar = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -49,7 +49,7 @@ const Navbar = () => {
           <OptionDropdown />
         </div>
       </div>
-      <div className='flex items-center md:space-x-6 space-x-4 justify-end '>
+      <div className='flex items-center gap-x-4 justify-end'>
         <Link
           href={'/support'}
           className={'text-sm font-bold text-[--text-primary] hover:text-black dark:hover:text-white md:block hidden'}
@@ -57,21 +57,21 @@ const Navbar = () => {
           Support
         </Link>
 
-        {matches && (
-          <>
-            <NotificationDropdown />
-            {user ? (
-              <UserDropdown />
-            ) : (
-              <Link
-                href={'/auth/login'}
-                className='bg-green-500 hover:bg-[#41b168] p-2 rounded-full cursor-pointer transition-all'
-              >
-                <User2 className='text-white h-6 w-6' />
-              </Link>
-            )}
-          </>
-        )}
+        <div className='md:flex gap-x-4 items-center justify-between hidden'>
+          {user ? (
+            <>
+              <NotificationDropdown />
+              <UserButton />
+            </>
+          ) : (
+            <Link
+              href={'/auth/login'}
+              className='bg-green-500 hover:bg-[#41b168] p-2 rounded-full cursor-pointer transition-all'
+            >
+              <User2 className='text-white h-6 w-6' />
+            </Link>
+          )}
+        </div>
 
         <div className='md:block hidden'>
           <ThemeToggle />
