@@ -20,3 +20,13 @@ export const LoginSchema = z.object({
     message: 'Password is required',
   }),
 });
+
+export const PersonalInfoSchema = z.object({
+  display: z.string().optional(),
+  real: z.string().optional(),
+  phone: z.number().optional(),
+  email: z.string().optional(),
+  bio: z.string().optional(),
+  website: z.string().optional(),
+  twitter: z.string().optional(),
+});

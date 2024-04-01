@@ -37,7 +37,7 @@ type StaysStore = {
 };
 
 export const useStaysStore = create<StaysStore>((set) => ({
-  location: '',
+  location: 'Grand Canyon',
   setLocation: (value) => set(() => ({ location: value })),
 }));
 

@@ -3,6 +3,7 @@ import { useUserStore } from '@/stores/useUserStore';
 import { motion } from 'framer-motion';
 import { Building2, Home, Mail, MessageCircleIcon, User2 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 import { Ref, useRef } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 import LinkProvider from '../LinkProvider';
@@ -43,7 +44,7 @@ const ProifleOptions = ({ ref }: ProfileProps) => {
   return (
     <motion.div
       className={
-        'text-black w-[250px] p-4 absolute top-16 sm:-left-[9.4rem] -left-[5rem] items-start justify-start gap-y-4 rounded-3xl dark:text-white dark:hover:text-white bg-background dark:bg-[#141416] z-50 shadow-custom'
+        'text-black w-[250px] p-4 absolute top-20 sm:-left-[9.4rem] -left-[5rem] items-start justify-start gap-y-4 rounded-3xl dark:text-white dark:hover:text-white bg-background dark:bg-[#141416] z-50 shadow-custom'
       }
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -58,9 +59,11 @@ const ProifleOptions = ({ ref }: ProfileProps) => {
       <LinkProvider href='/list-property' icon={<Building2 />} label='List your property' />
 
       <div className='flex justify-center gap-x-2 mt-4'>
-        <Button variant={'fill'} className='text-white bg-blue hover:bg-blue-hover py-4 px-6'>
-          Account
-        </Button>
+        <Link href={'/account-settings'}>
+          <Button variant={'fill'} className='text-white bg-blue hover:bg-blue-hover py-4 px-6'>
+            Account
+          </Button>
+        </Link>
         <Button variant={'fill'} className='py-4 px-6' onClick={() => signOut()}>
           Log out
         </Button>
