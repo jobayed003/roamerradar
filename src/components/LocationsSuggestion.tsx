@@ -17,7 +17,7 @@ const LocationsSuggestion = ({ location, setLocation }: { location: string; setL
       <div className='flex flex-col gap-y-2'>
         {filteredPlaces.map((place, idx) => (
           <div
-            className='flex items-center gap-x-3 cursor-pointer hover:bg-[#2b2f3a] py-4 rounded-md text-[#2b2f3a] hover:text-[#353945] '
+            className='flex items-center gap-x-3 cursor-pointer hover:bg-[#2b2f3a] py-4 rounded-md text-[#2b2f3a] hover:text-gray_border '
             key={place.length}
             onClick={() => setLocation(place)}
             onKeyDown={(e) => {

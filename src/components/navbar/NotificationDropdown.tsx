@@ -56,7 +56,7 @@ const Notifications = ({ ref }: NotificationProps) => {
         />
         <div className='font-poppins'>
           <h1 className='font-medium'>Kohaku Tora</h1>
-          <p className='text-[#353945] dark:text-[#E6E8EC]'>Just sent you a message</p>
+          <p className='text-gray_border dark:text-[#E6E8EC]'>Just sent you a message</p>
 
           <p className='text-xs text-muted-foreground'>1 minute ago</p>
         </div>
@@ -72,7 +72,7 @@ const Notifications = ({ ref }: NotificationProps) => {
         />
         <div className='font-poppins'>
           <h1 className='font-medium'>Kohaku Tora</h1>
-          <p className='text-[#353945] dark:text-[#E6E8EC]'>Just sent you a message</p>
+          <p className='text-gray_border dark:text-[#E6E8EC]'>Just sent you a message</p>
 
           <p className='text-xs text-muted-foreground'>1 minute ago</p>
         </div>

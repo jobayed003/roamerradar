@@ -76,7 +76,7 @@ const LocationCard = ({ name, location, img, price, offerPrice, rating, availabl
         </div>
       </div>
 
-      <div className='flex justify-between pt-4 mx-4 border-t border-[#E6E8EC] dark:border-[#353945] text-xs text-[--text-primary]'>
+      <div className='flex justify-between pt-4 mx-4 border-t border-[#E6E8EC] dark:border-gray_border text-xs text-[--text-primary]'>
         <p>
           {dateFormat(availableDate)} - {dateFormat(fromPlusDay)}
         </p>

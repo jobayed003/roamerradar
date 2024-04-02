@@ -17,7 +17,7 @@ const SecurityForm = () => {
         </div>
         <LinkButton href='/update-password' label='Update Password' />
       </div>
-      <Separator className='mt-16 bg-[#353945]' />
+      <Separator className='mt-16 bg-gray_border' />
 
       <div className='mt-16 mb-10 text-2xl font-poppins font-semibold'>Social accounts</div>
 
@@ -27,7 +27,7 @@ const SecurityForm = () => {
           <p className='text-[--text-primary] text-xs'>Not connected</p>
         </div>
         <LinkButton href='/update-password' label='Connect' />
-        <Separator orientation='vertical' className='h-[50px] bg-[#353945]' />
+        <Separator orientation='vertical' className='h-[50px] bg-gray_border' />
 
         <div className='font-poppins'>
           <p className='font-semibold leading-9'>Facebook</p>
@@ -35,7 +35,7 @@ const SecurityForm = () => {
         </div>
         <LinkButton href='/update-password' label='Connect' />
       </div>
-      {/* <Separator className='mt-16 bg-[#353945]' /> */}
+      {/* <Separator className='mt-16 bg-gray_border' /> */}
     </div>
   );
 };

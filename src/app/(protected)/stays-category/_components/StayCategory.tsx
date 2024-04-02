@@ -125,7 +125,7 @@ const StayCategory = () => {
             <div className='relative mt-8'>
               <Input
                 placeholder='Enter your phone number'
-                className='max-w-[300px] border-[#353945] bg-transparent rounded-full py-5'
+                className='max-w-[300px] border-gray_border bg-transparent rounded-full py-5'
               />
               <div className='absolute right-[6.7rem] top-2 p-1 bg-blue hover:bg-blue-hover rounded-full transition-all cursor-pointer'>
                 <ArrowRight className='w-5 h-5' />
@@ -147,7 +147,7 @@ const Filters = () => {
 
   return (
     <div className='py-8'>
-      <Separator className='bg-[#353945]' />
+      <Separator className='bg-gray_bborder-gray_border' />
 
       <div className='flex justify-between items-center mt-8'>
         <div className='flex gap-x-2'>

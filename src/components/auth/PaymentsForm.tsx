@@ -65,7 +65,7 @@ const PaymentsForm = () => {
                       <CustomInput
                         placeholder='XXXX XXXX XXXX XXXX'
                         props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-[#353945] dark:focus:border-[--text-primary]'
+                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-[--text-primary]'
                       />
                     </FormControl>
                   </FormItem>
@@ -81,7 +81,7 @@ const PaymentsForm = () => {
                       <CustomInput
                         placeholder='JOHN DOE'
                         props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-[#353945]'
+                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border'
                       />
                     </FormControl>
                   </FormItem>
@@ -99,7 +99,7 @@ const PaymentsForm = () => {
                       <CustomInput
                         placeholder='MM / YY'
                         props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-[#353945] dark:focus:border-[--text-primary]'
+                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-[--text-primary]'
                       />
                     </FormControl>
                   </FormItem>
@@ -115,7 +115,7 @@ const PaymentsForm = () => {
                       <CustomInput
                         placeholder='CVC'
                         props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-[#353945]'
+                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border'
                       />
                     </FormControl>
                   </FormItem>

@@ -31,7 +31,7 @@ export const Places = () => {
                 <h1 className='ml-1 text-base font-[500] font-poppins text-ellipsis'>
                   {index > 2 ? DETAILS[index - 3].label : DETAILS[index]?.label}
                 </h1>
-                <p className='uppercase bg-[#E6E8EC] dark:bg-[#353945] rounded-full text-sm inline-block font-[700] dark:text-[#E6E8EC] text-[#353945] px-3 py-0.5 w-max'>
+                <p className='uppercase bg-[#E6E8EC] dark:bg-gray_border rounded-full text-sm inline-block font-[700] dark:text-[#E6E8EC] text-gray_border px-3 py-0.5 w-max'>
                   {index > 2 ? DETAILS[index - 3].place : DETAILS[index]?.place} places
                 </p>
               </div>

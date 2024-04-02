@@ -14,7 +14,7 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-const inputClassNames = 'border-[#353945] bg-transparent py-5 mb-5';
+const inputClassNames = 'border-gray_border bg-transparent py-5 mb-5';
 
 const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>('');
