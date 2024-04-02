@@ -2,6 +2,7 @@ import { auth } from '@/auth';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/navbar/Navbar';
 import { Separator } from '@/components/ui/separator';
+import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/providers/theme-provider';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -44,6 +45,7 @@ export default async function RootLayout({
               <Separator />
               <Footer />
             </div>
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

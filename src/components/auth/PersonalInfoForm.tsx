@@ -2,12 +2,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { PersonalInfoSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
-import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import CustomInput from '../ui/CustomInput';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
+import LinkButton from './LinkButton';
 
 const PersonalInfoForm = () => {
   const form = useForm<z.infer<typeof PersonalInfoSchema>>({
@@ -26,14 +26,10 @@ const PersonalInfoForm = () => {
   const onSubmit = (values: z.infer<typeof PersonalInfoSchema>) => {};
 
   return (
-    <div className='grow pl-28 pb-20'>
+    <div className='grow pl-28 mb-20'>
       <div className='flex items-center justify-between'>
         <h1 className='text-5xl font-bold'>Personal Info</h1>
-        <Link href={'/profile'}>
-          <Button variant={'fill'} className='hover:bg-[#353945]'>
-            View Profile
-          </Button>
-        </Link>
+        <LinkButton href='/profile' label='View Profile' />
       </div>
 
       <div className='my-8 font-medium'>Account info</div>
@@ -115,7 +111,7 @@ const PersonalInfoForm = () => {
               <Textarea
                 spellCheck={false}
                 placeholder='About yourself in a few words'
-                className='h-[140px] outline-none ring-0 resize-none focus-visible:ring-transparent focus-visible:ring-offset-0 transition-all border-2 border-[#e6e8ec] dark:border-[#353945] placeholder:text-[--text-primary] placeholder:font-semibold rounded-xl'
+                className='h-[140px] outline-none ring-0 resize-none focus-visible:ring-transparent focus-visible:ring-offset-0 transition-all border-2 border-[#e6e8ec] dark:border-[#353945] placeholder:text-[--text-primary] placeholder:font-semibold rounded-xl focus:border-[--text-primary] dark:focus:border-[--text-primary]'
               />
             </div>
           </div>

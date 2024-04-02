@@ -30,3 +30,9 @@ export const PersonalInfoSchema = z.object({
   website: z.string().optional(),
   twitter: z.string().optional(),
 });
+export const PaymentSchema = z.object({
+  number: z.string().min(12),
+  name: z.string().min(1),
+  expiry: z.string().min(4),
+  cvc: z.string().min(3),
+});
