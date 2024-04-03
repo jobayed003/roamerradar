@@ -13,7 +13,7 @@ const CoverUpload = ({ img }: { img?: string }) => {
   return (
     <div
       className={cn(
-        'h-[400px] w-full flex flex-col items-center justify-center text-[#23262F] flex-shrink relative transition-all',
+        'h-52 w-full flex flex-col items-center justify-center text-[#23262F] flex-shrink relative transition-all',
         isClicked && 'bg-[#0000002c] '
       )}
     >

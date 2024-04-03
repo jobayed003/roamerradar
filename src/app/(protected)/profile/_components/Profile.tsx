@@ -1,17 +1,16 @@
 import LinkButton from '@/components/auth/LinkButton';
 import Layout from '@/components/ui/Layout';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { Home, Link2, MessageSquare } from 'lucide-react';
 import CoverUpload from './CoverUpload';
 import ProfileDetails from './ProfileDetails';
+import ProfileReviews from './ProfileReviews';
 
 const Profile = () => {
   return (
     <Layout>
       <CoverUpload />
 
-      <div className='flex gap-x-20 py-10 px-20'>
+      <div className='flex flex-col lg:flex-row gap-20 py-10 lg:px-20'>
         <ProfileDetails />
 
         <div className='flex flex-col gap-y-8 w-full'>
@@ -24,7 +23,7 @@ const Profile = () => {
             consectetur odit mollitia aspernatur earum
           </div>
 
-          <div className='space-y-3 font-poppins w-2/3'>
+          <div className='space-y-3 font-poppins max-[400px]:w-2/3'>
             <div className='grid grid-cols-2'>
               <div className='flex items-center gap-x-4 text-[--text-primary]'>
                 <Home className='w-4 h-4' />
@@ -49,18 +48,7 @@ const Profile = () => {
               <p className='font-medium'>English, Bengali</p>
             </div>
           </div>
-
-          <div className='mb-8'>
-            <div className='flex items-center justify-between mb-5'>
-              <h1>2 reviews</h1>
-
-              <div className='flex gap-x-2'>
-                <Button variant={'transparent'}>Review about you</Button>
-                <Button variant={'transparent'}>Reviews by you</Button>
-              </div>
-            </div>
-            <Separator />
-          </div>
+          <ProfileReviews />
         </div>
       </div>
     </Layout>

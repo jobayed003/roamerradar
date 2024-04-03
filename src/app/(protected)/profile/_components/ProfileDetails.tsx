@@ -8,8 +8,10 @@ import { FaPen } from 'react-icons/fa';
 
 const ProfileDetails = () => {
   return (
-    <div className='rounded-3xl border dark:bg-[#141416] bg-background dark:border-gray_border px-10 py-4 flex flex-col justify-center items-center -mt-40 z-[300]'>
-      <Image src={'/images/browse-1.jpg'} className='rounded-full' width={160} height={160} alt='Profile img' />
+    <div className='rounded-3xl border dark:bg-[#141416] bg-background dark:border-gray_border px-10 py-4 flex flex-col justify-center items-center lg:-mt-32 z-[300] h-max'>
+      <div className='h-40 w-40 relative overflow-hidden rounded-full'>
+        <Image src={'/images/browse-1.jpg'} fill className='absolute object-cover' alt='reviewer img' />
+      </div>
 
       <Button
         className='text-xs font-semibold text-[--text-primary] hover:text-blue-hover font-poppins'
