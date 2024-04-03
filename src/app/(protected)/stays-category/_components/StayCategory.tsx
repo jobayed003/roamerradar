@@ -71,7 +71,7 @@ const StayCategory = () => {
             </div>
           </div>
 
-          {/* TODO- Replace in a separate file for reuse */}
+          {/* TODO: Replace in a separate file for reuse */}
           <div className='relative'>
             {isClicked && (
               <div className='absolute rounded-xl rounded-se-none overflow-hidden -right-[28.5rem] w-[600px] h-[500px] top-12 z-[1000] border-4 border-white '>
@@ -104,7 +104,7 @@ const StayCategory = () => {
           <StayProduct />
         </div>
 
-        <div className='flex justify-between items-center gap-x-4 '>
+        <div className='flex flex-col md:flex-row justify-between items-center gap-x-4 '>
           <div className='flex flex-col gap-y-4 max-w-[400px]'>
             <h1 className='text-5xl font-bold'>Join our newsletter 🎉</h1>
             <p className='text-[--text-primary] mb-10'>

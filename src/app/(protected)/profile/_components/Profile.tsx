@@ -10,7 +10,7 @@ const Profile = () => {
     <Layout>
       <CoverUpload />
 
-      <div className='flex flex-col lg:flex-row gap-20 py-10 lg:px-20'>
+      <div className='flex flex-col lg:flex-row gap-20 py-10 lg:px-6'>
         <ProfileDetails />
 
         <div className='flex flex-col gap-y-8 w-full'>

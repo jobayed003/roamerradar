@@ -59,7 +59,6 @@ export default function Landing({
       <Travel />
       <Work />
       <Live />
-
       <Locations />
 
       <Nearby />

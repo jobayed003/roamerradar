@@ -6,10 +6,10 @@ import { Separator } from './ui/separator';
 const Footer = () => {
   return (
     <div className='lg:max-w-7xl w-full mx-auto pt-8 px-6 pb-4 mt-auto'>
-      <div className='flex justify-between py-4 items-center gap-x-8'>
-        <Link href={'/'}>
+      <div className='flex justify-between md:flex-row flex-col md:items-center gap-8 py-4 items-start'>
+        <Link href={'/'} className='md:ml-0 -ml-2'>
           <div className='flex items-center justify-center'>
-            <Image src='/logo.png' alt='app Logo' width={50} height={50} className='object-cover ' />
+            <Image src='/logo.png' alt='app Logo' width={50} height={50} className='object-cover' />
             <p className='text-2xl font-bold'>RoamerRadar</p>
           </div>
         </Link>

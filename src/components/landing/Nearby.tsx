@@ -14,14 +14,14 @@ const Nearby = () => {
           Let&apos;s go on an adventure
         </p>
 
-        <CarouselProvider buttonClasses='sm:absolute -top-[6.5rem] right-0'>
+        <CarouselProvider buttonClasses='sm:absolute sm:-top-[6.5rem] right-0'>
           {Array.from({ length: 6 }).map((_, index) => (
-            <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2'>
+            <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2 basis-full'>
               <Link href={'/stays-category'} className='overflow-hidden'>
                 <div className='flex flex-col justify-center gap-y-5 my-20 relative mx-8 min-[400px]:mx-4'>
                   <div className='w-full relative overflow-hidden rounded-xl'>
                     <Image
-                      className='rounded-xl hover:scale-110 duration-500 transition-all'
+                      className='rounded-xl hover:scale-105 duration-500 transition-all'
                       src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
                       alt='nearby image'
                       width={250}
@@ -56,7 +56,7 @@ const Nearby = () => {
         <div className='md:flex hidden flex-wrap justify-center gap-x-8 gap-y-16 my-16 md'>
           {products
             .sort((a, b) => a.placesNumber - b.placesNumber)
-            .map((product, index) => (
+            .map((product) => (
               <NearbyProduct key={product.title} {...product} />
             ))}
         </div>

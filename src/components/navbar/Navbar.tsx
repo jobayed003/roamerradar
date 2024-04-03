@@ -88,7 +88,7 @@ const Navbar = () => {
         </Button>
       </div>
       {isClicked && (
-        <motion.div className='md:hidden block absolute w-[100%] h-[100%] z-50 bg-[hsl(var(--background))] top-20 right-0 left-0 mx-auto transition'>
+        <motion.div className='md:hidden block absolute w-[100%] h-[100%] z-[100000] bg-[hsl(var(--background))] top-20 right-0 left-0 mx-auto transition'>
           <div className='flex flex-col gap-y-8 mt-8 text-[--text-primary] text-2xl font-poppins font-[600]'>
             {routes.map((route) => (
               <Link
