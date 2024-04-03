@@ -1,4 +1,4 @@
-import AccountDetailsForm from '@/components/auth/AccountDetailsForm';
+import AccountDetailsForm from '@/app/(protected)/account-settings/_components/AccountDetailsForm';
 
 const AccountPage = () => {
   return <AccountDetailsForm />;

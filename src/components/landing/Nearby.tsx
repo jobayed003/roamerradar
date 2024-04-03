@@ -1,9 +1,9 @@
+import { products } from '@/lib/constants';
 import { Home } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { CarouselProvider } from '../CarouselProvider';
 import { CarouselItem } from '../ui/carousel';
-import { products } from '@/lib/constants';
 
 const Nearby = () => {
   return (
@@ -17,15 +17,17 @@ const Nearby = () => {
         <CarouselProvider buttonClasses='sm:absolute -top-[6.5rem] right-0'>
           {Array.from({ length: 6 }).map((_, index) => (
             <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2'>
-              <Link href={'/stays-category'}>
+              <Link href={'/stays-category'} className='overflow-hidden'>
                 <div className='flex flex-col justify-center gap-y-5 my-20 relative mx-8 min-[400px]:mx-4'>
-                  <Image
-                    className='rounded-3xl hover:scale-105 duration-500  transition-all'
-                    src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
-                    alt='nearby image'
-                    width={250}
-                    height={300}
-                  />
+                  <div className='w-full relative overflow-hidden rounded-xl'>
+                    <Image
+                      className='rounded-xl hover:scale-110 duration-500 transition-all'
+                      src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
+                      alt='nearby image'
+                      width={250}
+                      height={300}
+                    />
+                  </div>
                   <div className='absolute top-4 left-4 bg-foreground rounded-full text-[#23262F] shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
                     20% off
                   </div>
@@ -100,7 +102,7 @@ const NearbyProduct = ({ placesNumber, image, title, time }: NearbyProductProps)
       <div className='flex flex-col items-center justify-center gap-y-2'>
         <Image
           src={image}
-          className='rounded-full object-fill max-w-[80px] max-h-[80px]'
+          className='rounded-full object-fill max-w-[80px] max-h-[80px] '
           width={80}
           height={80}
           alt='product image'

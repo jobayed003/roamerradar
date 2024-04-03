@@ -10,8 +10,8 @@ import { ArrowRight } from 'lucide-react';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const inputClassNames = 'border-gray_border bg-transparent py-5 mb-5';
 

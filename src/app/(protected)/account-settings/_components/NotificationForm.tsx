@@ -1,8 +1,8 @@
 import { Switch } from '@/components/ui/switch';
 
 import { useTransition } from 'react';
-import { Separator } from '../ui/separator';
-import { toast } from '../ui/use-toast';
+import { Separator } from '@/components/ui/separator';
+import { toast } from '@/components/ui/use-toast';
 
 const NotificationForm = () => {
   return (

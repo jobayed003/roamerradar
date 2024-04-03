@@ -1,13 +1,13 @@
+import LinkButton from '@/components/auth/LinkButton';
+import CustomInput from '@/components/ui/CustomInput';
+import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
 import { PersonalInfoSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import CustomInput from '../ui/CustomInput';
-import { Button } from '../ui/button';
-import { Textarea } from '../ui/textarea';
-import LinkButton from './LinkButton';
 
 const PersonalInfoForm = () => {
   const form = useForm<z.infer<typeof PersonalInfoSchema>>({

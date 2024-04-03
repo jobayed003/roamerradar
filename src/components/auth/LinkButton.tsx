@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 
 const LinkButton = ({ href, label }: { href: string; label: string }) => {
   return (

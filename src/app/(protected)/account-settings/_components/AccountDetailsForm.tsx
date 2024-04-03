@@ -1,9 +1,9 @@
 'use client';
+import Layout from '@/components/ui/Layout';
 import { cn } from '@/lib/utils';
 import { CreditCard, LockKeyhole, User2 } from 'lucide-react';
 import { useState } from 'react';
 import { IoNotificationsOutline } from 'react-icons/io5';
-import Layout from '../ui/Layout';
 import NotificationForm from './NotificationForm';
 import PaymentsForm from './PaymentsForm';
 import PersonalInfoForm from './PersonalInfoForm';

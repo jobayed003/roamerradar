@@ -7,8 +7,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import CustomInput from '../ui/CustomInput';
-import { Button } from '../ui/button';
+import CustomInput from '@/components/ui/CustomInput';
+import { Button } from '@/components/ui/button';
 
 const PaymentsForm = () => {
   const [isSelected, setIsSelected] = useState(true);
