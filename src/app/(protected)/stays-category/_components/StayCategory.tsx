@@ -43,7 +43,7 @@ const StayCategory = () => {
         <Stays />
       </HeroSection>
 
-      <div className='px-20 pb-20'>
+      <div className='md:px-20 px-4 pb-20 mt-72 lg:mt-0'>
         <div className='flex items-center justify-between'>
           <Link href={'/'}>
             <Button variant={'outline'} className='rounded-full'>
@@ -72,23 +72,22 @@ const StayCategory = () => {
           </div>
 
           {/* TODO: Replace in a separate file for reuse */}
-          <div className='relative'>
-            {isClicked && (
-              <div className='absolute rounded-xl rounded-se-none overflow-hidden -right-[28.5rem] w-[600px] h-[500px] top-12 z-[1000] border-4 border-white '>
-                <MapProvider />
-              </div>
-            )}
-          </div>
+
           <Button
             variant={'outline'}
             className={cn(
-              'rounded-full p-4 select-none font-bold relative focus:ring-0 focus:ring-offset-0 ring-offset-0 shadow-[inset_0_0_0_2px_#353945] border-0',
+              'rounded-full p-4 select-none font-bold relative md:flex hidden focus:ring-0 focus:ring-offset-0 ring-offset-0 shadow-[inset_0_0_0_2px_#353945] border-0',
               isClicked && 'bg-blue hover:bg-blue-hover'
             )}
             onClick={() => setIsClicked(!isClicked)}
           >
             Show Map
             <ChevronDown className={cn('ml-2 w-6 h-5 transition-all duration-200', isClicked && 'rotate-180')} />
+            {isClicked && (
+              <div className='absolute rounded-xl rounded-se-none overflow-hidden right-0 w-[600px] h-[500px] top-12 z-[1000] border-4 border-white '>
+                <MapProvider />
+              </div>
+            )}
           </Button>
         </div>
 
@@ -105,7 +104,7 @@ const StayCategory = () => {
         </div>
 
         <div className='flex flex-col md:flex-row justify-between items-center gap-x-4 '>
-          <div className='flex flex-col gap-y-4 max-w-[400px]'>
+          <div className='flex flex-col gap-y-4 md:max-w-[400px] mt-8'>
             <h1 className='text-5xl font-bold'>Join our newsletter 🎉</h1>
             <p className='text-[--text-primary] mb-10'>
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur
@@ -149,8 +148,8 @@ const Filters = () => {
     <div className='py-8'>
       <Separator className='bg-gray_bborder-gray_border' />
 
-      <div className='flex justify-between items-center mt-8'>
-        <div className='flex gap-x-2'>
+      <div className='flex justify-between md:flex-row flex-col gap-y-4 items-center mt-8'>
+        <div className='lg:flex hidden gap-x-2'>
           {filters.map((item) => (
             <div
               key={item.length}
@@ -165,16 +164,31 @@ const Filters = () => {
           ))}
         </div>
 
-        <Select>
-          <SelectTrigger className='w-[180px] focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl'>
-            <SelectValue placeholder='On Sales' />
-          </SelectTrigger>
-          <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red'>
-            <SelectItem value='On Sales'>On Sales</SelectItem>
-            <SelectItem value='On Delivery'>On Delivery</SelectItem>
-            <SelectItem value='In Exchange'>In Exchange</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className='lg:hidden md:w-auto w-full'>
+          <Select>
+            <SelectTrigger className='md:w-[180px] w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl'>
+              <SelectValue placeholder='Entire homes' />
+            </SelectTrigger>
+            <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red'>
+              <SelectItem value='Cancellation flexibility'>Cancellation flexibility</SelectItem>
+              <SelectItem value='Closest beach'>Closest beach</SelectItem>
+              <SelectItem value='For long stays'>For long stays</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className='md:w-auto w-full'>
+          <Select>
+            <SelectTrigger className='md:w-[180px] w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl'>
+              <SelectValue placeholder='On Sales' />
+            </SelectTrigger>
+            <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red'>
+              <SelectItem value='On Sales'>On Sales</SelectItem>
+              <SelectItem value='On Delivery'>On Delivery</SelectItem>
+              <SelectItem value='In Exchange'>In Exchange</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </div>
   );
@@ -185,16 +199,16 @@ const BrowseCarousel = () => {
     <div className='relative'>
       <CarouselProvider buttonClasses='sm:absolute -top-[2.5rem] right-0'>
         {Array.from({ length: 6 }).map((_, index) => (
-          <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2'>
+          <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2 basis-full'>
             <Link href={'/stays-category'} className='hover:text-blue transition-all'>
-              <div className='flex flex-col justify-center gap-y-5 my-20 relative rounded-3xl'>
-                <div className='w-[250px] h-full overflow-hidden rounded-3xl'>
+              <div className='flex flex-col gap-y-5 my-20 relative rounded-3xl'>
+                <div className='w-full relative overflow-hidden rounded-3xl'>
                   <Image
-                    className='hover:scale-110 duration-500'
+                    className='hover:scale-110 rounded-3xl duration-500'
                     src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
                     alt='nearby image'
                     width={250}
-                    height={300}
+                    height={250}
                   />
                 </div>
                 <div className='absolute top-4 left-4 bg-foreground rounded-full text-white dark:text-[#23262F] shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>

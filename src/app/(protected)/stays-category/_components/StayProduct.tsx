@@ -49,8 +49,11 @@ type StayProductCardProps = {
 
 const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, reviews }: StayProductCardProps) => {
   return (
-    <Link href={'/stays-product'} className='max-w-[350px] pb-6 rounded-xl border border-[rgb(53, 57, 69)] shadow-sm '>
-      <div className='w-full h-[240px] relative overflow-hidden rounded-t-xl'>
+    <Link
+      href={'/stays-product'}
+      className='md:max-w-[350px] w-full pb-6 rounded-xl border border-[rgb(53, 57, 69)] shadow-sm '
+    >
+      <div className='w-full md:h-[240px] h-[300px] relative overflow-hidden rounded-t-xl'>
         <Image
           src={img}
           alt='location img'
@@ -71,7 +74,7 @@ const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, revi
           </div>
         </div>
 
-        <div className='border-2 self-center border-[#58C27D] text-xs font-bold px-2 py-1'>
+        <div className='border-2 self-center rounded-sm border-[#58C27D] text-xs font-bold px-2 py-1'>
           <p className='line-through'>${price}</p>
           <p className='text-[#58C27D]'>${offerPrice}</p>
         </div>
