@@ -99,7 +99,7 @@ const StayCategory = () => {
         </div>
 
         <div>
-          <h1 className='text-3xl font-bold'>Over 300 stays</h1>
+          <h1 className='text-3xl font-bold mb-4'>Over 300 stays</h1>
           <StayProduct />
         </div>
 
@@ -121,13 +121,15 @@ const StayCategory = () => {
                 <p>Get premium travel magazine</p>
               </div>
             </div>
-            <div className='relative mt-8'>
+            <div className='mt-8 flex'>
               <Input
                 placeholder='Enter your phone number'
-                className='max-w-[300px] border-gray_border bg-transparent rounded-full py-5'
+                className='md:max-w-[300px] border-gray_border bg-transparent rounded-full py-5'
               />
-              <div className='absolute right-[6.7rem] top-2 p-1 bg-blue hover:bg-blue-hover rounded-full transition-all cursor-pointer'>
-                <ArrowRight className='w-5 h-5' />
+              <div className='relative'>
+                <div className='absolute right-1 top-2 p-1 bg-blue hover:bg-blue-hover rounded-full transition-all cursor-pointer'>
+                  <ArrowRight className='w-5 h-5' />
+                </div>
               </div>
             </div>
           </div>
@@ -200,9 +202,9 @@ const BrowseCarousel = () => {
       <CarouselProvider buttonClasses='sm:absolute -top-[2.5rem] right-0'>
         {Array.from({ length: 6 }).map((_, index) => (
           <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2 basis-full'>
-            <Link href={'/stays-category'} className='hover:text-blue transition-all'>
+            <Link href={'/stays-category'} className='hover:text-blue transition-all flex flex-col items-center'>
               <div className='flex flex-col gap-y-5 my-20 relative rounded-3xl'>
-                <div className='w-full relative overflow-hidden rounded-3xl'>
+                <div className='relative self-center sm:self-start overflow-hidden rounded-3xl'>
                   <Image
                     className='hover:scale-110 rounded-3xl duration-500'
                     src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}

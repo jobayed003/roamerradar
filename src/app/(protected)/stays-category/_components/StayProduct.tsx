@@ -1,9 +1,8 @@
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import { LucideIcon, Pizza, Wifi } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
-import ClipLoader from 'react-spinners/ClipLoader';
 
 const houses = [
   {
@@ -12,7 +11,7 @@ const houses = [
       { name: 'Free Wifi', icon: Wifi },
       { name: 'Breakfast Included', icon: Pizza },
     ],
-    img: '/images/browse-2.jpg',
+    img: '/images/card-2.jpg',
     price: 543,
     offerPrice: 325,
     rating: 4.9,
@@ -21,8 +20,6 @@ const houses = [
 ];
 
 const StayProduct = () => {
-  const { theme } = useTheme();
-
   return (
     <div className='flex flex-col items-center'>
       <div className='flex gap-x-6 gap-y-8 justify-center flex-wrap mt-8'>
@@ -32,7 +29,10 @@ const StayProduct = () => {
       </div>
 
       <Button variant={'outline'} className='my-8 border-2 border-[--text-primary] rounded-full'>
-        <ClipLoader color={theme === 'dark' ? 'white' : 'black'} size={25} /> Show More
+        <LoadingSpinner className='mr-2' />
+        Show More
+        {/* <PuffLoader color={theme === 'dark' ? 'white' : 'black'} size={25} /> */}
+        {/* <SyncLoader color={theme === 'dark' ? 'white' : 'black'} size={10} /> Show More */}
       </Button>
     </div>
   );
@@ -49,10 +49,7 @@ type StayProductCardProps = {
 
 const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, reviews }: StayProductCardProps) => {
   return (
-    <Link
-      href={'/stays-product'}
-      className='md:max-w-[350px] w-full pb-6 rounded-xl border border-[rgb(53, 57, 69)] shadow-sm '
-    >
+    <Link href={'/stays-product'} className='md:max-w-[350px] w-full rounded-3xl border border-gray_border shadow-sm '>
       <div className='w-full md:h-[240px] h-[300px] relative overflow-hidden rounded-t-xl'>
         <Image
           src={img}
@@ -61,7 +58,7 @@ const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, revi
           fill
         />
       </div>
-      <div className='flex justify-between p-4 pt-6'>
+      <div className='flex justify-between p-6'>
         <div>
           <h1 className='font-medium'>{name}</h1>
           <div className='flex gap-x-2 mt-2'>
@@ -74,13 +71,13 @@ const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, revi
           </div>
         </div>
 
-        <div className='border-2 self-center rounded-sm border-[#58C27D] text-xs font-bold px-2 py-1'>
+        <div className='border-2 self-center rounded-md border-[#58C27D] text-xs font-bold px-2 py-1'>
           <p className='line-through'>${price}</p>
           <p className='text-[#58C27D]'>${offerPrice}</p>
         </div>
       </div>
 
-      <div className='flex justify-between pt-4 mx-4 border-t border-[#E6E8EC] dark:border-gray_border text-xs text-[--text-primary] font-poppins'>
+      <div className='flex justify-between py-6 mx-6 border-t border-[#E6E8EC] dark:border-gray_border text-xs text-[--text-primary] font-poppins'>
         <p className='text-foreground font-semibold'>${offerPrice} total</p>
         <p className='text-foreground font-semibold'>
           ⭐{rating}
