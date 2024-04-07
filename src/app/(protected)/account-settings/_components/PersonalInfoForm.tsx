@@ -48,7 +48,7 @@ const PersonalInfoForm = () => {
                       <CustomInput
                         placeholder='Enter your display name'
                         props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-[--text-primary]'
+                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
                       />
                     </FormControl>
                   </FormItem>
@@ -111,7 +111,7 @@ const PersonalInfoForm = () => {
               <Textarea
                 spellCheck={false}
                 placeholder='About yourself in a few words'
-                className='h-[140px] outline-none ring-0 resize-none focus-visible:ring-transparent focus-visible:ring-offset-0 transition-all border-2 border-[#e6e8ec] dark:border-gray_border placeholder:text-[--text-primary] placeholder:font-semibold rounded-xl focus:border-[--text-primary] dark:focus:border-[--text-primary]'
+                className='h-[140px] outline-none ring-0 resize-none focus-visible:ring-transparent focus-visible:ring-offset-0 transition-all border-2 border-[#e6e8ec] dark:border-gray_border placeholder:text-gray_text placeholder:font-semibold rounded-xl focus:border-gray_text dark:focus:border-gray_text'
               />
             </div>
           </div>
@@ -160,7 +160,7 @@ const PersonalInfoForm = () => {
             <Button
               variant={'transparent'}
               onClick={() => form.reset()}
-              className='text-[--text-primary] font-bold hover:text-blue-hover'
+              className='text-gray_text font-bold hover:text-blue-hover'
             >
               <X className='w-4 h-4 mr-2' /> Clear all
             </Button>

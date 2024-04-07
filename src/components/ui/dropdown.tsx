@@ -20,7 +20,7 @@ const Dropdown = ({ isClicked, onClose, onOpen, onOutsideClick, children }: Drop
   return (
     <div
       className={cn(
-        'relative flex items-center justify-center gap-x-4 cursor-pointer text-[--text-primary] hover:text-black transition dark:hover:text-white ',
+        'relative flex items-center justify-center gap-x-4 cursor-pointer text-gray_text hover:text-black transition dark:hover:text-white ',
         isClicked && 'text-black dark:text-white'
       )}
       onClick={isClicked ? onClose : onOpen}

@@ -15,7 +15,7 @@ const Live = () => {
     <div className='lg:p-8 lg:pt-14 p-4 flex flex-col items-center mt-10 gap-y-10 md:gap-y-24 text-center'>
       <div className='md:text-center md:max-w-2xl max-w-xl'>
         <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>Live anywhere</h1>
-        <p className='lg:text-2xl md:text-md text-sm my-4 text-[--text-primary] font-poppins'>Keep calm & travel on</p>
+        <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins'>Keep calm & travel on</p>
       </div>
 
       <div className='flex flex-wrap justify-center items-center gap-x-8 gap-y-12'>
@@ -46,7 +46,7 @@ const LiveItem = ({ img, title, content }: LiveItemProps) => {
         />
       </div>
       <h1 className='font-medium my-4'>{title}</h1>
-      <p className='text-sm text-[--text-primary] font-poppins font-medium'>{content}</p>
+      <p className='text-sm text-gray_text font-poppins font-medium'>{content}</p>
     </Link>
   );
 };

@@ -28,11 +28,9 @@ const StayProduct = () => {
         ))}
       </div>
 
-      <Button variant={'outline'} className='my-8 border-2 border-[--text-primary] rounded-full'>
+      <Button variant={'outline'} className='my-8 border-2 border-gray_text rounded-full'>
         <LoadingSpinner className='mr-2' />
         Show More
-        {/* <PuffLoader color={theme === 'dark' ? 'white' : 'black'} size={25} /> */}
-        {/* <SyncLoader color={theme === 'dark' ? 'white' : 'black'} size={10} /> Show More */}
       </Button>
     </div>
   );
@@ -64,8 +62,8 @@ const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, revi
           <div className='flex gap-x-2 mt-2'>
             {amenities.map((item) => (
               <div className='flex gap-x-1 items-center' key={item.name}>
-                <item.icon className='w-3 h-3 text-[--text-primary]' />
-                <p className='text-xs text-[--text-primary] font-poppins'>{item.name}</p>
+                <item.icon className='w-3 h-3 text-gray_text' />
+                <p className='text-xs text-gray_text font-poppins'>{item.name}</p>
               </div>
             ))}
           </div>
@@ -77,11 +75,11 @@ const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, revi
         </div>
       </div>
 
-      <div className='flex justify-between py-6 mx-6 border-t border-[#E6E8EC] dark:border-gray_border text-xs text-[--text-primary] font-poppins'>
+      <div className='flex justify-between py-6 mx-6 border-t border-[#E6E8EC] dark:border-gray_border text-xs text-gray_text font-poppins'>
         <p className='text-foreground font-semibold'>${offerPrice} total</p>
         <p className='text-foreground font-semibold'>
           ⭐{rating}
-          <span className='text-[--text-primary] font-normal text-xs'>({reviews} reviews)</span>
+          <span className='text-gray_text font-normal text-xs'>({reviews} reviews)</span>
         </p>
       </div>
     </Link>

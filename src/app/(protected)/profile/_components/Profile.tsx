@@ -18,14 +18,14 @@ const Profile = () => {
             <h1 className='text-2xl font-semibold'>Hi, I&apos;m Jobayed Hossain</h1>
             <LinkButton href='/account-settings' label='Edit Your Profile' />
           </div>
-          <div className='text-[--text-primary]'>
+          <div className='text-gray_text'>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste quia, suscipit numquam a inventore omnis
             consectetur odit mollitia aspernatur earum
           </div>
 
           <div className='space-y-3 font-poppins max-[400px]:w-2/3'>
             <div className='grid grid-cols-2'>
-              <div className='flex items-center gap-x-4 text-[--text-primary]'>
+              <div className='flex items-center gap-x-4 text-gray_text'>
                 <Home className='w-4 h-4' />
                 Lives in
               </div>
@@ -33,7 +33,7 @@ const Profile = () => {
             </div>
 
             <div className='grid grid-cols-2'>
-              <div className='flex items-center gap-x-4 text-[--text-primary]'>
+              <div className='flex items-center gap-x-4 text-gray_text'>
                 <Link2 className='w-4 h-4' />
                 Account
               </div>
@@ -41,7 +41,7 @@ const Profile = () => {
             </div>
 
             <div className='grid grid-cols-2'>
-              <div className='flex items-center gap-x-4 text-[--text-primary]'>
+              <div className='flex items-center gap-x-4 text-gray_text'>
                 <MessageSquare className='w-4 h-4' />
                 Speak
               </div>

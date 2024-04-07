@@ -7,11 +7,10 @@ import Link from 'next/link';
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import { CarouselProvider } from '@/components/CarouselProvider';
+import CategoryFilter from '@/components/CategoryFilter';
 import MapProvider from '@/components/map/MapProvider';
 import { CarouselItem } from '@/components/ui/carousel';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
 import { cn, createSearchParams, getCountryByPlaceName } from '@/lib/utils';
 import { useBookingDate, useStaysStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
@@ -19,6 +18,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import StayProduct from './StayProduct';
+
+const filters = ['Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
+const selectItems = ['On Sales', 'On Delivery', 'In Exchange'];
 
 const StayCategory = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -62,7 +64,7 @@ const StayCategory = () => {
           <div className='font-bold'>
             <h1 className='text-5xl'>Places to stay</h1>
             <div className='flex gap-x-4 mt-3'>
-              <p className='border-2 border-[#58c27d] text-[#58c27d] uppercase p-2 py-1 text-xs rounded-sm'>
+              <p className='border-2 border-[#58c27d] text-[#58c27d] uppercase p-2 py-1 text-xs rounded-sm font-bold'>
                 300+ stays
               </p>
               <p>
@@ -70,8 +72,6 @@ const StayCategory = () => {
               </p>
             </div>
           </div>
-
-          {/* TODO: Replace in a separate file for reuse */}
 
           <Button
             variant={'outline'}
@@ -91,7 +91,7 @@ const StayCategory = () => {
           </Button>
         </div>
 
-        <Filters />
+        <CategoryFilter filters={filters} selectItems={selectItems} />
 
         <div className='py-8'>
           <h1 className='text-3xl font-bold'>Explore mountains in {location}</h1>
@@ -106,7 +106,7 @@ const StayCategory = () => {
         <div className='flex flex-col md:flex-row justify-between items-center gap-x-4 '>
           <div className='flex flex-col gap-y-4 md:max-w-[400px] mt-8'>
             <h1 className='text-5xl font-bold'>Join our newsletter 🎉</h1>
-            <p className='text-[--text-primary] mb-10'>
+            <p className='text-gray_text mb-10'>
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur
               adipisicing elit.
             </p>
@@ -141,61 +141,6 @@ const StayCategory = () => {
   );
 };
 
-const filters = ['Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
-
-const Filters = () => {
-  const [selected, setSelected] = useState(filters[0]);
-
-  return (
-    <div className='py-8'>
-      <Separator className='bg-gray_bborder-gray_border' />
-
-      <div className='flex justify-between md:flex-row flex-col gap-y-4 items-center mt-8'>
-        <div className='lg:flex hidden gap-x-2'>
-          {filters.map((item) => (
-            <div
-              key={item.length}
-              onClick={() => setSelected(item)}
-              className={cn(
-                'rounded-full px-2 py-1 font-bold text-sm bg-transparent text-[--text-primary] cursor-pointer hover:text-foreground transition-all select-none',
-                selected === item && 'bg-foreground text-[#23262F] hover:text-[#23262F]'
-              )}
-            >
-              {item}
-            </div>
-          ))}
-        </div>
-
-        <div className='lg:hidden md:w-auto w-full'>
-          <Select>
-            <SelectTrigger className='md:w-[180px] w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl'>
-              <SelectValue placeholder='Entire homes' />
-            </SelectTrigger>
-            <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red'>
-              <SelectItem value='Cancellation flexibility'>Cancellation flexibility</SelectItem>
-              <SelectItem value='Closest beach'>Closest beach</SelectItem>
-              <SelectItem value='For long stays'>For long stays</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className='md:w-auto w-full'>
-          <Select>
-            <SelectTrigger className='md:w-[180px] w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl'>
-              <SelectValue placeholder='On Sales' />
-            </SelectTrigger>
-            <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red'>
-              <SelectItem value='On Sales'>On Sales</SelectItem>
-              <SelectItem value='On Delivery'>On Delivery</SelectItem>
-              <SelectItem value='In Exchange'>In Exchange</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const BrowseCarousel = () => {
   return (
     <div className='relative'>
@@ -219,7 +164,7 @@ const BrowseCarousel = () => {
 
                 <div>
                   <h1 className='font-medium'>Mountain House</h1>
-                  <div className='flex items-center gap-1 text-[--text-primary] mt-1'>
+                  <div className='flex items-center gap-1 text-gray_text mt-1'>
                     <Home className='h-4 w-4' />
                     <p className='text-xs font-poppins font-semibold mt-1'>{(index + 23 * 32332).toLocaleString()}</p>
                   </div>

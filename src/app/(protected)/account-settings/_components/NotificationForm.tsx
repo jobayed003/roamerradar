@@ -92,7 +92,7 @@ const ToggleNotification = ({ label, value = false, desc, field }: ToggleCardPro
       <div className='flex items-center justify-between'>
         <div>
           <p className='font-semibold shrink-0 mb-1'>{label}</p>
-          <p className='text-[--text-primary] text-sm'>{desc}</p>
+          <p className='text-gray_text text-sm'>{desc}</p>
         </div>
         <div className='space-y-2'>
           <Switch disabled={isPending} onCheckedChange={onChange} checked={value}>

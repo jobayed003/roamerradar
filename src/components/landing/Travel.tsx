@@ -10,7 +10,7 @@ const Travel = () => {
         <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>
           Travel to make memories all around the world
         </h1>
-        <p className='lg:text-2xl md:text-md text-sm my-4 text-[--text-primary] font-poppins'>
+        <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins'>
           Find trips that fit a flexible lifestyle
         </p>
       </div>

@@ -52,7 +52,7 @@ const Navbar = () => {
       <div className='flex items-center gap-x-4 justify-end'>
         <Link
           href={'/support'}
-          className={'text-sm font-bold text-[--text-primary] hover:text-black dark:hover:text-white md:block hidden'}
+          className={'text-sm font-bold text-gray_text hover:text-black dark:hover:text-white md:block hidden'}
         >
           Support
         </Link>
@@ -78,7 +78,7 @@ const Navbar = () => {
         </div>
 
         <Button
-          className='md:hidden flex text-[--text-primary]'
+          className='md:hidden flex text-gray_text'
           onClick={() => setIsClicked(!isClicked)}
           variant='transparent'
           size='icon'
@@ -89,7 +89,7 @@ const Navbar = () => {
       </div>
       {isClicked && (
         <motion.div className='md:hidden block absolute w-[100%] h-[100%] z-[100000] bg-[hsl(var(--background))] top-20 right-0 left-0 mx-auto transition'>
-          <div className='flex flex-col gap-y-8 mt-8 text-[--text-primary] text-2xl font-poppins font-[600]'>
+          <div className='flex flex-col gap-y-8 mt-8 text-gray_text text-2xl font-poppins font-[600]'>
             {routes.map((route) => (
               <Link
                 key={route.href}

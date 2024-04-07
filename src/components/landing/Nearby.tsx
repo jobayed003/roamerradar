@@ -10,7 +10,7 @@ const Nearby = () => {
     <div className='mt-32 pb-32 relative'>
       <div className='sm:px-20 px-4 '>
         <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>Explore nearby</h1>
-        <p className='lg:text-2xl md:text-md text-sm my-4 text-[--text-primary] font-poppins'>
+        <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins'>
           Let&apos;s go on an adventure
         </p>
 
@@ -34,7 +34,7 @@ const Nearby = () => {
 
                   <div>
                     <h1 className='font-medium'>Nature House</h1>
-                    <div className='flex items-center gap-1 text-[--text-primary] mt-1'>
+                    <div className='flex items-center gap-1 text-gray_text mt-1'>
                       <Home className='h-4 w-4' />
                       <p className='text-xs font-poppins font-semibold mt-1'>{(index + 23 * 32332).toLocaleString()}</p>
                     </div>
@@ -49,7 +49,7 @@ const Nearby = () => {
       <div className='bg-[#F4F5F6] dark:bg-[#18191D] dark:border-2 dark:border-[#23262F] rounded-2xl lg:p-20 p-5'>
         <div className='text-center py-8'>
           <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>Explore nearby</h1>
-          <p className='lg:text-2xl md:text-md text-sm my-4 text-[--text-primary] font-poppins -r'>
+          <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins -r'>
             10,789 beautiful places to go
           </p>
         </div>
@@ -96,7 +96,7 @@ const NearbyProduct = ({ placesNumber, image, title, time }: NearbyProductProps)
        dark:hover:shadow-[inset_0_0_0_1px_#353945] 
        lg:w-[calc(20%-48px)] max-[1090px]:basis-1/4'
     >
-      <div className='bg-[#F4F5F6] dark:bg-[#141416] font-bold text-xs text-[--text-primary] font-poppins px-3 py-1 rounded-full max-w-max mb-4'>
+      <div className='bg-[#F4F5F6] dark:bg-[#141416] font-bold text-xs text-gray_text font-poppins px-3 py-1 rounded-full max-w-max mb-4'>
         {placesNumber}
       </div>
       <div className='flex flex-col items-center justify-center gap-y-2'>
@@ -109,7 +109,7 @@ const NearbyProduct = ({ placesNumber, image, title, time }: NearbyProductProps)
         />
         <div className='font-poppins text-center'>
           <h1 className='font-medium mt-4'>{title}</h1>
-          <p className='text-xs text-[--text-primary]'>{time}</p>
+          <p className='text-xs text-gray_text'>{time}</p>
         </div>
       </div>
     </Link>

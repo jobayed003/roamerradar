@@ -19,14 +19,14 @@ const Footer = () => {
             <Link
               href={route.href}
               key={route.href}
-              className='text-[--text-primary] hover:text-[#23262F] dark:hover:text-[#E6E8EC]  font-bold text-sm transition'
+              className='text-gray_text hover:text-[#23262F] dark:hover:text-[#E6E8EC]  font-bold text-sm transition'
             >
               {route.label}
             </Link>
           ))}
           <Link
             href={'/support'}
-            className='text-[--text-primary] hover:text-[#23262F] dark:hover:text-[#E6E8EC] font-bold text-sm transition'
+            className='text-gray_text hover:text-[#23262F] dark:hover:text-[#E6E8EC] font-bold text-sm transition'
           >
             Support
           </Link>
@@ -34,7 +34,7 @@ const Footer = () => {
       </div>
       <Separator />
 
-      <div className='text-[--text-primary] text-xs my-4 font-poppins'>
+      <div className='text-gray_text text-xs my-4 font-poppins'>
         Copyright © {new Date().getFullYear()} RoamerRadar. All rights reserved
       </div>
     </div>

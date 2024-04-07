@@ -29,7 +29,7 @@ const HeroSection = ({ children, className, imgClass, img }: HeroSectionProps) =
         className={cn('object-cover rounded-3xl -z-10 absolute', imgClass)}
         alt='hero image'
       />
-      <Panel className='lg:-bottom-16'>
+      <Panel className='lg:-bottom-16  mx-8'>
         <div className='flex flex-col lg:p-10 p-5'>{children}</div>
       </Panel>
 

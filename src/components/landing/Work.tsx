@@ -28,7 +28,7 @@ const Work = () => {
     <div className='lg:p-8 lg:pt-14 p-4 flex flex-col items-center mt-10 gap-y-10 md:gap-y-24 text-center'>
       <div className='md:text-center md:max-w-2xl max-w-xl'>
         <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>How it work</h1>
-        <p className='lg:text-2xl md:text-md text-sm my-4 text-[--text-primary] font-poppins'>Keep calm & travel on</p>
+        <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins'>Keep calm & travel on</p>
       </div>
 
       <div className='flex flex-col md:flex-row gap-y-10 justify-around items-center w-full relative'>
@@ -38,7 +38,7 @@ const Work = () => {
 
             <div className='text-center max-w-[200px]'>
               <h1 className='text-2xl font-[600] mb-2'>{details.title}</h1>
-              <p className='text-sm text-[--text-primary] font-poppins'>{details.description}</p>
+              <p className='text-sm text-gray_text font-poppins'>{details.description}</p>
             </div>
           </div>
         ))}

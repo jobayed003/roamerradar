@@ -19,7 +19,7 @@ const NotificationDropdown = () => {
   return (
     <Dropdown isClicked={isClicked} onOutsideClick={onOutsideClick} onClose={onClose} onOpen={onOpen}>
       <div className='relative p-2 hover:text-black dark:hover:text-white '>
-        <IoNotificationsOutline className='h-6 w-6 text-[--text-primary] hover:text-black dark:hover:text-white' />
+        <IoNotificationsOutline className='h-6 w-6 text-gray_text hover:text-black dark:hover:text-white' />
       </div>
 
       <div className='absolute top-0 left-6 w-3 h-3 bg-green-500 rounded-full' />

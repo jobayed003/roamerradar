@@ -22,9 +22,7 @@ const Locations = () => {
     <div className='bg-[#F4F5F6] dark:bg-background dark:border-2 dark:border-[#23262F] rounded-2xl lg:p-20 p-5 mt-16'>
       <div className='text-center lg:text-left'>
         <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>Go somewhere</h1>
-        <p className='lg:text-2xl md:text-md text-sm my-4 text-[--text-primary] font-poppins'>
-          Let&apos;s go on an adventure
-        </p>
+        <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins'>Let&apos;s go on an adventure</p>
       </div>
 
       <div className='flex items-center lg:justify-normal justify-center gap-x-8 gap-y-8 flex-wrap mt-16'>
@@ -35,7 +33,7 @@ const Locations = () => {
 
       <div className='text-center mt-14'>
         <Link href={'/stays-category'}>
-          <Button variant={'outline'} className='rounded-full border-2 border-[--text-primary]'>
+          <Button variant={'outline'} className='rounded-full border-2 border-gray_text'>
             View All
           </Button>
         </Link>
@@ -76,7 +74,7 @@ const LocationCard = ({ name, location, img, price, offerPrice, rating, availabl
         </div>
       </div>
 
-      <div className='flex justify-between pt-4 mx-4 border-t border-[#E6E8EC] dark:border-gray_border text-xs text-[--text-primary]'>
+      <div className='flex justify-between pt-4 mx-4 border-t border-[#E6E8EC] dark:border-gray_border text-xs text-gray_text'>
         <p>
           {dateFormat(availableDate)} - {dateFormat(fromPlusDay)}
         </p>

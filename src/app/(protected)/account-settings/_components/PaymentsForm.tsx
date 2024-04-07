@@ -36,7 +36,7 @@ const PaymentsForm = () => {
       <div className='flex items-center justify-between mt-4 my-8'>
         <div className='font-poppins'>
           <p className='font-semibold leading-9'>Visa ••••••1667</p>
-          <p className='text-[--text-primary] text-xs'>Expiration: 03/2026</p>
+          <p className='text-gray_text text-xs'>Expiration: 03/2026</p>
         </div>
 
         <Button variant={'fill'} className='font-bold p-6 bg-blue hover:bg-blue-hover text-white'>
@@ -65,7 +65,7 @@ const PaymentsForm = () => {
                       <CustomInput
                         placeholder='XXXX XXXX XXXX XXXX'
                         props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-[--text-primary]'
+                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
                       />
                     </FormControl>
                   </FormItem>
@@ -99,7 +99,7 @@ const PaymentsForm = () => {
                       <CustomInput
                         placeholder='MM / YY'
                         props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-[--text-primary]'
+                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
                       />
                     </FormControl>
                   </FormItem>

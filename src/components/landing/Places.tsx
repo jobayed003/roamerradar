@@ -13,7 +13,7 @@ export const Places = () => {
     <div className='p-8 flex flex-col items-center justify-center lg:mt-48 mt-64 gap-y-16'>
       <div className='text-center'>
         <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>Let&apos;s go on an adventure</h1>
-        <p className='lg:text-2xl md:text-md text-sm my-4 text-[--text-primary] font-poppins'>
+        <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins'>
           Find and book a great experience
         </p>
       </div>

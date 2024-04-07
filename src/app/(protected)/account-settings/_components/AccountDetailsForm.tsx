@@ -29,7 +29,7 @@ const AccountDetailsForm = () => {
             <div
               key={item.label}
               className={cn(
-                'flex gap-x-2 items-center font-bold text-sm transition text-[--text-primary] hover:text-black dark:text-[--text-primary] dark:hover:text-white cursor-pointer',
+                'flex gap-x-2 items-center font-bold text-sm transition text-gray_text hover:text-black dark:text-gray_text dark:hover:text-white cursor-pointer',
                 selected === idx && 'text-black dark:text-white'
               )}
               onClick={() => setSelected(idx)}

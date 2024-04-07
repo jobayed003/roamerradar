@@ -27,7 +27,7 @@ const LocationsSuggestion = ({ location, setLocation }: { location: string; setL
             }}
           >
             <Compass className='h-6 w-6 text-gray-700' />
-            <h1 className='text-[--text-primary] font-medium'>{place}</h1>
+            <h1 className='text-gray_text font-medium'>{place}</h1>
           </div>
         ))}
       </div>

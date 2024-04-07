@@ -27,7 +27,7 @@ const ProfileReviews = () => {
         <div className='flex items-center gap-x-2 font-bold text-sm'>
           <Button
             className={cn(
-              'rounded-full transition-all px-4 h-7 font-bold text-sm text-[--text-primary] dark:text-[--text-primary] dark:hover:text-white hover:text-black py-1',
+              'rounded-full transition-all px-4 h-7 font-bold text-sm text-gray_text dark:text-gray_text dark:hover:text-white hover:text-black py-1',
               selected === 'Review about you' &&
                 'dark:text-background text-background bg-gray_border dark:bg-foreground hover:text-background dark:hover:text-background'
             )}
@@ -38,7 +38,7 @@ const ProfileReviews = () => {
           </Button>
           <Button
             className={cn(
-              'rounded-full transition-all px-4 h-7 font-bold text-sm text-[--text-primary] dark:text-[--text-primary] dark:hover:text-white hover:text-black py-1',
+              'rounded-full transition-all px-4 h-7 font-bold text-sm text-gray_text dark:text-gray_text dark:hover:text-white hover:text-black py-1',
               selected === 'Reviews by you' &&
                 'dark:text-background text-background bg-gray_border dark:bg-foreground hover:text-background dark:hover:text-background'
             )}
@@ -80,10 +80,10 @@ const Review = ({ name, img, desc, id, time }: ReviewProps) => {
 
       <div className='flex flex-col'>
         <h1 className='font-medium mb-1'>{name}</h1>
-        <p className='dark:text-[--text-primary] text-gray_border mb-2'>{desc}</p>
+        <p className='dark:text-gray_text text-gray_border mb-2'>{desc}</p>
 
         <div className='flex gap-x-2 items-center text-sm'>
-          <p className='text-[--text-primary] text-xs'>{time}</p>
+          <p className='text-gray_text text-xs'>{time}</p>
 
           <div className='text-white font-poppins text-xs font-semibold hover:text-blue-hover cursor-pointer'>Like</div>
 
