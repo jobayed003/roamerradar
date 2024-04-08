@@ -13,10 +13,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import CategoryFilter from '@/components/CategoryFilter';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import CarProducts from './CarProducts';
 
 const filters = ['Sightseeing', 'Transportation activities', 'Art and culture'];
 const selectItems = ['Time of day', 'Time of week'];
@@ -34,7 +33,7 @@ const CarsCategory = () => {
   useEffect(() => {
     const url = createSearchParams({ baseUrl: '/cars-category', params: pickupLocation });
 
-    router.push(url);
+    router.push(url.toLowerCase());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickupLocation]);
 
@@ -63,7 +62,6 @@ const CarsCategory = () => {
           </Link>
           <BreadcrumbProvider
             backroute='cars-category'
-            originRoute=''
             location={getCountryByPlaceName(pickupLocation)}
             searchedLocation={pickupLocation}
           />
@@ -101,8 +99,10 @@ const CarsCategory = () => {
         </div>
 
         <CategoryFilter filters={filters} selectItems={selectItems} />
+        <CarProducts />
       </div>
     </div>
   );
 };
+
 export default CarsCategory;

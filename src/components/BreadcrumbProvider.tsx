@@ -9,12 +9,12 @@ import { capitalizeFirstCharacter } from '@/lib/utils';
 import Link from 'next/link';
 
 const BreadcrumbProvider = ({
-  originRoute,
+  originRoute = '',
   searchedLocation,
   backroute,
   location,
 }: {
-  originRoute: string;
+  originRoute?: string;
   backroute: string;
   searchedLocation: string;
   location: string;
