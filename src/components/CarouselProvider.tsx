@@ -26,11 +26,11 @@ export const CarouselProvider = ({
       <CarouselContent className='-ml-1'>{children}</CarouselContent>
       <div className={cn('flex items-center gap-x-4 justify-center mt-5', buttonClasses)}>
         <CarouselPrevious
-          className='static translate-x-0 translate-y-0 hover:border-2 hover:text-white text-gray_text border-gray_text '
+          className='static translate-x-0 translate-y-0 hover:border-2 hover:dark:text-white text-gray_text dark:border-gray_text border-[#e6e8ec]'
           variant={'transparent'}
         />
         <CarouselNext
-          className='static translate-x-0 translate-y-0 hover:border-2 hover:text-white text-gray_text border-gray_text '
+          className='static translate-x-0 translate-y-0 hover:border-2 hover:dark:text-white text-gray_text dark:border-gray_text border-[#e6e8ec]'
           variant={'transparent'}
         />
       </div>

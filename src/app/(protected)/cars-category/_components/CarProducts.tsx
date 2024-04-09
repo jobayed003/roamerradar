@@ -9,26 +9,6 @@ const cars = [
   {
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/cars_images/pic-1.jpg',
-    supplier: 1,
-    isPopular: false,
-    price: 543,
-    rating: 4.9,
-    reviews: 15,
-  },
-  {
-    name: 'London - Kings Cross',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/cars_images/pic-2.jpg',
-    supplier: 1,
-    isPopular: true,
-    price: 543,
-    rating: 4.9,
-    reviews: 15,
-  },
-  {
-    name: 'London - Kings Cross',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
     img: '/images/cars_images/pic-3.jpg',
     supplier: 1,
     isPopular: false,
@@ -59,7 +39,17 @@ const cars = [
   {
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/cars_images/pic-2.jpg',
+    img: '/images/cars_images/pic-6.jpg',
+    supplier: 1,
+    isPopular: true,
+    price: 543,
+    rating: 4.9,
+    reviews: 15,
+  },
+  {
+    name: 'London - Kings Cross',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/cars_images/pic-7.jpg',
     supplier: 1,
     isPopular: false,
     price: 543,
@@ -69,7 +59,17 @@ const cars = [
   {
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/cars_images/pic-4.jpg',
+    img: '/images/cars_images/pic-8.jpg',
+    supplier: 1,
+    isPopular: false,
+    price: 543,
+    rating: 4.9,
+    reviews: 15,
+  },
+  {
+    name: 'London - Kings Cross',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/cars_images/pic-9.jpg',
     supplier: 1,
     isPopular: false,
     price: 543,
@@ -129,7 +129,7 @@ const CarsProductCard = ({
   return (
     <Link
       href={'/cars-product'}
-      className='grid md:grid-cols-2 grid-row-2 max-w-[545px] rounded-2xl border border-gray_border shadow-sm font-poppins'
+      className='grid md:grid-cols-2 grid-row-2 max-w-[545px] rounded-2xl border dark:border-gray_border border-[#E6E8EC] shadow-sm font-poppins'
     >
       <div className='w-full md:h-[230px] h-[300px] relative overflow-hidden rounded-s-xl'>
         <Image
@@ -140,7 +140,7 @@ const CarsProductCard = ({
         />
 
         {isPopular && (
-          <div className='absolute bg-foreground uppercase font-bold font-poppins text-xs rounded-sm top-4 left-4 px-2 pt-[11px] pb-[9px] text-gray_border'>
+          <div className='absolute dark:bg-foreground bg-background uppercase font-bold font-poppins text-xs rounded-sm top-4 left-4 px-2 pt-[11px] pb-[9px] text-gray_border'>
             Popular
           </div>
         )}
@@ -159,7 +159,7 @@ const CarsProductCard = ({
 
         <div className='flex justify-between text-xs text-gray_text mt-5'>
           <div className='flex gap-x-2'>
-            <Navigation className='w-4 h-4' />
+            <Navigation className='w-8 h-4' />
             <p className='text-wrap'>{pickupLocation}</p>
           </div>
           <div className='flex gap-x-2 text-nowrap'>

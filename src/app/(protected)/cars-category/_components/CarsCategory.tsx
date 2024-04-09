@@ -7,12 +7,15 @@ import { Button } from '@/components/ui/button';
 import { cn, createSearchParams, getCountryByPlaceName } from '@/lib/utils';
 import { useBookingDate, useCarStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
-import { ChevronDown, ChevronLeft } from 'lucide-react';
+import { CarFrontIcon, ChevronDown, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
+import { CarouselProvider } from '@/components/CarouselProvider';
 import CategoryFilter from '@/components/CategoryFilter';
+import NearbyLocations from '@/components/NearbyLocations';
+import { CarouselItem } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import CarProducts from './CarProducts';
@@ -36,6 +39,17 @@ const CarsCategory = () => {
     router.push(url.toLowerCase());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickupLocation]);
+
+  const pickupLocations = [
+    { id: 54, label: 'South Virgilland', price: 232 },
+    { id: 23, label: 'Purdyhaven', price: 232 },
+    { id: 76, label: 'Port Jarrett', price: 232 },
+    { id: 22, label: 'New Kristian', price: 232 },
+    { id: 87, label: 'Demetstrisfort', price: 232 },
+    { id: 70, label: 'Port Jarrett', price: 232 },
+    { id: 65, label: 'New Kristian', price: 232 },
+    { id: 49, label: 'Demetstrisfort', price: 232 },
+  ];
 
   return (
     <div>
@@ -83,7 +97,7 @@ const CarsCategory = () => {
           <Button
             variant={'outline'}
             className={cn(
-              'rounded-full p-4 select-none font-bold relative md:flex hidden focus:ring-0 focus:ring-offset-0 ring-offset-0 shadow-[inset_0_0_0_2px_#353945] border-0',
+              'rounded-full p-4 select-none font-bold relative md:flex hidden focus:ring-0 focus:ring-offset-0 ring-offset-0 dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0',
               isClicked && 'bg-blue hover:bg-blue-hover'
             )}
             onClick={() => setIsClicked(!isClicked)}
@@ -100,8 +114,54 @@ const CarsCategory = () => {
 
         <CategoryFilter filters={filters} selectItems={selectItems} />
         <CarProducts />
+
+        <NearbyLocations />
+      </div>
+
+      <div className='text-center'>
+        <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>Recommended pickup locations</h1>
+        <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins'>A lot of amazing experiences</p>
+
+        <CarouselProvider className='my-16'>
+          {pickupLocations.map((item) => (
+            <CarouselItem
+              key={item.id}
+              className='flex justify-center xl:basis-1/6 md:basis-1/4 sm:basis-1/3 basis-full'
+            >
+              <PickupLocationCard {...item} />
+            </CarouselItem>
+          ))}
+        </CarouselProvider>
       </div>
     </div>
+  );
+};
+
+type PickupLocationCardProps = {
+  id: number;
+  label: string;
+  price: number;
+};
+
+const PickupLocationCard = ({ id, label, price }: PickupLocationCardProps) => {
+  return (
+    <Link
+      href={'/car-product/' + id}
+      className='dark:bg-[#23262F] hover:dark:bg-[#141416] border dark:border-[#23262F] hover:border-[#E6E6EC] rounded-3xl w-64 h-64 p-6 transition-all'
+    >
+      <div className='flex flex-col items-start justify-between h-full'>
+        <div className='bg-[#E6E8EC] dark:bg-gray_border text-foreground text-xs font-bold rounded-full p-2 px-4 w-max'>
+          {id}
+        </div>
+
+        <div className='self-start text-left'>
+          <CarFrontIcon className='w-8 h-8 text-gray_text' />
+
+          <p className='font-medium text-[#23262F] dark:text-white mt-6'>{label}</p>
+          <p className='text-xs text-gray_text'>From USD {price} per day</p>
+        </div>
+      </div>
+    </Link>
   );
 };
 
