@@ -11,13 +11,13 @@ import Link from 'next/link';
 const BreadcrumbProvider = ({
   originRoute = '',
   searchedLocation,
-  backroute,
+  backRoute,
   location,
 }: {
   originRoute?: string;
-  backroute: string;
-  searchedLocation: string;
-  location: string;
+  backRoute: string;
+  searchedLocation?: string;
+  location?: string;
 }) => {
   return (
     <Breadcrumb>
@@ -39,7 +39,7 @@ const BreadcrumbProvider = ({
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <Link href={'/' + backroute} className='text-gray_text font-bold hover:text-blue '>
+              <Link href={'/' + backRoute} className='text-gray_text font-bold hover:text-blue '>
                 {location}
               </Link>
             </BreadcrumbItem>

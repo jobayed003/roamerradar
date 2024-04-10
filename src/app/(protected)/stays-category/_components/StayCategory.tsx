@@ -54,7 +54,7 @@ const StayCategory = () => {
             </Button>
           </Link>
           <BreadcrumbProvider
-            backroute='stays-category'
+            backRoute='stays-category'
             location={getCountryByPlaceName(location)}
             searchedLocation={location}
           />

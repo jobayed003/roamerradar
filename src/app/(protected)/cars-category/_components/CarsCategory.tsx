@@ -22,6 +22,16 @@ import CarProducts from './CarProducts';
 
 const filters = ['Sightseeing', 'Transportation activities', 'Art and culture'];
 const selectItems = ['Time of day', 'Time of week'];
+const pickupLocations = [
+  { id: 54, label: 'South Virgilland', price: 232 },
+  { id: 23, label: 'Purdyhaven', price: 232 },
+  { id: 76, label: 'Port Jarrett', price: 232 },
+  { id: 22, label: 'New Kristian', price: 232 },
+  { id: 87, label: 'Demetstrisfort', price: 232 },
+  { id: 70, label: 'Port Jarrett', price: 232 },
+  { id: 65, label: 'New Kristian', price: 232 },
+  { id: 49, label: 'Demetstrisfort', price: 232 },
+];
 
 const CarsCategory = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -39,17 +49,6 @@ const CarsCategory = () => {
     router.push(url.toLowerCase());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickupLocation]);
-
-  const pickupLocations = [
-    { id: 54, label: 'South Virgilland', price: 232 },
-    { id: 23, label: 'Purdyhaven', price: 232 },
-    { id: 76, label: 'Port Jarrett', price: 232 },
-    { id: 22, label: 'New Kristian', price: 232 },
-    { id: 87, label: 'Demetstrisfort', price: 232 },
-    { id: 70, label: 'Port Jarrett', price: 232 },
-    { id: 65, label: 'New Kristian', price: 232 },
-    { id: 49, label: 'Demetstrisfort', price: 232 },
-  ];
 
   return (
     <div>
@@ -75,7 +74,8 @@ const CarsCategory = () => {
             </Button>
           </Link>
           <BreadcrumbProvider
-            backroute='cars-category'
+            backRoute='cars-category'
+            originRoute='cars'
             location={getCountryByPlaceName(pickupLocation)}
             searchedLocation={pickupLocation}
           />
