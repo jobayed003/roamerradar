@@ -1,14 +1,13 @@
+import CustomInput from '@/components/ui/CustomInput';
+import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { cn } from '@/lib/utils';
+import RadioButton from '@/components/ui/radio';
 import { PaymentSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Check } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import CustomInput from '@/components/ui/CustomInput';
-import { Button } from '@/components/ui/button';
 
 const PaymentsForm = () => {
   const [isSelected, setIsSelected] = useState(true);
@@ -123,16 +122,7 @@ const PaymentsForm = () => {
               />
             </div>
 
-            <Button
-              className='font-semibold font-poppins px-0'
-              variant={'transparent'}
-              onClick={() => setIsSelected(!isSelected)}
-            >
-              <div className='border transition-all rounded-sm mr-2 hover:border-blue-hover'>
-                <Check className={cn('h-6 w-6 text-white rounded-sm bg-blue', !isSelected && 'opacity-0 ')} />
-              </div>
-              Save Card
-            </Button>
+            <RadioButton showCheck={isSelected} onChange={() => setIsSelected(!isSelected)} label='Save Card' />
           </form>
         </Form>
       </div>

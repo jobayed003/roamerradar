@@ -35,4 +35,3 @@ export function createSearchParams({ baseUrl, params }: { baseUrl: string; param
 
   return url;
 }
-

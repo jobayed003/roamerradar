@@ -25,8 +25,8 @@ type BookingDate = {
 
 export const useBookingDate = create<BookingDate>((set) => ({
   date: {
-    from: undefined,
-    to: undefined,
+    from: new Date(),
+    to: new Date(),
   },
   setBookingDate: (range: DateRange | undefined) => set(() => ({ date: range })),
 }));
