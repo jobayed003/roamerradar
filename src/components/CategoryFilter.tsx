@@ -50,7 +50,7 @@ const CategoryFilter = ({
           </Select>
         </div>
 
-        <div className='md:w-auto w-full max-w-64'>
+        <div className='md:w-auto w-full md:max-w-64'>
           <Select>
             <SelectTrigger className='md:w-64 w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
               <SelectValue placeholder={selectItems[0]} />
