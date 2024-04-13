@@ -82,11 +82,15 @@ const FlightsCategory = () => {
       <Layout className='lg:px-20 px-10 mt-72 lg:mt-0 pb-20 w-auto'>
         <div className='flex justify-between'>
           <Link href={'/'}>
-            <Button variant={'outline'} className='rounded-full'>
-              <ChevronLeft className='h-5 w-5 mr-3' />
+            <Button
+              variant={'fill'}
+              className='hover:bg-[#23262F] dark:hover:bg-gray_border dark:text-white text-[#23262F] hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold'
+            >
+              <ChevronLeft className='h-5 w-5 mr-2' />
               Go Home
             </Button>
           </Link>
+
           <BreadcrumbProvider backRoute='flights-category' originRoute='flights' />
         </div>
 
@@ -146,29 +150,31 @@ const FlightsCategory = () => {
                 </p>
                 <p>{format(takeoffEnd!, 'h:mm a')}</p>
               </div>
+              {date?.to && (
+                <>
+                  <div className='text-gray_text'>
+                    <p className='font-medium'>Landing</p>
+                    <p className='text-xs'>South Island (SIZ)</p>
+                  </div>
+                  <Slider
+                    defaultValue={[25, 75]}
+                    min={0}
+                    max={100}
+                    step={2.1}
+                    minStepsBetweenThumbs={1}
+                    values={landingTime}
+                    onValueChange={(value: number[]) => setLandingTime(value)}
+                  />
 
-              <div className='text-gray_text'>
-                <p className='font-medium'>Landing</p>
-                <p className='text-xs'>South Island (SIZ)</p>
-              </div>
-              <Slider
-                defaultValue={[25, 75]}
-                min={0}
-                max={100}
-                step={2.1}
-                minStepsBetweenThumbs={1}
-                values={landingTime}
-                onValueChange={(value: number[]) => setLandingTime(value)}
-              />
-
-              <div className='flex justify-between font-bold text-sm'>
-                <p>
-                  {format(date?.to!, 'EEE')}
-                  <span className='ml-1'>{format(landingStart!, 'h:mm a')}</span>
-                </p>
-                <p>{format(landingEnd!, 'h:mm a')}</p>
-              </div>
-
+                  <div className='flex justify-between font-bold text-sm'>
+                    <p>
+                      {format(date?.to!, 'EEE')}
+                      <span className='ml-1'>{format(landingStart!, 'h:mm a')}</span>
+                    </p>
+                    <p>{format(landingEnd!, 'h:mm a')}</p>
+                  </div>
+                </>
+              )}
               <Separator className='bg-gray_border mt-4' />
 
               <div className='flex flex-col'>
@@ -202,7 +208,7 @@ const FlightsCategory = () => {
 
               <Button
                 variant={'transparent'}
-                className='text-gray_text self-start px-0 font-bold text-sm hover:text-white'
+                className='text-gray_text self-start px-0 font-bold text-sm hover:dark:text-white hover:text-foreground'
                 onClick={() => setRadioValues({ nonStop: false, oneStop: false, twoPlusStops: false })}
               >
                 <IoCloseCircle className='mr-1' size={20} />

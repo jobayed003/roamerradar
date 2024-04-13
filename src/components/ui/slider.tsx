@@ -19,22 +19,22 @@ const Slider = React.forwardRef<
       className={cn('relative flex w-full touch-none select-none items-center', className)}
       {...props}
     >
-      <SliderPrimitive.Track className='relative h-2 w-full grow overflow-hidden rounded-full bg-gray_border'>
+      <SliderPrimitive.Track className='relative h-2 w-full grow overflow-hidden rounded-full dark:bg-gray_border bg-gray-200'>
         <SliderPrimitive.Range className='absolute h-full bg-blue' />
       </SliderPrimitive.Track>
 
-      <SliderPrimitive.Thumb className='block h-6 w-6 rounded-full border-4 border-primary bg-blue transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 relative'>
+      <SliderPrimitive.Thumb className='block h-6 w-6 rounded-full border-4 dark:border-primary bg-blue transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 relative'>
         {showLabel && values && (
-          <div className='absolute bottom-6 -right-6 bg-gray_border px-2 py-1 rounded-md'>
+          <div className='absolute bottom-6 -right-6 dark:bg-gray_border bg-black text-background dark:text-foreground px-2 py-1 rounded-md'>
             {label}
             {values[0]}
           </div>
         )}
       </SliderPrimitive.Thumb>
 
-      <SliderPrimitive.Thumb className='block h-6 w-6 rounded-full border-4 border-primary bg-blue transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 relative'>
+      <SliderPrimitive.Thumb className='block h-6 w-6 rounded-full border-4 dark:border-primary bg-blue transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 relative'>
         {showLabel && values && (
-          <div className='absolute bottom-6 -right-6 bg-gray_border px-2 py-1 rounded-md'>
+          <div className='absolute bottom-6 -right-6 dark:bg-gray_border text-background px-2 py-1 rounded-md'>
             {label}
             {values[1]}
           </div>

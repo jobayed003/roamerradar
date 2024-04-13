@@ -1,5 +1,5 @@
-import { Separator } from '@/components/ui/separator';
 import LinkButton from '@/components/auth/LinkButton';
+import { Separator } from '@/components/ui/separator';
 
 const SecurityForm = () => {
   return (
