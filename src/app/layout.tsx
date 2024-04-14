@@ -42,7 +42,7 @@ export default async function RootLayout({
             <Navbar />
             {children}
             <div className='justify-self-end'>
-              <Separator />
+              <Separator className='bg-[#23262F]' />
               <Footer />
             </div>
             <Toaster />

@@ -1,3 +1,4 @@
+'use client';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -5,8 +6,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { capitalizeFirstCharacter } from '@/lib/utils';
+import { capitalizeFirstCharacter, cn } from '@/lib/utils';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const BreadcrumbProvider = ({
   originRoute = '',
@@ -19,6 +21,8 @@ const BreadcrumbProvider = ({
   searchedLocation?: string;
   location?: string;
 }) => {
+  const pathname = usePathname().replace('/', '');
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -29,7 +33,13 @@ const BreadcrumbProvider = ({
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <Link href={`/${originRoute === '' ? '' : originRoute}`} className='text-gray_text font-bold hover:text-blue'>
+          <Link
+            href={`/${originRoute === '' ? '' : originRoute}`}
+            className={cn(
+              'text-gray_text font-bold hover:text-blue',
+              originRoute === pathname && 'text-[#B1B5C3] hover:text-[#b1b5c3]'
+            )}
+          >
             {originRoute === '' ? 'Stays' : ''}
             {capitalizeFirstCharacter(originRoute)}
           </Link>

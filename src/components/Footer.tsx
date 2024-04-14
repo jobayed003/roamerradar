@@ -32,7 +32,7 @@ const Footer = () => {
           </Link>
         </div>
       </div>
-      <Separator />
+      <Separator className='bg-[#23262F]' />
 
       <div className='text-gray_text text-xs my-4 font-poppins'>
         Copyright © {new Date().getFullYear()} RoamerRadar. All rights reserved

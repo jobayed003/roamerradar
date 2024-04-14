@@ -1,4 +1,4 @@
-import LinkButton from '@/components/auth/LinkButton';
+import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
 import { Home, Link2, MessageSquare } from 'lucide-react';
 import CoverUpload from './CoverUpload';

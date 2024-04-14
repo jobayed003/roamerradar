@@ -3,6 +3,7 @@
 import Flights from '@/app/(browse)/flights/_components/Flights';
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import CategoryFilter from '@/components/CategoryFilter';
+import LinkButton from '@/components/LinkButton';
 import Panel from '@/components/Panel';
 import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,6 @@ import { useBookingDate, useFlightStore } from '@/stores/useData';
 import { addDays, addMinutes, format } from 'date-fns';
 import { ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IoCloseCircle } from 'react-icons/io5';
@@ -81,15 +81,9 @@ const FlightsCategory = () => {
 
       <Layout className='lg:px-20 px-10 mt-72 lg:mt-0 pb-20 w-auto'>
         <div className='flex justify-between'>
-          <Link href={'/'}>
-            <Button
-              variant={'fill'}
-              className='hover:bg-[#23262F] dark:hover:bg-gray_border dark:text-white text-[#23262F] hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold'
-            >
-              <ChevronLeft className='h-5 w-5 mr-2' />
-              Go Home
-            </Button>
-          </Link>
+          <LinkButton href='/' label='Go Home'>
+            <ChevronLeft className='h-5 w-5 mr-2' />
+          </LinkButton>
 
           <BreadcrumbProvider backRoute='flights-category' originRoute='flights' />
         </div>

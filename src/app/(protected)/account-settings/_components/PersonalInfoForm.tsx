@@ -1,4 +1,4 @@
-import LinkButton from '@/components/auth/LinkButton';
+import LinkButton from '@/components/LinkButton';
 import CustomInput from '@/components/ui/CustomInput';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
