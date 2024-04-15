@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export const FlightCard = () => {
   return (
-    <div className='flex lg:flex-row flex-col gap-x-12 gap-y-6 dark:shadow-[inset_0_0_0_1px_#353945] shadow-[inset_0_0_0_1px_#F4F5F6] hover:shadow-none hover:dark:bg-[#23262F] hover:bg-[#F4F5F6] rounded-3xl p-8'>
+    <div className='flex lg:flex-row flex-col gap-x-12 gap-y-6 dark:shadow-[inset_0_0_0_1px_#353945] shadow-[inset_0_0_0_1px_#F4F5F6] hover:shadow-none hover:dark:bg-dark_russian hover:bg-[#F4F5F6] rounded-3xl p-8'>
       <div className='flex flex-col gap-y-8'>
         <FlightDetails
           departingLocation='AKL'
@@ -26,7 +26,7 @@ export const FlightCard = () => {
         />
       </div>
 
-      <Separator className='lg:hidden dark:bg-[#353945] bg-[#E6E8EC]' />
+      <Separator className='lg:hidden dark:bg-gray_border bg-[#E6E8EC]' />
       <div className='flex flex-row lg:flex-col justify-between  gap-4  self-end w-full'>
         <div className='flex items-center gap-x-1 text-gray_text text-xs'>
           <Check className='w-4 h-4 font-bold' />

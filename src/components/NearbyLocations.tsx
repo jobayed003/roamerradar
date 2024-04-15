@@ -36,7 +36,7 @@ const NearbyLocations = () => {
                     height={300}
                   />
                 </div>
-                <div className='absolute top-4 left-4 dark:bg-foreground bg-background rounded-full text-[#23262F] shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
+                <div className='absolute top-4 left-4 dark:bg-foreground bg-background rounded-full text-dark_russian shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
                   {item.offer}
                 </div>
 

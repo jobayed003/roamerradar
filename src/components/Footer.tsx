@@ -19,20 +19,20 @@ const Footer = () => {
             <Link
               href={route.href}
               key={route.href}
-              className='text-gray_text hover:text-[#23262F] dark:hover:text-[#E6E8EC]  font-bold text-sm transition'
+              className='text-gray_text hover:text-dark_russian dark:hover:text-[#E6E8EC]  font-bold text-sm transition'
             >
               {route.label}
             </Link>
           ))}
           <Link
             href={'/support'}
-            className='text-gray_text hover:text-[#23262F] dark:hover:text-[#E6E8EC] font-bold text-sm transition'
+            className='text-gray_text hover:text-dark_russian dark:hover:text-[#E6E8EC] font-bold text-sm transition'
           >
             Support
           </Link>
         </div>
       </div>
-      <Separator className='bg-[#23262F]' />
+      <Separator className='bg-dark_text-dark_russian' />
 
       <div className='text-gray_text text-xs my-4 font-poppins'>
         Copyright © {new Date().getFullYear()} RoamerRadar. All rights reserved

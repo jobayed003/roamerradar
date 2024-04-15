@@ -24,7 +24,7 @@ const Guests = ({ children }: { children?: React.ReactNode }) => {
             onClick={() => setIsClicked(!isClicked)}
             className={cn(
               'relative cursor-pointer md:col-span-1 col-span-2 rounded-2xl lg:-ml-4 lg:p-4 lg:pr-20',
-              isClicked && 'shadow-custom dark:shadow-none dark:lg:bg-[#141416]'
+              isClicked && 'shadow-custom dark:shadow-none dark:lg:bg-dark_bg'
             )}
           >
             <div className='flex flex-col items-start '>

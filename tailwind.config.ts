@@ -23,6 +23,8 @@ const config = {
         active: 'inset 2px 0 0 #3B71FE',
       },
       colors: {
+        dark_bg: '#141416',
+        dark_russian: '#23262F',
         blue: '#3B71FE',
         'blue-hover': '#084cfe',
         gray_border: '#353945',

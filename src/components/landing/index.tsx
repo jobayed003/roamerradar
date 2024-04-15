@@ -35,7 +35,7 @@ export default function Landing({
     <div className='px-2 lg:max-w-7xl mx-auto'>
       <div
         className={cn(
-          'h-[780px] w-full flex flex-col items-start text-[#23262F] p-20 pt-24 line space-y-6 flex-shrink relative',
+          'h-[780px] w-full flex flex-col items-start text-dark_russian p-20 pt-24 line space-y-6 flex-shrink relative',
           className
         )}
       >
@@ -47,10 +47,10 @@ export default function Landing({
           </div>
         </Panel>
 
-        <h1 className='font-bold lg:text-8xl md:text-7xl text-5xl text-wrap text-ellipsis text-[#23262F] lg:w-[605px]'>
+        <h1 className='font-bold lg:text-8xl md:text-7xl text-5xl text-wrap text-ellipsis text-dark_russian lg:w-[605px]'>
           {heading}
         </h1>
-        <p className='font-medium lg:text-2xl md:text-xl text-lg text-[#23262F]'>Find and book a great experience</p>
+        <p className='font-medium lg:text-2xl md:text-xl text-lg text-dark_russian'>Find and book a great experience</p>
 
         <CTAButton href={pathname === '' ? 'stays-category' : `${pathname}-category`} />
       </div>

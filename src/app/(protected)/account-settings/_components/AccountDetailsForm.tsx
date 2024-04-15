@@ -24,7 +24,7 @@ const AccountDetailsForm = () => {
   return (
     <Layout>
       <div className='flex justify-between gap-x-8 py-8 mt-20'>
-        <div className='flex flex-col p-8 px-10 gap-x-2 gap-y-8 rounded-3xl dark:bg-[#23262F] shadow-[0_32px_32px_-12px_rgba(15,15,15,0.08)] dark:shadow-sm select-none h-max'>
+        <div className='flex flex-col p-8 px-10 gap-x-2 gap-y-8 rounded-3xl dark:bg-dark_russian shadow-[0_32px_32px_-12px_rgba(15,15,15,0.08)] dark:shadow-sm select-none h-max'>
           {links.map((item, idx) => (
             <div
               key={item.label}

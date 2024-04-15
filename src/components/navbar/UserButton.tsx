@@ -44,7 +44,7 @@ const ProifleOptions = ({ ref }: ProfileProps) => {
   return (
     <motion.div
       className={
-        'text-black w-[250px] p-4 absolute top-16 sm:-left-[9.4rem] -left-[5rem] items-start justify-start gap-y-4 rounded-3xl dark:text-white dark:hover:text-white bg-background dark:bg-[#141416] z-[10000] shadow-custom'
+        'text-black w-[250px] p-4 absolute top-16 sm:-left-[9.4rem] -left-[5rem] items-start justify-start gap-y-4 rounded-3xl dark:text-white dark:hover:text-white bg-background dark:bg-dark_bg z-[10000] shadow-custom'
       }
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}

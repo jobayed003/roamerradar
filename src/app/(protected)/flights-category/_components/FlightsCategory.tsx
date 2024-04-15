@@ -68,7 +68,7 @@ const FlightsCategory = () => {
     <div>
       <div
         className={
-          'h-60 w-full flex flex-col justify-center text-[#23262F] p-20 pt-24 flex-shrink relative mt-4 mb-32 '
+          'h-60 w-full flex flex-col justify-center text-dark_russian p-20 pt-24 flex-shrink relative mt-4 mb-32 '
         }
       >
         <Image src={'/images/bg-car.jpg'} fill className={'object-cover -z-10 absolute'} alt='hero image' />

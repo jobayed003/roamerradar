@@ -54,7 +54,7 @@ const CarsCategory = () => {
     <div>
       <div
         className={
-          'h-60 w-full flex flex-col justify-center text-[#23262F] p-20 pt-24 flex-shrink relative mt-4 mb-32 '
+          'h-60 w-full flex flex-col justify-center text-dark_russian p-20 pt-24 flex-shrink relative mt-4 mb-32 '
         }
       >
         <Image src={'/images/bg-car.jpg'} fill className={'object-cover -z-10 absolute'} alt='hero image' />
@@ -147,7 +147,7 @@ const PickupLocationCard = ({ id, label, price }: PickupLocationCardProps) => {
   return (
     <Link
       href={'/car-product/' + id}
-      className='dark:bg-[#23262F] hover:dark:bg-[#141416] border dark:border-[#23262F] hover:border-[#E6E6EC] rounded-3xl w-64 h-64 p-6 transition-all'
+      className='dark:bg-dark_russian hover:dark:bg-dark_bg border dark:border-dark_russian hover:border-[#E6E6EC] rounded-3xl w-64 h-64 p-6 transition-all'
     >
       <div className='flex flex-col items-start justify-between h-full'>
         <div className='bg-[#E6E8EC] dark:bg-gray_border text-foreground text-xs font-bold rounded-full p-2 px-4 w-max'>
@@ -157,7 +157,7 @@ const PickupLocationCard = ({ id, label, price }: PickupLocationCardProps) => {
         <div className='self-start text-left'>
           <CarFrontIcon className='w-8 h-8 text-gray_text' />
 
-          <p className='font-medium text-[#23262F] dark:text-white mt-6'>{label}</p>
+          <p className='font-medium text-dark_russian dark:text-white mt-6'>{label}</p>
           <p className='text-xs text-gray_text'>From USD {price} per day</p>
         </div>
       </div>

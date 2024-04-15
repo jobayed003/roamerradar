@@ -12,7 +12,7 @@ const Nearby = () => {
         <NearbyLocations />
       </div>
 
-      <div className='bg-[#F4F5F6] dark:bg-[#18191D] dark:border-2 dark:border-[#23262F] rounded-2xl lg:p-20 p-5'>
+      <div className='bg-[#F4F5F6] dark:bg-[#18191D] dark:border-2 dark:border-dark_russian rounded-2xl lg:p-20 p-5'>
         <div className='text-center py-8'>
           <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>Explore nearby</h1>
           <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins -r'>
@@ -56,13 +56,13 @@ const NearbyProduct = ({ placesNumber, image, title, time }: NearbyProductProps)
       href={`/stays-product/${placesNumber}`}
       className='block 
       bg-[#FCFCFD]
-       dark:bg-[#23262F] 
+       dark:bg-dark_russian
        rounded-2xl p-2 pb-6 mx-2
        hover:shadow-[inset_0_0_0_1px_#B1B5C3]
        dark:hover:shadow-[inset_0_0_0_1px_#353945] 
        lg:w-[calc(20%-48px)] max-[1090px]:basis-1/4'
     >
-      <div className='bg-[#F4F5F6] dark:bg-[#141416] font-bold text-xs text-gray_text font-poppins px-3 py-1 rounded-full max-w-max mb-4'>
+      <div className='bg-[#F4F5F6] dark:bg-dark_bg font-bold text-xs text-gray_text font-poppins px-3 py-1 rounded-full max-w-max mb-4'>
         {placesNumber}
       </div>
       <div className='flex flex-col items-center justify-center gap-y-2'>

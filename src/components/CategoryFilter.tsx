@@ -27,7 +27,7 @@ const CategoryFilter = ({
               className={cn(
                 'rounded-full px-2 py-1 font-bold text-sm bg-transparent text-gray_text dark:text-gray_text dark:hover:text-white hover:text-black transition-all select-none cursor-pointer',
                 selected === item &&
-                  'dark:text-background text-background bg-gray_border dark:bg-foreground hover:text-background dark:hover:text-background hover:dark:text-[#23262F]'
+                  'dark:text-background text-background bg-gray_border dark:bg-foreground hover:text-background dark:hover:text-background hover:dark:text-dark_russian'
               )}
             >
               {item}

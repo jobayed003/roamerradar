@@ -21,7 +21,7 @@ const LinkProvider = ({ href, label, icon }: LinkProviderProps) => {
       className={cn(
         'flex items-center justify-start w-full p-3 py-3.5 gap-x-2 rounded-3xl transition text-gray_text hover:text-black dark:text-gray_text dark:hover:text-white select-none',
         pathname === href &&
-          'bg-[#23262F] text-white hover:text-white dark:bg-white dark:text-black dark:hover:text-black'
+          'bg-dark_russian text-white hover:text-white dark:bg-white dark:text-black dark:hover:text-black'
       )}
     >
       {icon}

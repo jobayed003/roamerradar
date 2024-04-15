@@ -157,7 +157,7 @@ const BrowseCarousel = () => {
                     height={250}
                   />
                 </div>
-                <div className='absolute top-4 left-4 bg-foreground rounded-full text-white dark:text-[#23262F] shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
+                <div className='absolute top-4 left-4 bg-foreground rounded-full text-white dark:text-dark_russian shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
                   30% off
                 </div>
 

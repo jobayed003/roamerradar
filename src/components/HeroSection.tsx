@@ -19,7 +19,7 @@ const HeroSection = ({ children, className, imgClass, img }: HeroSectionProps) =
   return (
     <div
       className={cn(
-        'h-[680px] w-full flex flex-col items-start text-[#23262F] p-20 pt-24 flex-shrink relative',
+        'h-[680px] w-full flex flex-col items-start text-dark_russian p-20 pt-24 flex-shrink relative',
         className
       )}
     >
@@ -34,10 +34,12 @@ const HeroSection = ({ children, className, imgClass, img }: HeroSectionProps) =
       </Panel>
 
       <div className='w-full text-center mt-20'>
-        <h1 className='font-bold lg:text-8xl md:text-7xl text-5xl text-wrap text-ellipsis text-[#23262F]'>
+        <h1 className='font-bold lg:text-8xl md:text-7xl text-5xl text-wrap text-ellipsis text-dark_russian'>
           {location}
         </h1>
-        <p className='font-medium lg:text-2xl md:text-xl text-lg text-[#23262F]'>{getCountryByPlaceName(location)}</p>
+        <p className='font-medium lg:text-2xl md:text-xl text-lg text-dark_russian'>
+          {getCountryByPlaceName(location)}
+        </p>
       </div>
     </div>
   );
