@@ -1,4 +1,4 @@
-import CustomInput from '@/components/ui/CustomInput';
+import CustomInput from '@/components/CustomInput';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import RadioButton from '@/components/ui/radio';
