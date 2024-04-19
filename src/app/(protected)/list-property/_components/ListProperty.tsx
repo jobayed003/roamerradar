@@ -6,6 +6,7 @@ import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
@@ -42,7 +43,7 @@ const ListProperty = () => {
         </div>
 
         <div className='flex'>
-          <div className='w-[calc(100%-400px)] pr-32'>
+          <div className='lg:w-[calc(100%-400px)] lg:pr-32 w-full'>
             <h1 className='text-5xl font-bold mb-10'>List your property</h1>
 
             <div className='flex flex-col gap-y-4 py-4'>
@@ -69,7 +70,7 @@ const ListProperty = () => {
 
                 {/* Price Section */}
                 <div className='text-xs font-bold text-[#B1B5C3] uppercase'>Price</div>
-                <div className='flex gap-x-4'>
+                <div className='flex md:flex-row flex-col gap-x-4'>
                   <div className='relative h-10 w-full basis-2/3 '>
                     <CustomInput
                       placeholder='e.g. "180'
@@ -77,12 +78,14 @@ const ListProperty = () => {
                     />
                     <div className='absolute right-2 top-1 z-10 flex gap-x-2 items-center bg-dark_bg'>
                       <Separator orientation='vertical' className='h-9 bg-border' />
-                      <FieldSelect selectItems={['$ USD', '€ Euro']} className='w-32' />
+                      <FieldSelect selectItems={['$ USD', '€ Euro']} className='md:w-32' />
                       <Separator orientation='vertical' className='h-9 bg-border' />
-                      <FieldSelect selectItems={['per Night', 'per Day']} className='w-32' />
+                      <FieldSelect selectItems={['per Night', 'per Day']} className='md:w-32' />
                     </div>
                   </div>
                   <div className='relative h-10 basis-1/3'>
+                    <div className='text-xs font-bold text-[#B1B5C3] uppercase my-4 block md:hidden'>Discount</div>
+
                     <CustomInput
                       placeholder='e.g. "10'
                       className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
@@ -147,23 +150,23 @@ const ListProperty = () => {
               <div className='font-poppins font-medium my-4'>Amenities</div>
 
               <div className='flex flex-col gap-y-6'>
-                <div className='flex gap-x-4'>
+                <div className='flex md:flex-row flex-col gap-4 '>
                   <CustomInput
-                    placeholder='e.g. "Wifi 24/7'
+                    placeholder='e.g. "Wifi 24/7"'
                     className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
                   />
                   <CustomInput
-                    placeholder='e.g. "Wifi 24/7'
+                    placeholder='e.g. "Wifi 24/7"'
                     className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
                   />
                 </div>
-                <div className='flex gap-x-4'>
+                <div className='flex md:flex-row flex-col gap-4'>
                   <CustomInput
-                    placeholder='e.g. "Wifi 24/7'
+                    placeholder='e.g. "Wifi 24/7"'
                     className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
                   />
                   <CustomInput
-                    placeholder='e.g. "Wifi 24/7'
+                    placeholder='e.g. "Wifi 24/7"'
                     className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
                   />
                 </div>
@@ -171,10 +174,26 @@ const ListProperty = () => {
 
               <div className='my-8'>
                 <Separator className='w-full bg-gray_border my-8' />
-                <div className='flex justify-between'>
-                  <Button className='rounded-full bg-blue hover:bg-blue-hover p-6 cursor-pointer text-center lg:w-auto w-full text-white'>
-                    Submit for Review <ArrowRight className='ml-1 w-3.5 h-3.5' />
-                  </Button>
+                <div className='flex flex-col md:flex-row justify-between'>
+                  <div className='flex flex-col md:flex-row gap-4'>
+                    <Dialog>
+                      <DialogTrigger>
+                        <Button
+                          variant={'fill'}
+                          className='rounded-full p-6 cursor-pointer text-center text-white lg:hidden flex w-full'
+                        >
+                          Preview
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className='sm:rounded-3xl bg-dark_bg'>
+                        <div className='font-poppins font-semibold text-2xl mb-10'>Preview</div>
+                        <PreviewCard {...houses} />
+                      </DialogContent>
+                    </Dialog>
+                    <Button className='rounded-full bg-blue hover:bg-blue-hover p-6 cursor-pointer text-center lg:w-auto text-white'>
+                      Submit for Review <ArrowRight className='ml-1 w-3.5 h-3.5' />
+                    </Button>
+                  </div>
                   <Button variant={'transparent'}>
                     Auto Saving <LoadingSpinner className='ml-1' />
                   </Button>
@@ -183,7 +202,7 @@ const ListProperty = () => {
             </div>
           </div>
 
-          <div>
+          <div className='lg:block hidden'>
             <div className='font-poppins font-semibold text-2xl mb-10'>Preview</div>
             <div className='flex'>
               <PreviewCard {...houses} />
