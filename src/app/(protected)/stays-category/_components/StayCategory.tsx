@@ -17,7 +17,7 @@ import { format } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import StayProduct from './StayProduct';
+import StayProduct from '../../../../components/StayProduct';
 
 const filters = ['Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
 const selectItems = ['On Sales', 'On Delivery', 'In Exchange'];

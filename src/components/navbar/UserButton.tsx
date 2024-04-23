@@ -36,7 +36,7 @@ type ProfileProps = {
 
 const profileLinks = [
   { label: 'Messages', href: '/messages', icon: <MessageCircleIcon /> },
-  { label: 'Bookings', href: '/bookings-list', icon: <Home /> },
+  { label: 'Bookings', href: '/my-bookings', icon: <Home /> },
   { label: 'Wishlists', href: '/wishlists', icon: <Mail /> },
 ];
 

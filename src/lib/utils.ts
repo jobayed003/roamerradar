@@ -14,6 +14,7 @@ export function dateFormat(date: Date) {
 
 export function capitalizeFirstCharacter(str: string) {
   return str
+    .replace('-', ' ')
     .split(' ')
     .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');

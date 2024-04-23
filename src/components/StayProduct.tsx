@@ -22,7 +22,7 @@ const houses = [
 const StayProduct = () => {
   return (
     <div className='flex flex-col items-center'>
-      <div className='flex gap-x-6 gap-y-8 justify-center flex-wrap mt-8'>
+      <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 w-full mt-8'>
         {Array.from({ length: 8 }).map(() => (
           <StayProductCard key={houses[0].name} {...houses[0]} />
         ))}
@@ -47,7 +47,7 @@ type StayProductCardProps = {
 
 const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, reviews }: StayProductCardProps) => {
   return (
-    <Link href={'/stays-product'} className='md:max-w-[350px] w-full rounded-3xl border border-gray_border shadow-sm '>
+    <Link href={'/stays-product'} className='rounded-3xl border border-gray_border shadow-sm'>
       <div className='w-full md:h-[240px] h-[300px] relative overflow-hidden rounded-t-xl'>
         <Image
           src={img}

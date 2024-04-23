@@ -1,5 +1,6 @@
-import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { cn, createSearchParams } from '@/lib/utils';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Separator } from './ui/separator';
 
@@ -13,6 +14,15 @@ const CategoryFilter = ({
   className?: string;
 }) => {
   const [selected, setSelected] = useState(filters[0]);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const url = createSearchParams({ baseUrl: pathname, params: selected.toLowerCase() });
+
+    router.push(url);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
 
   return (
     <div className='py-8'>
