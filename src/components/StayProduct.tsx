@@ -23,7 +23,7 @@ const StayProduct = () => {
   return (
     <div className='flex flex-col items-center'>
       <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 w-full mt-8'>
-        {Array.from({ length: 8 }).map(() => (
+        {Array.from({ length: 9 }).map(() => (
           <StayProductCard key={houses[0].name} {...houses[0]} />
         ))}
       </div>

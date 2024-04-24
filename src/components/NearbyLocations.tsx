@@ -13,10 +13,10 @@ const nearbyLocations = [
   { title: 'Nature House', img: '/images/browse-2.jpg', offer: 'FROM $230', totalHouse: 567567 },
 ];
 
-const NearbyLocations = () => {
+const NearbyLocations = ({ title = 'Explore Nearby' }: { title?: string }) => {
   return (
     <div className='mt-32 relative'>
-      <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>Explore nearby</h1>
+      <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>{title}</h1>
       <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins'>Let&apos;s go on an adventure</p>
 
       <CarouselProvider buttonClasses='sm:absolute sm:-top-[6.5rem] right-0'>

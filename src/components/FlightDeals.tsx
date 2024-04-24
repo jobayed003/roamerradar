@@ -4,10 +4,20 @@ import { ArrowRight, Check } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const FlightCard = () => {
+export const FlightDeals = () => {
+  return (
+    <div className='flex flex-col gap-y-6 w-full '>
+      {Array.from({ length: 4 }).map(() => (
+        <FlightCard key={Math.random()} />
+      ))}
+    </div>
+  );
+};
+
+const FlightCard = () => {
   return (
     <div className='flex lg:flex-row flex-col gap-x-12 gap-y-6 dark:shadow-[inset_0_0_0_1px_#353945] shadow-[inset_0_0_0_1px_#F4F5F6] hover:shadow-none hover:dark:bg-dark_russian hover:bg-[#F4F5F6] rounded-3xl p-8'>
-      <div className='flex flex-col gap-y-8'>
+      <div className='flex flex-col gap-y-8 basis-4/5'>
         <FlightDetails
           departingLocation='AKL'
           takeOffTime='6:45 AM'
@@ -27,12 +37,12 @@ export const FlightCard = () => {
       </div>
 
       <Separator className='lg:hidden dark:bg-gray_border bg-[#E6E8EC]' />
-      <div className='flex flex-row lg:flex-col justify-between  gap-4  self-end w-full'>
+      <div className='flex flex-row lg:flex-col justify-between  gap-4  self-end basis-3/12 w-full '>
         <div className='flex items-center gap-x-1 text-gray_text text-xs'>
           <Check className='w-4 h-4 font-bold' />
           eDreams
         </div>
-        <Link href={'/flight-deals'} className='h-12 group'>
+        <Link href={'/flight-deals'} className='h-12 group min-w-[160px]'>
           <Button
             variant={'outline'}
             className='rounded-full w-full self-end h-12 text-green-500 shadow-[0_0_0_2px_#E6E8EC_inset] dark:shadow-[0_0_0_2px_#777E90_inset] hover:shadow-none hover:dark:shadow-none font-bold hover:bg-blue-hover transition-all'
@@ -73,7 +83,7 @@ const FlightDetails = ({
       </div>
       <Separator className='lg:hidden bg-[#E6E8EC] dark:bg-[#353945] mb-2' />
 
-      <div className='flex justify-center items-center'>
+      <div className='flex justify-around items-center basis-4/5'>
         <div className='text-nowrap text-center'>
           <h1 className='text-2xl font-semibold'>{departingLocation}</h1>
           <p className='font-medium text-gray_text text-sm'>{takeOffTime}</p>

@@ -3,6 +3,7 @@
 import Flights from '@/app/(browse)/flights/_components/Flights';
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import CategoryFilter from '@/components/CategoryFilter';
+import { FlightDeals } from '@/components/FlightDeals';
 import LinkButton from '@/components/LinkButton';
 import Panel from '@/components/Panel';
 import Layout from '@/components/ui/Layout';
@@ -19,7 +20,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IoCloseCircle } from 'react-icons/io5';
 import { useMediaQuery } from 'usehooks-ts';
-import { FlightCard } from './FlightCard';
 
 const selectItems = ['Recommended', 'Popular', 'In exchange'];
 const filters = ['Cheapest', 'Best', 'With transfers'];
@@ -211,11 +211,7 @@ const FlightsCategory = () => {
             </div>
           )}
 
-          <div className='flex flex-col gap-y-6 w-full '>
-            {Array.from({ length: 4 }).map(() => (
-              <FlightCard key={Math.random()} />
-            ))}
-          </div>
+          <FlightDeals />
         </div>
       </Layout>
     </div>
