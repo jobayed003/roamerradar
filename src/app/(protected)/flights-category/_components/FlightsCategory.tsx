@@ -3,9 +3,9 @@
 import Flights from '@/app/(browse)/flights/_components/Flights';
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import CategoryFilter from '@/components/CategoryFilter';
-import { FlightDeals } from '@/components/FlightDeals';
 import LinkButton from '@/components/LinkButton';
 import Panel from '@/components/Panel';
+import { FlightDeals } from '@/components/products/FlightDeals';
 import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
 import RadioButton from '@/components/ui/radio';

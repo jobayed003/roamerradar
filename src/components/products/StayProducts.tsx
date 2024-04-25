@@ -19,7 +19,7 @@ const houses = [
   },
 ];
 
-const StayProduct = () => {
+export const StayProducts = () => {
   return (
     <div className='flex flex-col items-center'>
       <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 w-full mt-8'>
@@ -85,5 +85,3 @@ const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, revi
     </Link>
   );
 };
-
-export default StayProduct;

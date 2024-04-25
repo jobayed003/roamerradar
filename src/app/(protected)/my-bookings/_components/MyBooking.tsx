@@ -2,10 +2,11 @@
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import CategoryFilter from '@/components/CategoryFilter';
-import { FlightDeals } from '@/components/FlightDeals';
 import LinkButton from '@/components/LinkButton';
 import NearbyLocations from '@/components/NearbyLocations';
-import StayProduct from '@/components/StayProduct';
+import { CarProducts } from '@/components/products/CarProducts';
+import { FlightDeals } from '@/components/products/FlightDeals';
+import { StayProducts } from '@/components/products/StayProducts';
 import Layout from '@/components/ui/Layout';
 import { Separator } from '@/components/ui/separator';
 
@@ -15,10 +16,10 @@ import { useSearchParams } from 'next/navigation';
 const bookingFilters = ['Stays', 'Flights', 'Cars', 'Things to do'];
 const bookingSelectItems = ['Past', 'Upcoming', 'Future'];
 const steps = [
-  { stepName: 'stays', component: <StayProduct /> },
+  { stepName: 'stays', component: <StayProducts /> },
   { stepName: 'flights', component: <FlightDeals /> },
-  { stepName: 'cars', component: <div>Cars</div> },
-  { stepName: 'things', component: <div>Things</div> },
+  { stepName: 'cars', component: <CarProducts /> },
+  { stepName: 'things', component: <StayProducts /> },
 ];
 
 const MyBooking = () => {

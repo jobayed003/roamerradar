@@ -15,10 +15,10 @@ import { useState } from 'react';
 import { CarouselProvider } from '@/components/CarouselProvider';
 import CategoryFilter from '@/components/CategoryFilter';
 import NearbyLocations from '@/components/NearbyLocations';
+import { CarProducts } from '@/components/products/CarProducts';
 import { CarouselItem } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import CarProducts from './CarProducts';
 
 const filters = ['Sightseeing', 'Transportation activities', 'Art and culture'];
 const selectItems = ['Time of day', 'Time of week'];

@@ -88,7 +88,7 @@ const cars = [
   },
 ];
 
-const CarProducts = () => {
+export const CarProducts = () => {
   return (
     <div className='flex flex-col items-center'>
       <div className='flex w-full gap-x-6 gap-y-8 justify-center flex-wrap mt-8'>
@@ -180,5 +180,3 @@ const CarsProductCard = ({
     </Link>
   );
 };
-
-export default CarProducts;

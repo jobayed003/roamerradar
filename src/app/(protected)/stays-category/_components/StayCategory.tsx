@@ -9,6 +9,7 @@ import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import { CarouselProvider } from '@/components/CarouselProvider';
 import CategoryFilter from '@/components/CategoryFilter';
 import MapProvider from '@/components/map/MapProvider';
+import { StayProducts } from '@/components/products/StayProducts';
 import { CarouselItem } from '@/components/ui/carousel';
 import { Input } from '@/components/ui/input';
 import { cn, createSearchParams, getCountryByPlaceName } from '@/lib/utils';
@@ -17,7 +18,6 @@ import { format } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import StayProduct from '../../../../components/StayProduct';
 
 const filters = ['Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
 const selectItems = ['On Sales', 'On Delivery', 'In Exchange'];
@@ -99,7 +99,7 @@ const StayCategory = () => {
 
         <div>
           <h1 className='text-3xl font-bold mb-4'>Over 300 stays</h1>
-          <StayProduct />
+          <StayProducts />
         </div>
 
         <div className='flex flex-col md:flex-row justify-between items-center gap-x-4 '>
