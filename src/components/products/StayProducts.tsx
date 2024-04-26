@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 const houses = [
   {
+    id: '234',
     name: 'Entire serviced classy mountain house',
     amenities: [
       { name: 'Free Wifi', icon: Wifi },
@@ -36,6 +37,7 @@ export const StayProducts = () => {
   );
 };
 type StayProductCardProps = {
+  id: string;
   name: string;
   amenities: { name: string; icon: LucideIcon }[];
   img: string;
@@ -45,9 +47,9 @@ type StayProductCardProps = {
   reviews: number;
 };
 
-const StayProductCard = ({ name, amenities, img, price, offerPrice, rating, reviews }: StayProductCardProps) => {
+const StayProductCard = ({ id, name, amenities, img, price, offerPrice, rating, reviews }: StayProductCardProps) => {
   return (
-    <Link href={'/stays-product'} className='rounded-3xl border border-gray_border shadow-sm'>
+    <Link href={'/stays-product/' + id} className='rounded-3xl border border-gray_border shadow-sm'>
       <div className='w-full md:h-[240px] h-[300px] relative overflow-hidden rounded-t-xl'>
         <Image
           src={img}
