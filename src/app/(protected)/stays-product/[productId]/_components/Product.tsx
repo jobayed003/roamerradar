@@ -4,7 +4,11 @@ import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
 import { Separator } from '@/components/ui/separator';
-import { ChevronLeft, Heart, Navigation, Share, X } from 'lucide-react';
+import { ChevronLeft, Flag, Heart, Home, Navigation, Share, X } from 'lucide-react';
+import Image from 'next/image';
+import { FaStar } from 'react-icons/fa';
+
+const icons = [Navigation, Share, Heart, X];
 
 const Product = () => {
   return (
@@ -12,7 +16,7 @@ const Product = () => {
       <Separator className='bg-dark_russian mb-4' />
 
       <Layout className='lg:px-20 px-8'>
-        <div className='flex justify-between pb-20'>
+        <div className='flex justify-between pb-10'>
           <LinkButton href='/stays-category' label='Go Home'>
             <ChevronLeft className='h-5 w-5 mr-2' />
           </LinkButton>
@@ -26,25 +30,38 @@ const Product = () => {
         </div>
 
         <div className='flex justify-between'>
-          <div>
-            <h1 className='text-5xl font-bold mb-3'>Spectacular views of Queenstown</h1>
-            <div></div>
+          <div className='max-w-2xl'>
+            <h1 className='text-5xl font-bold mb-3 leading-tight'>Spectacular views of Queenstown</h1>
+            <div className='flex items-center gap-3 font-poppins text-sm text-gray_text'>
+              <div className='overflow-hidden rounded-full'>
+                <Image src={'/user.jpg'} alt='user img' width={25} height={25} />
+              </div>
+
+              <div className='flex items-center gap-x-2 ml-2 '>
+                <FaStar size={22} fill='#FFD166' />
+                <p className='font-medium text-white'>
+                  4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
+                </p>
+              </div>
+              <div className='flex items-center gap-x-2 ml-2'>
+                <Home className='w-4 h-4 ' />
+                <p className=''>Superhost</p>
+              </div>
+              <div className='flex items-center gap-x-2 ml-2'>
+                <Flag className='w-4 h-4 ' />
+                <p className=''>Queenstown, Otago, New Zealand</p>
+              </div>
+            </div>
           </div>
-          <div className='flex text-gray_border'>
-            <div className='w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray_border group transition-all'>
-              <Navigation size={25} className='group-hover:text-[#FCFCFD] ' />
-            </div>
-            <div className='w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray_border group transition-all'>
-              <Share size={25} className='group-hover:text-[#FCFCFD]' />
-            </div>
-
-            <div className='w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray_border group transition-all'>
-              <Heart size={25} className='group-hover:text-[#FCFCFD]' />
-            </div>
-
-            <div className='w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray_border group transition-all'>
-              <X size={25} className='group-hover:text-[#FCFCFD]' />
-            </div>
+          <div className='flex gap-3 text-gray_border'>
+            {icons.map((Item) => (
+              <div
+                className='w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray_border group transition-all hover:bg-[#353945] cursor-pointer'
+                key={Math.random()}
+              >
+                <Item className='group-hover:text-[#FCFCFD] text-gray_text' />
+              </div>
+            ))}
           </div>
         </div>
       </Layout>
