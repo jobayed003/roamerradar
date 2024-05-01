@@ -64,6 +64,17 @@ const Product = () => {
             ))}
           </div>
         </div>
+        <div className='py-10'>
+          <div className='grid grid-cols-4 grid-rows-3 gap-2 h-full'>
+            <div className='relative col-span-3 row-span-4'>
+              <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl' />
+            </div>
+
+            <Image src={'/images/grid-2.jpg'} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
+            <Image src={'/images/grid-1.jpg'} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
+            <Image src={'/images/grid-3.jpg'} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
+          </div>
+        </div>
       </Layout>
     </>
   );

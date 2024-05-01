@@ -10,6 +10,7 @@ import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { DM_Sans, Poppins } from 'next/font/google';
 import './globals.css';
+import 'react-photo-view/dist/react-photo-view.css';
 
 const poppins = Poppins({
   subsets: ['latin'],
