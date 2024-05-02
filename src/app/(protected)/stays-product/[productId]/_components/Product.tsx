@@ -4,11 +4,13 @@ import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
 import { Separator } from '@/components/ui/separator';
-import { ChevronLeft, Flag, Heart, Home, Navigation, Share, X } from 'lucide-react';
+import { Bath, Bed, ChevronLeft, Flag, Heart, Home, Navigation, Share, User, X } from 'lucide-react';
 import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 
 const icons = [Navigation, Share, Heart, X];
+
+const galleryImages = ['/images/grid-2.jpg', '/images/grid-1.jpg', '/images/grid-3.jpg'];
 
 const Product = () => {
   return (
@@ -66,14 +68,53 @@ const Product = () => {
         </div>
         <div className='py-10'>
           <div className='grid grid-cols-4 grid-rows-3 gap-2 h-full'>
-            <div className='relative col-span-3 row-span-4'>
+            <div className='relative col-span-3 row-span-full'>
               <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl' />
             </div>
-
-            <Image src={'/images/grid-2.jpg'} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
-            <Image src={'/images/grid-1.jpg'} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
-            <Image src={'/images/grid-3.jpg'} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
+            {galleryImages.map((img) => (
+              <Image key={img} src={img} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
+            ))}
           </div>
+        </div>
+
+        <div className='flex gap-8 mt-3'>
+          <div className='basis-7/12'>
+            <h1 className='text-3xl mb-2 font-bold'>Private room in house</h1>
+            <div className='flex items-center gap-x-2 pt-2 pb-4'>
+              <span className='text-gray_text'>Hosted by</span>
+              <div>
+                <Image src={'/user.jpg'} alt='user avatar' width={25} height={25} className='rounded-full' />
+              </div>
+              <p className='font-medium'>Jobayed Hossain</p>
+            </div>
+
+            <Separator className='bg-dark_russian' />
+            <div className='flex items-center gap-x-3 text-gray_text py-4'>
+              <User className='h-5 w-5' />
+              <p>2 guests</p>
+              <Bed className='h-5 w-5' />
+              <p>1 bedroom</p>
+              <Bath className='h-5 w-5 ' />
+              <p>1 private bath</p>
+            </div>
+
+            <div className='flex flex-col gap-y-4 my-4 text-gray_text'>
+              <p className='font-poppins'>
+                Described by Queenstown House & Garden magazine as having &apos;one of the best views we've ever seen'
+                you will love relaxing in this newly built, architectural house sitting proudly on Queenstown Hill.
+              </p>
+              <p>
+                Enjoy breathtaking 180&apos; views of Lake Wakatipu from your well appointed & privately accessed
+                bedroom with modern en suite and floor-to-ceiling windows.
+              </p>
+              <p>
+                Your private patio takes in the afternoon sun, letting you soak up unparalleled lake and mountain views
+                by day and the stars & city lights by night.
+              </p>
+            </div>
+          </div>
+
+          <div>hlw</div>
         </div>
       </Layout>
     </>
