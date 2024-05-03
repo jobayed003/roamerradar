@@ -3,14 +3,40 @@
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Bath, Bed, ChevronLeft, Flag, Heart, Home, Navigation, Share, User, X } from 'lucide-react';
+import {
+  Bath,
+  Bed,
+  Building2,
+  ChevronLeft,
+  Computer,
+  CreditCard,
+  Flag,
+  Heart,
+  Home,
+  Navigation,
+  Pizza,
+  Router,
+  Share,
+  User,
+  X,
+} from 'lucide-react';
 import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 
 const icons = [Navigation, Share, Heart, X];
 
 const galleryImages = ['/images/grid-2.jpg', '/images/grid-1.jpg', '/images/grid-3.jpg'];
+
+const amenities = [
+  { icon: Router, label: 'Free wifi 24/7' },
+  { icon: Computer, label: 'Free computer' },
+  { icon: Bath, label: 'Free clean bathroom' },
+  { icon: Pizza, label: 'Breakfast included' },
+  { icon: Building2, label: 'Nearby city' },
+  { icon: CreditCard, label: 'ATM' },
+];
 
 const Product = () => {
   return (
@@ -78,7 +104,7 @@ const Product = () => {
         </div>
 
         <div className='flex gap-8 mt-3'>
-          <div className='basis-7/12'>
+          <div className='basis-7/12 py-8'>
             <h1 className='text-3xl mb-2 font-bold'>Private room in house</h1>
             <div className='flex items-center gap-x-2 pt-2 pb-4'>
               <span className='text-gray_text'>Hosted by</span>
@@ -100,8 +126,9 @@ const Product = () => {
 
             <div className='flex flex-col gap-y-4 my-4 text-gray_text'>
               <p className='font-poppins'>
-                Described by Queenstown House & Garden magazine as having &apos;one of the best views we've ever seen'
-                you will love relaxing in this newly built, architectural house sitting proudly on Queenstown Hill.
+                Described by Queenstown House & Garden magazine as having &apos;one of the best views we&apos;ve ever
+                seen&apos; you will love relaxing in this newly built, architectural house sitting proudly on Queenstown
+                Hill.
               </p>
               <p>
                 Enjoy breathtaking 180&apos; views of Lake Wakatipu from your well appointed & privately accessed
@@ -112,6 +139,24 @@ const Product = () => {
                 by day and the stars & city lights by night.
               </p>
             </div>
+
+            <div className='my-8 font-poppins'>
+              <h1 className='text-2xl font-semibold mb-8'>Amenities</h1>
+              <div className='flex flex-wrap items-center gap-8'>
+                {amenities.map((item) => (
+                  <div className='flex items-center gap-x-4 basis-2/5 text-gray_text text-sm' key={Math.random()}>
+                    <item.icon className='w-5 h-5' />
+                    <p>{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <Button
+              variant={'fill'}
+              className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold '
+            >
+              More details
+            </Button>
           </div>
 
           <div>hlw</div>
