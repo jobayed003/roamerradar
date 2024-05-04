@@ -9,6 +9,7 @@ import {
   Bath,
   Bed,
   Building2,
+  CalendarDays,
   ChevronLeft,
   Computer,
   CreditCard,
@@ -20,6 +21,7 @@ import {
   Router,
   Share,
   User,
+  User2,
   X,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -103,8 +105,8 @@ const Product = () => {
           </div>
         </div>
 
-        <div className='flex gap-8 mt-3'>
-          <div className='basis-7/12 py-8'>
+        <div className='flex gap-8 mt-3 py-8'>
+          <div className='basis-7/12'>
             <h1 className='text-3xl mb-2 font-bold'>Private room in house</h1>
             <div className='flex items-center gap-x-2 pt-2 pb-4'>
               <span className='text-gray_text'>Hosted by</span>
@@ -159,7 +161,71 @@ const Product = () => {
             </Button>
           </div>
 
-          <div>hlw</div>
+          <div className='bg-dark_russian border border-gray_border p-8 max-w-md w-full rounded-3xl'>
+            <div className='flex items-center justify-between mb-8'>
+              <div>
+                <div className='flex gap-2 text-3xl font-bold'>
+                  <h1 className='text-[#b1b5c3] line-through'>${119}</h1>
+                  <h1>${109}</h1>
+                  <p className='text-base font-normal self-end text-gray_text'>/night</p>
+                </div>
+                <div className='flex gap-2 mt-2'>
+                  <FaStar size={22} fill='#FFD166' />
+                  <p className='font-medium text-white'>
+                    4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
+                  </p>
+                </div>
+              </div>
+              <div>
+                <Image
+                  src={'/user.jpg'}
+                  alt='user img'
+                  width={60}
+                  height={70}
+                  className='rounded-full relative w-16 h-16 object-fill'
+                />
+                <div className='absolute ' />
+              </div>
+            </div>
+            <div className='bg-gray_border rounded-2xl'>
+              <div className='flex items-center flex-wrap gap-x-3 p-3'>
+                <div className='flex gap-2 items-center text-gray_text p-3'>
+                  <CalendarDays />
+                  <div className='flex flex-col '>
+                    <p className='text-xs'>Check-in</p>
+                    <p className='text-foreground font-medium'>May 15, 2024</p>
+                  </div>
+                </div>
+                <div className='flex gap-2 border-l items-center border-gray_text text-gray_text p-3'>
+                  <CalendarDays />
+                  <div className='flex flex-col'>
+                    <p className='text-xs'>Check-out</p>
+                    <p className='text-foreground font-medium'>May 22, 2024</p>
+                  </div>
+                </div>
+
+                <div className='flex gap-2 items-center text-gray_text p-3'>
+                  <User2 />
+                  <div className='flex flex-col'>
+                    <p className='text-xs'>Guest</p>
+                    <p className='text-foreground font-medium'>2 guests</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className='flex gap-2 mt-6'>
+              <Button
+                className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold h-12 px-6'
+                variant={'fill'}
+              >
+                Save +
+              </Button>
+              <Button className='bg-blue hover:bg-blue-hover grow text-white rounded-full h-12 px-6 font-bold'>
+                Reserve
+              </Button>
+            </div>
+          </div>
         </div>
       </Layout>
     </>
