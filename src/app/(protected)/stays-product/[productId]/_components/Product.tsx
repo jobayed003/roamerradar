@@ -25,7 +25,7 @@ import {
   X,
 } from 'lucide-react';
 import Image from 'next/image';
-import { FaStar } from 'react-icons/fa';
+import { FaCheckCircle, FaStar } from 'react-icons/fa';
 
 const icons = [Navigation, Share, Heart, X];
 
@@ -39,6 +39,14 @@ const amenities = [
   { icon: Building2, label: 'Nearby city' },
   { icon: CreditCard, label: 'ATM' },
 ];
+
+const receiptDetails = [
+  { label: '$109 x 7 nights', price: 833 },
+  { label: '10% campaign discount', price: -83.3 },
+  { label: 'Service fee', price: 103 },
+];
+
+const totalPrice = receiptDetails.reduce((acc, item) => acc + item.price, 0);
 
 const Product = () => {
   return (
@@ -105,7 +113,7 @@ const Product = () => {
           </div>
         </div>
 
-        <div className='flex gap-8 mt-3 py-8'>
+        <div className='flex gap-8 mt-3 pt-8 pb-20'>
           <div className='basis-7/12'>
             <h1 className='text-3xl mb-2 font-bold'>Private room in house</h1>
             <div className='flex items-center gap-x-2 pt-2 pb-4'>
@@ -176,15 +184,17 @@ const Product = () => {
                   </p>
                 </div>
               </div>
-              <div>
+              <div className='relative'>
                 <Image
                   src={'/user.jpg'}
                   alt='user img'
                   width={60}
                   height={70}
-                  className='rounded-full relative w-16 h-16 object-fill'
+                  className='rounded-full w-16 h-16 object-fill'
                 />
-                <div className='absolute ' />
+                <div className='absolute top-0 right-0 z-50'>
+                  <FaCheckCircle className='text-green-400 bg-transparent overflow-hidden rounded-full' size={20} />
+                </div>
               </div>
             </div>
             <div className='bg-gray_border rounded-2xl'>
@@ -213,7 +223,6 @@ const Product = () => {
                 </div>
               </div>
             </div>
-
             <div className='flex gap-2 mt-6'>
               <Button
                 className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold h-12 px-6'
@@ -225,9 +234,32 @@ const Product = () => {
                 Reserve
               </Button>
             </div>
+            <div className='pt-8 flex flex-col'>
+              {receiptDetails.map((item) => (
+                <div className='flex justify-between py-2 font-medium px-2' key={Math.random()}>
+                  <div className='text-gray_text text-sm'>{item.label}</div>
+                  <div className=''>${Math.abs(item.price)}</div>
+                </div>
+              ))}
+              <div className='flex justify-between py-2 font-medium bg-gray_border px-2 rounded-lg'>
+                <div className='text-gray_text text-sm'>Total</div>
+                <div>${totalPrice}</div>
+              </div>
+
+              <Button
+                variant={'transparent'}
+                className='flex items-center self-center pt-8 gap-2 text-xs text-gray_text hover:text-blue-hover transition-all'
+              >
+                <Flag className='w-3 h-3' /> Report this property
+              </Button>
+            </div>
           </div>
         </div>
       </Layout>
+
+      <Separator />
+
+      <Layout>Hlw</Layout>
     </>
   );
 };
