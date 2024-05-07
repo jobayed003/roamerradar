@@ -25,6 +25,8 @@ import {
   X,
 } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { CiFacebook, CiGlobe, CiInstagram, CiTwitter } from 'react-icons/ci';
 import { FaCheckCircle, FaStar } from 'react-icons/fa';
 
 const icons = [Navigation, Share, Heart, X];
@@ -257,9 +259,96 @@ const Product = () => {
         </div>
       </Layout>
 
-      <Separator />
+      <Separator className='my-28 bg-dark_russian' />
 
-      <Layout>Hlw</Layout>
+      <Layout className='lg:px-20 px-8'>
+        <div className='flex gap-8'>
+          <div className='border border-gray_border bg-dark_bg p-8 px-5 max-w-96 rounded-3xl'>
+            <div className='flex items-center justify-center gap-6'>
+              <div className='relative'>
+                <Image
+                  src={'/user.jpg'}
+                  alt='user img'
+                  width={60}
+                  height={70}
+                  className='rounded-full w-16 h-16 object-fill'
+                />
+                <div className='absolute top-0 right-0 z-50'>
+                  <FaCheckCircle className='text-green-400 bg-transparent overflow-hidden rounded-full' size={20} />
+                </div>
+              </div>
+
+              <div>
+                <h1 className='text-3xl'>Jobayed Hossain</h1>
+                <div className='flex items-center gap-x-2 text-xs mt-2'>
+                  <FaStar size={22} fill='#FFD166' />
+                  <p className='font-medium text-white'>
+                    4.8 <span className='text-gray_text'>(234 reviews)</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className='flex flex-col gap-y-8 items-center mt-8 px-4'>
+              <div className='flex gap-x-3 py-2 px-4 bg-dark_russian rounded-3xl text-gray_text'>
+                <div className='flex items-center gap-x-2'>
+                  <Home className='w-4 h-4' />
+                  <p>Superhost</p>
+                </div>
+                <div className='flex items-center gap-x-2'>
+                  <FaStar />
+                  <p>256 Reviews</p>
+                </div>
+              </div>
+
+              <div className='text-center text-gray_text'>
+                Described by Queenstown House & Garden magazine as having &apos;one of the best views we&apos;ve ever
+                seen&apos; you will love relaxing in this newly built
+              </div>
+              <Link
+                target='_blank'
+                href={'https://jobayed.netlify.app'}
+                className='flex gap-x-2 items-center font-bold text-sm'
+              >
+                <CiGlobe color='#777E90' />
+                https://jobayed.netlify.app
+              </Link>
+
+              <div className='flex gap-x-4'>
+                <Link href={'/message-center'}>
+                  <Button variant={'fill'}>Contact</Button>
+                </Link>
+
+                <Button variant={'fill'} className='rounded-full px-2 '>
+                  <Share />
+                </Button>
+              </div>
+
+              <div className='flex gap-x-4 items-center justify-center text-gray_text my-4'>
+                <Link target='_blank' href={'https://twitter.com'}>
+                  <CiTwitter size={20} className='hover:text-blue-hover' />
+                </Link>
+                <Link target='_blank' href={'https://instagram.com'}>
+                  <CiInstagram size={20} className='hover:text-blue-hover' />
+                </Link>
+                <Link target='_blank' href={'https://facebook.com'}>
+                  <CiFacebook size={20} className='hover:text-blue-hover' />
+                </Link>
+              </div>
+
+              <Separator className='bg-dark_russian' />
+
+              <div className='my-4 text-xs text-gray_text text-center'>
+                <p>Member since Mar 15, 2023</p>
+                <div className='flex gap-x-2 justify-center items-center mt-4'>
+                  <Flag className='w-3 h-3' />
+                  <p>Report this profile</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>hlw</div>
+        </div>
+      </Layout>
     </>
   );
 };
