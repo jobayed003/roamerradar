@@ -1,9 +1,12 @@
 'use client';
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
+import CustomInput from '@/components/CustomInput';
 import LinkButton from '@/components/LinkButton';
+import NearbyLocations from '@/components/NearbyLocations';
 import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import {
   Bath,
@@ -20,6 +23,7 @@ import {
   Pizza,
   Router,
   Share,
+  Smile,
   User,
   User2,
   X,
@@ -27,7 +31,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { CiFacebook, CiGlobe, CiInstagram, CiTwitter } from 'react-icons/ci';
-import { FaCheckCircle, FaStar } from 'react-icons/fa';
+import { FaArrowRight, FaCheckCircle, FaStar } from 'react-icons/fa';
 
 const icons = [Navigation, Share, Heart, X];
 
@@ -50,10 +54,12 @@ const receiptDetails = [
 
 const totalPrice = receiptDetails.reduce((acc, item) => acc + item.price, 0);
 
+const filterItems = ['Newest', 'Popular', 'All'];
+
 const Product = () => {
   return (
     <>
-      <Separator className='bg-dark_russian mb-4' />
+      <Separator className='dark:bg-dark_russian mb-4 bg-[#E6E8EC]' />
 
       <Layout className='lg:px-20 px-8'>
         <div className='flex justify-between pb-10'>
@@ -165,7 +171,7 @@ const Product = () => {
             </div>
             <Button
               variant={'fill'}
-              className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold '
+              className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold'
             >
               More details
             </Button>
@@ -263,7 +269,7 @@ const Product = () => {
 
       <Layout className='lg:px-20 px-8'>
         <div className='flex gap-8'>
-          <div className='border border-gray_border bg-dark_bg p-8 px-5 max-w-96 rounded-3xl'>
+          <div className='h-min border border-gray_border bg-dark_bg p-8 px-5 max-w-96 rounded-3xl'>
             <div className='flex items-center justify-center gap-6'>
               <div className='relative'>
                 <Image
@@ -279,7 +285,7 @@ const Product = () => {
               </div>
 
               <div>
-                <h1 className='text-3xl'>Jobayed Hossain</h1>
+                <h1 className='text-3xl font-bold'>Jobayed Hossain</h1>
                 <div className='flex items-center gap-x-2 text-xs mt-2'>
                   <FaStar size={22} fill='#FFD166' />
                   <p className='font-medium text-white'>
@@ -315,10 +321,18 @@ const Product = () => {
 
               <div className='flex gap-x-4'>
                 <Link href={'/message-center'}>
-                  <Button variant={'fill'}>Contact</Button>
+                  <Button
+                    variant={'fill'}
+                    className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold '
+                  >
+                    Contact
+                  </Button>
                 </Link>
 
-                <Button variant={'fill'} className='rounded-full px-2 '>
+                <Button
+                  variant={'fill'}
+                  className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold rounded-full px-2'
+                >
                   <Share />
                 </Button>
               </div>
@@ -346,10 +360,109 @@ const Product = () => {
               </div>
             </div>
           </div>
-          <div>hlw</div>
+          <div className='pt-10 w-full'>
+            <div>
+              <h1 className='text-2xl font-semibold mb-2'>Add a review</h1>
+              <div className='flex gap-x-1 justify-between font-poppins text-sm '>
+                <p className='text-gray_text'>
+                  Be the first to review <span className='text-foreground'> Spectacular veiws of Queenstown</span>
+                </p>
+
+                <div className='flex flex-row-reverse gap-x-1 cursor-pointer'>
+                  <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500' />
+                  <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500' />
+                  <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500' />
+                  <FaStar size={20} className='peer peer-hover:text-yellow-500 text-yellow-500 hover:text-yellow-500' />
+                  <FaStar size={20} className='peer peer-hover:text-yellow-500 text-yellow-500 hover:text-yellow-500' />
+                </div>
+              </div>
+
+              <div className='flex flex-col gap-y-6 my-8 relative'>
+                <CustomInput
+                  className='h-[72px] border-gray_border border-2 rounded-3xl text-base'
+                  placeholder='Share your thoughts'
+                />
+
+                <div className='absolute flex items-center gap-x-3 right-4 top-4 transition-all cursor-pointer'>
+                  <Smile className='text-gray_text hover:text-blue-hover' />
+                  <Button className='bg-blue hover:bg-blue-hover grow text-white rounded-full px-4 py-2 font-bold'>
+                    Post it! <FaArrowRight className='ml-3 ' />
+                  </Button>
+                </div>
+
+                <div className='flex justify-between items-center'>
+                  <h1 className='text-2xl font-semibold '>3 comments</h1>
+                  <Select>
+                    <SelectTrigger className='md:w-40 h-12 w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
+                      <SelectValue placeholder={filterItems[0]} />
+                    </SelectTrigger>
+                    <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red bg-dark_bg'>
+                      {filterItems.map((item) => (
+                        <SelectItem key={item.length} value={item}>
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {Array.from({ length: 3 }).map(() => (
+                  <UserComments key={Math.random()} />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
+        <NearbyLocations title={'Browse by property type'} />
       </Layout>
     </>
+  );
+};
+
+type UserComments = {
+  name: string;
+  img: string;
+  starCount: number;
+  comment: string;
+  commentedOn: string;
+};
+
+const UserComments = () => {
+  return (
+    <div className='flex gap-x-4 border-b border-gray_border py-5 text-sm font-poppins'>
+      <div>
+        <Image src={'/user.jpg'} alt='user img' width={48} height={48} className='h-12 w-12 rounded-full' />
+      </div>
+
+      <div className='w-full'>
+        <div className='flex justify-between'>
+          <h1 className='font-medium'>John Marston</h1>
+
+          <div className='flex gap-x-1 cursor-pointer'>
+            <FaStar size={20} className='text-yellow-500' />
+            <FaStar size={20} className='text-yellow-500' />
+            <FaStar size={20} className='text-yellow-500' />
+            <FaStar size={20} className='text-yellow-500 ' />
+            <FaStar size={20} className='text-yellow-500' />
+          </div>
+        </div>
+
+        <p className='mt-2 text-[#B1B5C3]'>
+          We had the most spectacular view. Unfortunately it was very hot in the room from 2-830 pm due to no air
+          conditioning and no shade.
+        </p>
+
+        <div className='flex items-center gap-x-4 text-xs'>
+          <p className='text-gray_text'>about 5 hour ago</p>
+          <Button variant={'transparent'} className='p-0 text-xs'>
+            Like
+          </Button>
+          <Button variant={'transparent'} className='p-0 text-xs'>
+            Reply
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
 
