@@ -19,6 +19,7 @@ import {
   Flag,
   Heart,
   Home,
+  ImageIcon,
   Navigation,
   Pizza,
   Router,
@@ -31,7 +32,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { CiFacebook, CiGlobe, CiInstagram, CiTwitter } from 'react-icons/ci';
-import { FaArrowRight, FaCheckCircle, FaStar } from 'react-icons/fa';
+import { FaArrowRight, FaCheckCircle, FaSearchPlus, FaStar } from 'react-icons/fa';
 
 const icons = [Navigation, Share, Heart, X];
 
@@ -75,34 +76,37 @@ const Product = () => {
           />
         </div>
 
-        <div className='flex justify-between'>
+        <div className='flex md:flex-row flex-col gap-y-6 justify-between'>
           <div className='max-w-2xl'>
-            <h1 className='text-5xl font-bold mb-3 leading-tight'>Spectacular views of Queenstown</h1>
-            <div className='flex items-center gap-3 font-poppins text-sm text-gray_text'>
+            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>Spectacular views of Queenstown</h1>
+
+            <div className='flex items-center flex-wrap gap-3 font-poppins text-sm text-gray_text'>
               <div className='overflow-hidden rounded-full'>
                 <Image src={'/user.jpg'} alt='user img' width={25} height={25} />
               </div>
-
-              <div className='flex items-center gap-x-2 ml-2 '>
+              <div className='flex items-center gap-x-2 ml-2'>
                 <FaStar size={22} fill='#FFD166' />
                 <p className='font-medium text-white'>
                   4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
                 </p>
               </div>
-              <div className='flex items-center gap-x-2 ml-2'>
-                <Home className='w-4 h-4 ' />
-                <p className=''>Superhost</p>
-              </div>
-              <div className='flex items-center gap-x-2 ml-2'>
-                <Flag className='w-4 h-4 ' />
-                <p className=''>Queenstown, Otago, New Zealand</p>
+
+              <div className='flex'>
+                <div className='flex items-center gap-x-2'>
+                  <Home className='w-4 h-4 ' />
+                  <p className=''>Superhost</p>
+                </div>
+                <div className='flex items-center gap-x-2 ml-2'>
+                  <Flag className='w-4 h-4 ' />
+                  <p className=''>Queenstown, Otago, New Zealand</p>
+                </div>
               </div>
             </div>
           </div>
-          <div className='flex gap-3 text-gray_border'>
+          <div className='flex gap-3 text-gray_border self-center'>
             {icons.map((Item) => (
               <div
-                className='w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray_border group transition-all hover:bg-[#353945] cursor-pointer'
+                className='w-10 h-10 flex items-center justify-center rounded-full border-2 dark:border-gray_border hover:border-[#353945] group transition-all hover:bg-[#353945] cursor-pointer'
                 key={Math.random()}
               >
                 <Item className='group-hover:text-[#FCFCFD] text-gray_text' />
@@ -111,17 +115,33 @@ const Product = () => {
           </div>
         </div>
         <div className='py-10'>
-          <div className='grid grid-cols-4 grid-rows-3 gap-2 h-full'>
-            <div className='relative col-span-3 row-span-full'>
-              <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl' />
+          <div className='grid md:grid-cols-4 grid-cols-3 md:grid-rows-3 grid-rows-4 gap-2 h-full'>
+            <div className='md:col-span-3 col-span-full md:row-span-full row-span-3 relative group cursor-pointer'>
+              <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl ' />
+              <div className='bg-white rounded-full p-4 absolute z-50 top-1/2 right-1/2 invisible group-hover:visible transition-all'>
+                <FaSearchPlus size={14} className='text-gray_text' />
+              </div>
+              <Link
+                href={'/' + 'photo-grid'}
+                className='bg-white flex items-center gap-x-4 rounded-full px-3 py-2 absolute z-50 bottom-4 left-4 text-dark_bg'
+              >
+                <ImageIcon className='w-4 h-4' />
+                <span className='text-sm font-bold'>Show all photos</span>
+              </Link>
             </div>
             {galleryImages.map((img) => (
-              <Image key={img} src={img} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
+              <div key={img} className='relative group cursor-pointer'>
+                <Image src={img} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
+
+                <div className='bg-white rounded-full p-4 absolute z-50 top-[40%] left-[40%] invisible group-hover:visible transition-all'>
+                  <FaSearchPlus size={14} className='text-gray_text' />
+                </div>
+              </div>
             ))}
           </div>
         </div>
 
-        <div className='flex gap-8 mt-3 pt-8 pb-20'>
+        <div className='flex lg:flex-row flex-col gap-8 mt-3 py-8 '>
           <div className='basis-7/12'>
             <h1 className='text-3xl mb-2 font-bold'>Private room in house</h1>
             <div className='flex items-center gap-x-2 pt-2 pb-4'>
@@ -177,7 +197,7 @@ const Product = () => {
             </Button>
           </div>
 
-          <div className='bg-dark_russian border border-gray_border p-8 max-w-md w-full rounded-3xl'>
+          <div className='dark:bg-dark_russian border dark:border-gray_border p-8 lg:max-w-md w-full rounded-3xl'>
             <div className='flex items-center justify-between mb-8'>
               <div>
                 <div className='flex gap-2 text-3xl font-bold'>
@@ -187,7 +207,7 @@ const Product = () => {
                 </div>
                 <div className='flex gap-2 mt-2'>
                   <FaStar size={22} fill='#FFD166' />
-                  <p className='font-medium text-white'>
+                  <p className='font-medium text-foreground'>
                     4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
                   </p>
                 </div>
@@ -200,21 +220,21 @@ const Product = () => {
                   height={70}
                   className='rounded-full w-16 h-16 object-fill'
                 />
-                <div className='absolute top-0 right-0 z-50'>
+                <div className='absolute top-0 right-0 z-50 bg-white rounded-full'>
                   <FaCheckCircle className='text-green-400 bg-transparent overflow-hidden rounded-full' size={20} />
                 </div>
               </div>
             </div>
-            <div className='bg-gray_border rounded-2xl'>
-              <div className='flex items-center flex-wrap gap-x-3 p-3'>
-                <div className='flex gap-2 items-center text-gray_text p-3'>
+            <div className='dark:bg-gray_border bg-[#F4F5F6] rounded-2xl'>
+              <div className='flex items-center flex-wrap p-3'>
+                <div className='flex gap-2 items-center text-gray_text p-3 basis-1/2'>
                   <CalendarDays />
-                  <div className='flex flex-col '>
+                  <div className='flex flex-col font-poppins'>
                     <p className='text-xs'>Check-in</p>
                     <p className='text-foreground font-medium'>May 15, 2024</p>
                   </div>
                 </div>
-                <div className='flex gap-2 border-l items-center border-gray_text text-gray_text p-3'>
+                <div className='flex gap-2 border-l items-center dark:border-gray_text text-gray_text p-3 basis-1/2'>
                   <CalendarDays />
                   <div className='flex flex-col'>
                     <p className='text-xs'>Check-out</p>
@@ -222,7 +242,7 @@ const Product = () => {
                   </div>
                 </div>
 
-                <div className='flex gap-2 items-center text-gray_text p-3'>
+                <div className='flex gap-2 items-center text-gray_text p-3 basis-1/2'>
                   <User2 />
                   <div className='flex flex-col'>
                     <p className='text-xs'>Guest</p>
@@ -249,7 +269,7 @@ const Product = () => {
                   <div className=''>${Math.abs(item.price)}</div>
                 </div>
               ))}
-              <div className='flex justify-between py-2 font-medium bg-gray_border px-2 rounded-lg'>
+              <div className='flex justify-between py-2 font-medium dark:bg-gray_border bg-[#F4F5F6] px-2 rounded-lg'>
                 <div className='text-gray_text text-sm'>Total</div>
                 <div>${totalPrice}</div>
               </div>
@@ -265,157 +285,170 @@ const Product = () => {
         </div>
       </Layout>
 
-      <Separator className='my-28 bg-dark_russian' />
+      <Separator className='mt-10 mb-20 dark:bg-dark_russian' />
 
-      <Layout className='lg:px-20 px-8'>
-        <div className='flex gap-8'>
-          <div className='h-min border border-gray_border bg-dark_bg p-8 px-5 max-w-96 rounded-3xl'>
-            <div className='flex items-center justify-center gap-6'>
-              <div className='relative'>
-                <Image
-                  src={'/user.jpg'}
-                  alt='user img'
-                  width={60}
-                  height={70}
-                  className='rounded-full w-16 h-16 object-fill'
-                />
-                <div className='absolute top-0 right-0 z-50'>
-                  <FaCheckCircle className='text-green-400 bg-transparent overflow-hidden rounded-full' size={20} />
-                </div>
-              </div>
+      <ProfileSection />
+    </>
+  );
+};
 
-              <div>
-                <h1 className='text-3xl font-bold'>Jobayed Hossain</h1>
-                <div className='flex items-center gap-x-2 text-xs mt-2'>
-                  <FaStar size={22} fill='#FFD166' />
-                  <p className='font-medium text-white'>
-                    4.8 <span className='text-gray_text'>(234 reviews)</span>
-                  </p>
-                </div>
+const ProfileSection = () => {
+  return (
+    <Layout className='lg:px-20 px-8'>
+      <div className='flex lg:flex-row flex-col-reverse gap-8'>
+        <div className='h-min border dark:border-gray_border dark:bg-dark_bg p-8 px-5 lg:max-w-96 rounded-3xl'>
+          <div className='flex items-center justify-center gap-6'>
+            <div className='relative'>
+              <Image
+                src={'/user.jpg'}
+                alt='user img'
+                width={60}
+                height={70}
+                className='rounded-full w-16 h-16 object-fill'
+              />
+              <div className='absolute top-0 right-0 z-50'>
+                <FaCheckCircle className='text-green-400 bg-transparent overflow-hidden rounded-full' size={20} />
               </div>
             </div>
-            <div className='flex flex-col gap-y-8 items-center mt-8 px-4'>
-              <div className='flex gap-x-3 py-2 px-4 bg-dark_russian rounded-3xl text-gray_text'>
-                <div className='flex items-center gap-x-2'>
-                  <Home className='w-4 h-4' />
-                  <p>Superhost</p>
-                </div>
-                <div className='flex items-center gap-x-2'>
-                  <FaStar />
-                  <p>256 Reviews</p>
-                </div>
-              </div>
 
-              <div className='text-center text-gray_text'>
-                Described by Queenstown House & Garden magazine as having &apos;one of the best views we&apos;ve ever
-                seen&apos; you will love relaxing in this newly built
-              </div>
-              <Link
-                target='_blank'
-                href={'https://jobayed.netlify.app'}
-                className='flex gap-x-2 items-center font-bold text-sm'
-              >
-                <CiGlobe color='#777E90' />
-                https://jobayed.netlify.app
-              </Link>
-
-              <div className='flex gap-x-4'>
-                <Link href={'/message-center'}>
-                  <Button
-                    variant={'fill'}
-                    className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold '
-                  >
-                    Contact
-                  </Button>
-                </Link>
-
-                <Button
-                  variant={'fill'}
-                  className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold rounded-full px-2'
-                >
-                  <Share />
-                </Button>
-              </div>
-
-              <div className='flex gap-x-4 items-center justify-center text-gray_text my-4'>
-                <Link target='_blank' href={'https://twitter.com'}>
-                  <CiTwitter size={20} className='hover:text-blue-hover' />
-                </Link>
-                <Link target='_blank' href={'https://instagram.com'}>
-                  <CiInstagram size={20} className='hover:text-blue-hover' />
-                </Link>
-                <Link target='_blank' href={'https://facebook.com'}>
-                  <CiFacebook size={20} className='hover:text-blue-hover' />
-                </Link>
-              </div>
-
-              <Separator className='bg-dark_russian' />
-
-              <div className='my-4 text-xs text-gray_text text-center'>
-                <p>Member since Mar 15, 2023</p>
-                <div className='flex gap-x-2 justify-center items-center mt-4'>
-                  <Flag className='w-3 h-3' />
-                  <p>Report this profile</p>
-                </div>
+            <div>
+              <h1 className='text-3xl font-bold'>Jobayed Hossain</h1>
+              <div className='flex items-center gap-x-2 text-xs mt-2'>
+                <FaStar size={22} fill='#FFD166' />
+                <p className='font-medium text-white'>
+                  4.8 <span className='text-gray_text'>(234 reviews)</span>
+                </p>
               </div>
             </div>
           </div>
-          <div className='pt-10 w-full'>
-            <div>
-              <h1 className='text-2xl font-semibold mb-2'>Add a review</h1>
-              <div className='flex gap-x-1 justify-between font-poppins text-sm '>
-                <p className='text-gray_text'>
-                  Be the first to review <span className='text-foreground'> Spectacular veiws of Queenstown</span>
-                </p>
-
-                <div className='flex flex-row-reverse gap-x-1 cursor-pointer'>
-                  <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500' />
-                  <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500' />
-                  <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500' />
-                  <FaStar size={20} className='peer peer-hover:text-yellow-500 text-yellow-500 hover:text-yellow-500' />
-                  <FaStar size={20} className='peer peer-hover:text-yellow-500 text-yellow-500 hover:text-yellow-500' />
-                </div>
+          <div className='flex flex-col gap-y-8 items-center mt-8 px-4'>
+            <div className='flex gap-x-3 py-2 px-4 dark:bg-dark_russian bg-[#F4F5F6] rounded-3xl text-gray_text'>
+              <div className='flex items-center gap-x-2'>
+                <Home className='w-4 h-4' />
+                <p>Superhost</p>
               </div>
+              <div className='flex items-center gap-x-2'>
+                <FaStar />
+                <p>256 Reviews</p>
+              </div>
+            </div>
 
-              <div className='flex flex-col gap-y-6 my-8 relative'>
-                <CustomInput
-                  className='h-[72px] border-gray_border border-2 rounded-3xl text-base'
-                  placeholder='Share your thoughts'
-                />
+            <div className='text-center text-gray_text'>
+              Described by Queenstown House & Garden magazine as having &apos;one of the best views we&apos;ve ever
+              seen&apos; you will love relaxing in this newly built
+            </div>
+            <Link
+              target='_blank'
+              href={'https://jobayed.netlify.app'}
+              className='flex gap-x-2 items-center font-bold text-sm'
+            >
+              <CiGlobe color='#777E90' />
+              https://jobayed.netlify.app
+            </Link>
 
-                <div className='absolute flex items-center gap-x-3 right-4 top-4 transition-all cursor-pointer'>
-                  <Smile className='text-gray_text hover:text-blue-hover' />
-                  <Button className='bg-blue hover:bg-blue-hover grow text-white rounded-full px-4 py-2 font-bold'>
-                    Post it! <FaArrowRight className='ml-3 ' />
-                  </Button>
-                </div>
+            <div className='flex gap-x-4'>
+              <Link href={'/message-center'}>
+                <Button
+                  variant={'fill'}
+                  className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold '
+                >
+                  Contact
+                </Button>
+              </Link>
 
-                <div className='flex justify-between items-center'>
-                  <h1 className='text-2xl font-semibold '>3 comments</h1>
-                  <Select>
-                    <SelectTrigger className='md:w-40 h-12 w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
-                      <SelectValue placeholder={filterItems[0]} />
-                    </SelectTrigger>
-                    <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red bg-dark_bg'>
-                      {filterItems.map((item) => (
-                        <SelectItem key={item.length} value={item}>
-                          {item}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <Button
+                variant={'fill'}
+                className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold rounded-full px-2'
+              >
+                <Share className='text-gray_text' />
+              </Button>
+            </div>
 
-                {Array.from({ length: 3 }).map(() => (
-                  <UserComments key={Math.random()} />
-                ))}
+            <div className='flex gap-x-4 items-center justify-center text-gray_text my-4'>
+              <Link target='_blank' href={'https://twitter.com'}>
+                <CiTwitter size={20} className='hover:text-blue-hover' />
+              </Link>
+              <Link target='_blank' href={'https://instagram.com'}>
+                <CiInstagram size={20} className='hover:text-blue-hover' />
+              </Link>
+              <Link target='_blank' href={'https://facebook.com'}>
+                <CiFacebook size={20} className='hover:text-blue-hover' />
+              </Link>
+            </div>
+
+            <Separator className='dark:bg-dark_russian' />
+
+            <div className='my-4 text-xs text-gray_text text-center'>
+              <p>Member since Mar 15, 2023</p>
+              <div className='flex gap-x-2 justify-center items-center mt-4'>
+                <Flag className='w-3 h-3' />
+                <p>Report this profile</p>
               </div>
             </div>
           </div>
         </div>
-        <NearbyLocations title={'Browse by property type'} />
-      </Layout>
-    </>
+        <div className='pt-10 w-full'>
+          <div>
+            <h1 className='text-2xl font-semibold mb-2'>Add a review</h1>
+            <div className='flex gap-x-1 justify-between font-poppins text-sm '>
+              <p className='text-gray_text'>
+                Be the first to review{' '}
+                <span
+                  className='dark:text-foreground text-dark_bg font-medium
+            '
+                >
+                  {' '}
+                  Spectacular veiws of Queenstown
+                </span>
+              </p>
+
+              <div className='flex flex-row-reverse gap-x-1 cursor-pointer'>
+                <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500 text-gray_text' />
+                <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500 text-gray_text' />
+                <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500 text-gray_text' />
+                <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500 text-gray_text' />
+                <FaStar size={20} className='peer peer-hover:text-yellow-500 text-yellow-500 hover:text-yellow-500' />
+              </div>
+            </div>
+
+            <div className='flex flex-col gap-y-6 my-8 relative'>
+              <CustomInput
+                className='h-[72px] font-normal dark:border-gray_border border-2 rounded-3xl text-base placeholder:text-gray_text'
+                placeholder='Share your thoughts'
+              />
+
+              <div className='absolute flex items-center gap-x-3 right-4 top-4 transition-all cursor-pointer'>
+                <Smile className='text-gray_text hover:text-blue-hover' />
+                <Button className='bg-blue hover:bg-blue-hover grow text-white rounded-full px-4 py-2 font-bold'>
+                  Post it! <FaArrowRight className='ml-3 ' />
+                </Button>
+              </div>
+
+              <div className='flex justify-between items-center'>
+                <h1 className='text-2xl font-semibold '>3 comments</h1>
+                <Select>
+                  <SelectTrigger className='md:w-40 h-12 w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
+                    <SelectValue placeholder={filterItems[0]} />
+                  </SelectTrigger>
+                  <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red dark:bg-dark_bg'>
+                    {filterItems.map((item) => (
+                      <SelectItem key={item.length} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {Array.from({ length: 3 }).map(() => (
+                <UserComments key={Math.random()} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <NearbyLocations title={'Browse by property type'} />
+    </Layout>
   );
 };
 
@@ -429,7 +462,7 @@ type UserComments = {
 
 const UserComments = () => {
   return (
-    <div className='flex gap-x-4 border-b border-gray_border py-5 text-sm font-poppins'>
+    <div className='flex gap-x-4 border-b dark:border-gray_border py-5 text-sm font-poppins'>
       <div>
         <Image src={'/user.jpg'} alt='user img' width={48} height={48} className='h-12 w-12 rounded-full' />
       </div>
