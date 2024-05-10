@@ -1,9 +1,9 @@
 import Product from './_components/Product';
 
-const ProductPage = ({ params }: { params: { productId: string } }) => {
+const StayProducts = ({ params }: { params: { productId: string } }) => {
   const { productId } = params;
 
   return <Product />;
 };
 
-export default ProductPage;
+export default StayProducts;
