@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 const cars = [
   {
+    id: 234,
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
     img: '/images/cars_images/pic-3.jpg',
@@ -17,6 +18,7 @@ const cars = [
     reviews: 15,
   },
   {
+    id: 232,
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
     img: '/images/cars_images/pic-4.jpg',
@@ -27,6 +29,7 @@ const cars = [
     reviews: 15,
   },
   {
+    id: 231,
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
     img: '/images/cars_images/pic-5.jpg',
@@ -37,6 +40,7 @@ const cars = [
     reviews: 15,
   },
   {
+    id: 223,
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
     img: '/images/cars_images/pic-6.jpg',
@@ -47,6 +51,7 @@ const cars = [
     reviews: 15,
   },
   {
+    id: 276,
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
     img: '/images/cars_images/pic-7.jpg',
@@ -57,6 +62,8 @@ const cars = [
     reviews: 15,
   },
   {
+    id: 216,
+
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
     img: '/images/cars_images/pic-8.jpg',
@@ -67,6 +74,8 @@ const cars = [
     reviews: 15,
   },
   {
+    id: 976,
+
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
     img: '/images/cars_images/pic-9.jpg',
@@ -77,6 +86,7 @@ const cars = [
     reviews: 15,
   },
   {
+    id: 176,
     name: 'London - Kings Cross',
     pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
     img: '/images/cars_images/pic-1.jpg',
@@ -106,6 +116,7 @@ export const CarProducts = () => {
 };
 
 type CarProductCardProps = {
+  id: number;
   name: string;
   pickupLocation: string;
   img: string;
@@ -117,6 +128,7 @@ type CarProductCardProps = {
 };
 
 const CarsProductCard = ({
+  id,
   name,
   img,
   supplier,
@@ -128,7 +140,7 @@ const CarsProductCard = ({
 }: CarProductCardProps) => {
   return (
     <Link
-      href={'/cars-product'}
+      href={'/cars-product/' + id}
       className='grid md:grid-cols-2 grid-row-2 max-w-[545px] rounded-2xl border dark:border-gray_border border-[#E6E8EC] shadow-sm font-poppins'
     >
       <div className='w-full md:h-[230px] h-[300px] relative overflow-hidden rounded-s-xl'>
