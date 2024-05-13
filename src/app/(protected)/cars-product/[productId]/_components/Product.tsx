@@ -10,22 +10,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import {
   AlarmClock,
-  Bath,
-  Building2,
   CalendarDays,
   CarFront,
   ChevronLeft,
-  Computer,
-  CreditCard,
   Flag,
   Heart,
   Home,
   ImageIcon,
   Minus,
   Navigation,
-  Pizza,
   Plus,
-  Router,
   Settings2Icon,
   Share,
   ShoppingCart,
@@ -46,15 +40,6 @@ const galleryImages = [
   '/images/cars_images/gallery-5.jpg',
 ];
 
-const amenities = [
-  { icon: Router, label: 'Free wifi 24/7' },
-  { icon: Computer, label: 'Free computer' },
-  { icon: Bath, label: 'Free clean bathroom' },
-  { icon: Pizza, label: 'Breakfast included' },
-  { icon: Building2, label: 'Nearby city' },
-  { icon: CreditCard, label: 'ATM' },
-];
-
 const receiptDetails = [
   { label: '$500 x 3 nights', price: 1500 },
   { label: '10% campaign discount', price: -83.3 },
@@ -72,7 +57,7 @@ const Product = () => {
       <Separator className='dark:bg-dark_russian mb-4 bg-[#E6E8EC]' />
 
       <Layout className='lg:px-20 px-8'>
-        <div className='flex justify-between pb-10'>
+        <div className='md:flex hidden justify-between pb-10'>
           <LinkButton href='/stays-category' label='Go Home'>
             <ChevronLeft className='h-5 w-5 mr-2' />
           </LinkButton>
@@ -350,7 +335,7 @@ const ProfileSection = () => {
         <div className='pt-10 w-full'>
           <div>
             <h1 className='text-2xl font-semibold mb-2'>Add a review</h1>
-            <div className='flex gap-x-1 justify-between font-poppins text-sm '>
+            <div className='md:flex hidden gap-x-1 justify-between font-poppins text-sm '>
               <p className='text-gray_text'>
                 Be the first to review{' '}
                 <span
@@ -384,10 +369,10 @@ const ProfileSection = () => {
                 </Button>
               </div>
 
-              <div className='flex justify-between items-center'>
+              <div className='md:flex hidden justify-between items-center'>
                 <h1 className='text-2xl font-semibold '>3 comments</h1>
                 <Select>
-                  <SelectTrigger className='md:w-40 h-12 w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
+                  <SelectTrigger className='md:w-40 h-12 focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
                     <SelectValue placeholder={filterItems[0]} />
                   </SelectTrigger>
                   <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red dark:bg-dark_bg'>
