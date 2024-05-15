@@ -42,6 +42,10 @@ export const Places = [
     country: 'Japan',
     places: ['Mount Fuji', 'Fushimi Inari Shrine', 'Tokyo Tower'],
   },
+  {
+    country: 'New Zealand',
+    places: ['South Island'],
+  },
 ];
 
 export const products = [

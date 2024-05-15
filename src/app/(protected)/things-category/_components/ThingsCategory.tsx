@@ -1,37 +1,37 @@
 'use client';
-import Stays from '@/app/(browse)/_components/Stays';
 import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ChevronDown, ChevronLeft, Home } from 'lucide-react';
 import Link from 'next/link';
 
+import Things from '@/app/(browse)/things/_components/Things';
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import { CarouselProvider } from '@/components/CarouselProvider';
 import CategoryFilter from '@/components/CategoryFilter';
 import MapProvider from '@/components/map/MapProvider';
-import { StayProducts } from '@/components/products/StayProducts';
+import { ThingsProduct } from '@/components/products/ThingsProduct';
 import { CarouselItem } from '@/components/ui/carousel';
 import { Input } from '@/components/ui/input';
 import { cn, createSearchParams, getCountryByPlaceName } from '@/lib/utils';
-import { useBookingDate, useStaysStore, useTravelers } from '@/stores/useData';
+import { useBookingDate, useThingsStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const filters = ['Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
+const filters = ['Sightseeing', 'Transportation', 'Art and Culture', 'City tour'];
 const selectItems = ['On Sales', 'On Delivery', 'In Exchange'];
 
-const StayCategory = () => {
+const ThingsCategory = () => {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
 
-  const { location } = useStaysStore();
+  const { location } = useThingsStore();
   const { date } = useBookingDate();
   const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
 
   useEffect(() => {
-    const url = createSearchParams({ baseUrl: '/stays-category', params: location });
+    const url = createSearchParams({ baseUrl: '/things-category', params: location });
 
     router.push(url);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,8 +42,8 @@ const StayCategory = () => {
 
   return (
     <div className='px-2 lg:max-w-7xl mx-auto'>
-      <HeroSection img='images/main-2.jpg' className='mb-32' location={location} countryName={countryName}>
-        <Stays />
+      <HeroSection img='images/main-3.jpg' className='mb-32' location={location} countryName={countryName}>
+        <Things />
       </HeroSection>
 
       <div className='md:px-20 px-4 pb-20 mt-72 lg:mt-0'>
@@ -54,14 +54,19 @@ const StayCategory = () => {
               Go Home
             </Button>
           </Link>
-          <BreadcrumbProvider backRoute='stays-category' location={countryName} searchedLocation={location} />
+          <BreadcrumbProvider
+            backRoute='things-category'
+            originRoute='things'
+            location={countryName}
+            searchedLocation={location}
+          />
         </div>
         <div className='flex justify-between mt-14'>
           <div className='font-bold'>
-            <h1 className='text-5xl'>Places to stay</h1>
+            <h1 className='text-5xl'>145+ experiences</h1>
             <div className='flex gap-x-4 mt-3'>
               <p className='border-2 border-[#58c27d] text-[#58c27d] uppercase p-2 py-1 text-xs rounded-sm font-bold'>
-                300+ stays
+                Up to 25% off
               </p>
               <p>
                 {travelDates}, {totalTravelers} guests
@@ -88,16 +93,7 @@ const StayCategory = () => {
         </div>
 
         <CategoryFilter filters={filters} selectItems={selectItems} />
-
-        <div className='py-8'>
-          <h1 className='text-3xl font-bold'>Explore mountains in {location}</h1>
-          <BrowseCarousel />
-        </div>
-
-        <div>
-          <h1 className='text-3xl font-bold mb-4'>Over 300 stays</h1>
-          <StayProducts />
-        </div>
+        <ThingsProduct />
 
         <div className='flex flex-col md:flex-row justify-between items-center gap-x-4 '>
           <div className='flex flex-col gap-y-4 md:max-w-[400px] mt-8'>
@@ -174,4 +170,4 @@ const BrowseCarousel = () => {
   );
 };
 
-export default StayCategory;
+export default ThingsCategory;

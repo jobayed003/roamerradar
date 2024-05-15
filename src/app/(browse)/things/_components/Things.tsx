@@ -2,12 +2,12 @@
 
 import { DateRangePicker } from '@/components/DatePicker';
 import Guests from '@/components/Guests';
+import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useThingsStore } from '@/stores/useData';
-import { CalendarRange, Navigation, Search } from 'lucide-react';
-import Link from 'next/link';
+import { CalendarRange, Navigation } from 'lucide-react';
 
 const Things = () => {
   const { location, setValues } = useThingsStore();
@@ -50,12 +50,7 @@ const Things = () => {
 
       <Guests />
 
-      <Link
-        href={'/category'}
-        className='absolute right-7 lg:top-4 top-[10.4rem] rounded-full bg-blue-600 p-5 cursor-pointer text-center'
-      >
-        <Search className='h-6 w-6 text-white' />
-      </Link>
+      <SearchIcon className='top-6' link='/things-category' />
     </div>
   );
 };

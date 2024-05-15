@@ -1,7 +1,6 @@
 'use client';
 
-import { cn, getCountryByPlaceName } from '@/lib/utils';
-import { useStaysStore } from '@/stores/useData';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import Panel from './Panel';
@@ -9,13 +8,13 @@ import Panel from './Panel';
 type HeroSectionProps = {
   className?: string;
   img: string;
+  location: string;
   imgClass?: string;
+  countryName: string;
   children: ReactNode;
 };
 
-const HeroSection = ({ children, className, imgClass, img }: HeroSectionProps) => {
-  const location = useStaysStore((state) => state.location);
-
+const HeroSection = ({ children, className, imgClass, img, location, countryName }: HeroSectionProps) => {
   return (
     <div
       className={cn(
@@ -37,9 +36,7 @@ const HeroSection = ({ children, className, imgClass, img }: HeroSectionProps) =
         <h1 className='font-bold lg:text-8xl md:text-7xl text-5xl text-wrap text-ellipsis text-dark_russian'>
           {location}
         </h1>
-        <p className='font-medium lg:text-2xl md:text-xl text-lg text-dark_russian'>
-          {getCountryByPlaceName(location)}
-        </p>
+        <p className='font-medium lg:text-2xl md:text-xl text-lg text-dark_russian'>{countryName}</p>
       </div>
     </div>
   );

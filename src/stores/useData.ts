@@ -78,6 +78,6 @@ type ThingsStore = {
 };
 
 export const useThingsStore = create<ThingsStore>((set) => ({
-  location: '',
+  location: 'South Island',
   setValues: ({ location }) => set(() => ({ location })),
 }));
