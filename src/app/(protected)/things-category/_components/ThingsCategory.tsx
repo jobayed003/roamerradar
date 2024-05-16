@@ -20,7 +20,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const filters = ['Sightseeing', 'Transportation', 'Art and Culture', 'City tour'];
-const selectItems = ['On Sales', 'On Delivery', 'In Exchange'];
+const selectItems = ['Times of day', 'Time of week'];
 
 const ThingsCategory = () => {
   const [isClicked, setIsClicked] = useState(false);
