@@ -1,16 +1,14 @@
 'use client';
 import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ChevronDown, ChevronLeft, Home } from 'lucide-react';
+import { ArrowRight, ChevronDown, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 
 import Things from '@/app/(browse)/things/_components/Things';
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
-import { CarouselProvider } from '@/components/CarouselProvider';
 import CategoryFilter from '@/components/CategoryFilter';
 import MapProvider from '@/components/map/MapProvider';
 import { ThingsProduct } from '@/components/products/ThingsProduct';
-import { CarouselItem } from '@/components/ui/carousel';
 import { Input } from '@/components/ui/input';
 import { cn, createSearchParams, getCountryByPlaceName } from '@/lib/utils';
 import { useBookingDate, useThingsStore, useTravelers } from '@/stores/useData';
@@ -129,43 +127,6 @@ const ThingsCategory = () => {
           <Image alt='newsletter pic' src='/images/newsletter-pic-1.png' width={500} height={500} />
         </div>
       </div>
-    </div>
-  );
-};
-
-const BrowseCarousel = () => {
-  return (
-    <div className='relative'>
-      <CarouselProvider buttonClasses='sm:absolute -top-[2.5rem] right-0'>
-        {Array.from({ length: 6 }).map((_, index) => (
-          <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2 basis-full'>
-            <Link href={'/stays-category'} className='hover:text-blue transition-all flex flex-col items-center'>
-              <div className='flex flex-col gap-y-5 my-20 relative rounded-3xl'>
-                <div className='relative self-center sm:self-start overflow-hidden rounded-3xl'>
-                  <Image
-                    className='hover:scale-110 rounded-3xl duration-500'
-                    src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
-                    alt='nearby image'
-                    width={250}
-                    height={250}
-                  />
-                </div>
-                <div className='absolute top-4 left-4 bg-foreground rounded-full text-white dark:text-dark_russian shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
-                  30% off
-                </div>
-
-                <div>
-                  <h1 className='font-medium'>Mountain House</h1>
-                  <div className='flex items-center gap-1 text-gray_text mt-1'>
-                    <Home className='h-4 w-4' />
-                    <p className='text-xs font-poppins font-semibold mt-1'>{(index + 23 * 32332).toLocaleString()}</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </CarouselItem>
-        ))}
-      </CarouselProvider>
     </div>
   );
 };

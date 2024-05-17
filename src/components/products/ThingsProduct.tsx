@@ -190,7 +190,7 @@ const ThingsProductCard = ({
           </div>
         )}
       </div>
-      <div className='flex flex-col justify-between p-6 px-4'>
+      <div className='flex flex-col justify-between gap-y-4 p-6 px-4'>
         <div className='flex justify-between gap-x-4'>
           <h1 className='font-medium'>{name}</h1>
 
@@ -215,7 +215,7 @@ const ThingsProductCard = ({
 
         <Separator />
 
-        <div className='flex justify-between gap-x-2'>
+        <div className='flex justify-between items-center gap-x-2'>
           <div>
             <Image
               src={'/user.jpg'}
