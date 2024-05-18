@@ -9,18 +9,18 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import {
-  AlarmClock,
+  AtSign,
   CalendarDays,
-  CarFront,
   ChevronLeft,
+  Clock,
   Flag,
   Heart,
   Home,
+  IceCream,
   ImageIcon,
   Minus,
   Navigation,
   Plus,
-  Settings2Icon,
   Share,
   ShoppingCart,
   Smile,
@@ -35,9 +35,10 @@ import { FaArrowRight, FaCheckCircle, FaSearchPlus, FaStar } from 'react-icons/f
 const icons = [Navigation, Share, Heart, X];
 
 const galleryImages = [
-  '/images/cars_images/gallery-3.jpg',
-  '/images/cars_images/gallery-4.jpg',
-  '/images/cars_images/gallery-5.jpg',
+  '/images/things-images/product-3.jpg',
+  '/images/things-images/product-2.jpg',
+  '/images/things-images/product-1.jpg',
+  '/images/things-images/product-4.jpg',
 ];
 
 const receiptDetails = [
@@ -72,7 +73,9 @@ const Product = () => {
 
         <div className='flex md:flex-row flex-col gap-y-6 justify-between'>
           <div className='max-w-2xl'>
-            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>Mercedes AMG GT63</h1>
+            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>
+              Premium milford sound tour ex queenstown
+            </h1>
 
             <div className='flex items-center flex-wrap gap-3 font-poppins text-sm text-gray_text'>
               <div className='overflow-hidden rounded-full'>
@@ -88,11 +91,11 @@ const Product = () => {
               <div className='flex'>
                 <div className='flex items-center gap-x-2'>
                   <User className='w-4 h-4' />
-                  <p>Best Driver</p>
+                  <p>Best tour guide</p>
                 </div>
                 <div className='flex items-center gap-x-2 ml-2'>
                   <Flag className='w-4 h-4 ' />
-                  <p className=''>London - Kings Cross</p>
+                  <p className=''>Queenstown, Otago, New Zealand</p>
                 </div>
               </div>
             </div>
@@ -109,10 +112,10 @@ const Product = () => {
           </div>
         </div>
         <div className='py-10'>
-          <div className='grid md:grid-cols-3 grid-cols-2 grid-rows-3 gap-2 max-h-[1000px]'>
-            <div className='md:col-span-2 col-span-full row-span-2 relative group cursor-pointer '>
+          <div className='grid md:grid-cols-4 grid-cols-2 md:grid-rows-2 grid-rows-4 gap-2 max-h-[1000px]'>
+            <div className='md:col-span-2 col-span-full md:row-span-full row-span-2 relative group cursor-pointer h-full'>
               <Image
-                src={'/images/cars_images/gallery-2.jpg'}
+                src={'/images/things-images/product-0.jpg'}
                 alt='Gallery pic'
                 fill
                 className='absolute object-cover rounded-2xl '
@@ -128,19 +131,8 @@ const Product = () => {
                 <span className='text-sm font-bold'>Show all photos</span>
               </Link>
             </div>
-            <div className='row-span-2 relative group cursor-pointer'>
-              <Image
-                src={'/images/cars_images/gallery-1.jpg'}
-                alt='Gallery pic'
-                fill
-                className='absolute object-cover rounded-2xl '
-              />
-              <div className='bg-white rounded-full p-4 absolute z-50 top-1/2 right-1/2 invisible group-hover:visible transition-all'>
-                <FaSearchPlus size={14} className='text-gray_text' />
-              </div>
-            </div>
             {galleryImages.map((img) => (
-              <div key={img} className='relative group cursor-pointer md:row-span-1 row-span-2'>
+              <div key={img} className='relative group cursor-pointer '>
                 <Image
                   src={img}
                   alt='Gallery Img'
@@ -159,9 +151,9 @@ const Product = () => {
 
         <div className='flex lg:flex-row flex-col gap-8 mt-3 py-8 '>
           <div className='basis-7/12'>
-            <h1 className='text-3xl mb-2 font-bold'>Car details</h1>
+            <h1 className='text-3xl mb-2 font-bold'>Amazing experience</h1>
             <div className='flex items-center gap-x-2 pt-2 pb-4'>
-              <span className='text-gray_text'>Car owner</span>
+              <span className='text-gray_text'>Hosted by</span>
               <div>
                 <Image src={'/user.jpg'} alt='user avatar' width={25} height={25} className='rounded-full' />
               </div>
@@ -171,27 +163,27 @@ const Product = () => {
             <div className='flex items-center flex-wrap gap-y-8 mb-16'>
               <div className='flex items-center gap-x-3 basis-1/2'>
                 <div className='border-2 border-[#92A5EF] p-3 rounded-full'>
-                  <AlarmClock className='w-5 h-5' />
+                  <Clock className='w-5 h-5' />
                 </div>
-                <p>Put your car feature</p>
+                <p className='text-gray_text'>12 hours</p>
               </div>
               <div className='flex items-center gap-x-3 basis-1/2'>
                 <div className='border-2 border-[#8BC5E5] p-3 rounded-full'>
-                  <CarFront className='w-5 h-5' />
+                  <IceCream className='w-5 h-5' />
                 </div>
-                <p>Put your car feature</p>
+                <p className='text-gray_text'>Includes food, drinks and tickets</p>
               </div>
               <div className='flex items-center gap-x-3 basis-1/2'>
                 <div className='border-2 border-[#FA8F54] p-3 rounded-full'>
                   <User className='w-5 h-5' />
                 </div>
-                <p>Put your car feature</p>
+                <p className='text-gray_text'>Up to 10 people</p>
               </div>
               <div className='flex items-center gap-x-3 basis-1/2'>
                 <div className='border-2 border-[#58C27D] p-3 rounded-full'>
-                  <Settings2Icon className='w-5 h-5' />
+                  <AtSign className='w-5 h-5' />
                 </div>
-                <p>Put your car feature</p>
+                <p className='text-gray_text'>Hosted in English</p>
               </div>
             </div>
 
