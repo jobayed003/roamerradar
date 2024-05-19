@@ -8,6 +8,7 @@ import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { useTravelers } from '@/stores/useData';
 import {
   AtSign,
   CalendarDays,
@@ -18,13 +19,12 @@ import {
   Home,
   IceCream,
   ImageIcon,
-  Minus,
   Navigation,
-  Plus,
   Share,
-  ShoppingCart,
+  ShoppingBagIcon,
   Smile,
   User,
+  User2,
   X,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -201,11 +201,9 @@ const Product = () => {
               </p>
               <p>From your accommodation enjoy the stunning scenic drive.</p>
             </div>
-            <Separator className='bg-dark_russian' />
+            {/* <Separator className='bg-dark_russian' /> */}
 
             <div className='flex flex-col gap-y-4 my-8 text-gray_text'>
-              <h1 className='text-3xl font-semibold mb-4 text-foreground'>Full protection</h1>
-
               <p>
                 The best 16 passenger small group, intimate and unique, Milford Sound tour. Travel in unparalleled style
                 and comfort in a premium Mercedes.
@@ -226,6 +224,86 @@ const Product = () => {
 
       <ProfileSection />
     </>
+  );
+};
+
+const ReceiptDetails = () => {
+  const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
+
+  return (
+    <div className='dark:bg-dark_russian border dark:border-gray_border p-8 lg:max-w-md w-full rounded-3xl h-min'>
+      <div className='flex items-center justify-between mb-8'>
+        <div>
+          <div className='flex gap-2 text-3xl font-bold'>
+            <h1 className='text-[#b1b5c3] line-through'>${124}</h1>
+            <h1>${104}</h1>
+            <p className='text-base font-normal self-end text-gray_text'>/person</p>
+          </div>
+          <div className='flex gap-2 mt-2'>
+            <FaStar size={22} fill='#FFD166' />
+            <p className='font-medium text-foreground'>
+              4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
+            </p>
+          </div>
+        </div>
+        <div className='relative'>
+          <Image
+            src={'/user.jpg'}
+            alt='user img'
+            width={60}
+            height={70}
+            className='rounded-full w-16 h-16 object-fill'
+          />
+          <div className='absolute top-0 right-0 z-50 bg-white rounded-full'>
+            <FaCheckCircle className='text-green-400 bg-transparent overflow-hidden rounded-full' size={20} />
+          </div>
+        </div>
+      </div>
+      <div className='dark:bg-gray_border bg-[#F4F5F6] rounded-2xl'>
+        <div className='flex items-center flex-wrap gap-4 text-gray_text p-3 py-4'>
+          <CalendarDays className='w-6 h-6' />
+          <div className='flex flex-col font-poppins'>
+            <p className='text-xs'>Date</p>
+            <p className='text-foreground font-medium'>May 15, 2024</p>
+          </div>
+
+          <Separator orientation='vertical' className='h-10 bg-gray_text' />
+          <User2 className='w-6 h-6' />
+          <div className='flex flex-col font-poppins'>
+            <p className='text-xs'>Guest</p>
+            <p className='text-foreground font-medium'>{totalTravelers} guests</p>
+          </div>
+        </div>
+      </div>
+      <div className='flex flex-col gap-y-6 mt-8'>
+        <ReceiptOffer />
+        <ReceiptOffer />
+        <ReceiptOffer />
+        <ReceiptOffer />
+      </div>
+    </div>
+  );
+};
+
+const ReceiptOffer = () => {
+  return (
+    <div className='flex justify-between'>
+      <div className='flex flex-col'>
+        <h1 className='font-medium'>Wed, June 23</h1>
+        <p className='text-gray_text text-xs'>7.30 AM - 7.30 PM</p>
+      </div>
+      <Link href={'/checkout'} className='group'>
+        <Button
+          variant={'fill'}
+          className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold px-6 h-12 gap-x-4 group-hover:text-white'
+        >
+          <p className='font-bold'>
+            <span className='text-[#58C27D] group-odd:'>$256</span> / person
+          </p>
+          <ShoppingBagIcon className='w-3 h-3' />
+        </Button>
+      </Link>
+    </div>
   );
 };
 
@@ -334,7 +412,6 @@ const ProfileSection = () => {
                   className='dark:text-foreground text-dark_bg font-medium
             '
                 >
-                  {' '}
                   Spectacular veiws of Queenstown
                 </span>
               </p>
@@ -431,109 +508,6 @@ const UserComments = () => {
             Reply
           </Button>
         </div>
-      </div>
-    </div>
-  );
-};
-
-const ReceiptDetails = () => {
-  return (
-    <div className='dark:bg-dark_russian border dark:border-gray_border p-8 lg:max-w-md w-full rounded-3xl h-min'>
-      <div className='flex items-center justify-between mb-8'>
-        <div>
-          <div className='flex gap-2 text-3xl font-bold'>
-            <h1 className='text-[#b1b5c3] line-through'>${600}</h1>
-            <h1>${500}</h1>
-            <p className='text-base font-normal self-end text-gray_text'>/day</p>
-          </div>
-          <div className='flex gap-2 mt-2'>
-            <FaStar size={22} fill='#FFD166' />
-            <p className='font-medium text-foreground'>
-              4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
-            </p>
-          </div>
-        </div>
-        <div className='relative'>
-          <Image
-            src={'/user.jpg'}
-            alt='user img'
-            width={60}
-            height={70}
-            className='rounded-full w-16 h-16 object-fill'
-          />
-          <div className='absolute top-0 right-0 z-50 bg-white rounded-full'>
-            <FaCheckCircle className='text-green-400 bg-transparent overflow-hidden rounded-full' size={20} />
-          </div>
-        </div>
-      </div>
-      <div className='dark:bg-gray_border bg-[#F4F5F6] rounded-2xl'>
-        <div className='flex items-center flex-wrap gap-4 text-gray_text p-3'>
-          <CalendarDays className='w-5 h-5' />
-          <div className='flex flex-col font-poppins'>
-            <p className='text-xs'>Date</p>
-            <p className='text-foreground font-medium'>May 15, 2024 - May 22, 2024</p>
-          </div>
-        </div>
-      </div>
-      <div className='my-6'>
-        <h1 className='text-2xl font-semibold mb-4 text-foreground'>Extras</h1>
-        <div className='flex items-center justify-between gap-4'>
-          <div className='basis-2/3'>
-            <p>Payable on collection</p>
-            <p className='text-gray_text text-xs mt-2'>
-              if you reserve any of these extras you&apos;ll pay for them at the counter.
-            </p>
-          </div>
-
-          <div className='flex gap-x-2 items-center border border-gray_border px-5 py-1 rounded-3xl'>
-            <Button variant={'transparent'} className='p-0'>
-              <Minus className='cursor-pointer text-[#B1B5C3] w-4 h-4' />
-            </Button>
-            <p className='w-[1.5rem] text-center'>32</p>
-            <Button variant={'transparent'} className='p-0'>
-              <Plus className='cursor-pointer text-[#B1B5C3] w-4 h-4' />
-            </Button>
-          </div>
-        </div>
-        <Separator className='bg-gray_border my-6' />
-
-        <div className='flex items-center justify-between gap-4'>
-          <div className='basis-2/3'>
-            <p>Child seat</p>
-            <p className='text-gray_text text-xs mt-2'>$50</p>
-          </div>
-
-          <div className='flex gap-x-2 items-center border border-gray_border px-5 py-1 rounded-3xl'>
-            <Button variant={'transparent'} className='p-0'>
-              <Minus className='cursor-pointer text-[#B1B5C3] w-4 h-4' />
-            </Button>
-            <p className='w-[1.5rem] text-center'>3</p>
-            <Button variant={'transparent'} className='p-0'>
-              <Plus className='cursor-pointer text-[#B1B5C3] w-4 h-4' />
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className='pt-2 flex flex-col'>
-        <h1 className='text-2xl font-semibold mb-4 text-foreground'>Price Details</h1>
-
-        {receiptDetails.map((item) => (
-          <div className='flex justify-between py-2 font-medium px-2' key={Math.random()}>
-            <div className='text-gray_text text-sm'>{item.label}</div>
-            <div className=''>${Math.abs(item.price)}</div>
-          </div>
-        ))}
-        <div className='flex justify-between py-2 font-medium dark:bg-gray_border bg-[#F4F5F6] px-2 rounded-lg'>
-          <div className='text-gray_text text-sm'>Total</div>
-          <div>${totalPrice}</div>
-        </div>
-
-        <Button variant={'transparent'} className='flex items-center self-center pt-8 gap-2 text-xs text-gray_text'>
-          Free cancellation until 3:00 PM on May 15, 2024
-        </Button>
-        <Button className='w-min mt-6 self-center bg-blue hover:bg-blue-hover grow text-white rounded-full h-12 px-6 font-bold'>
-          Rent this car <ShoppingCart />
-        </Button>
       </div>
     </div>
   );
