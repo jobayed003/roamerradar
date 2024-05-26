@@ -1,4 +1,4 @@
-import { CarIcon, Home, Medal, Plane } from 'lucide-react';
+import { CarIcon, Clock, Home, Medal, Plane, User2 } from 'lucide-react';
 
 export const routes = [
   { href: '/', icon: Home, label: 'Stays' },
@@ -58,4 +58,128 @@ export const products = [
   { placesNumber: 1750, image: '/images/travel-1.jpg', title: 'Hudsontown', time: '55 minutes drive' },
   { placesNumber: 1540, image: '/images/browse-1.jpg', title: 'New Keagon', time: '1 hour drive' },
   { placesNumber: 1760, image: '/images/browse-3.jpg', title: 'North Justen', time: '30 minutes drive' },
+];
+
+export const thingsProduct = [
+  {
+    id: 234,
+    name: 'Premium milford sound tour ex Queenstown',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/things-images/things-1.jpg',
+    amenities: [
+      { name: '12 hours', icon: Clock },
+      { name: 'Up to 10 people', icon: User2 },
+    ],
+    isBestSelling: false,
+    oldPrice: 543,
+    newPrice: 234,
+    rating: 4.9,
+    reviews: 15,
+  },
+  {
+    id: 232,
+    name: 'Premium milford sound tour ex Queenstown',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/things-images/things-4.jpg',
+    amenities: [
+      { name: '12 hours', icon: Clock },
+      { name: 'Up to 10 people', icon: User2 },
+    ],
+    isBestSelling: true,
+    oldPrice: 543,
+    newPrice: 234,
+    rating: 4.9,
+    reviews: 15,
+  },
+  {
+    id: 231,
+    name: 'Premium milford sound tour ex Queenstown',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/things-images/things-2.jpg',
+    amenities: [
+      { name: '12 hours', icon: Clock },
+      { name: 'Up to 10 people', icon: User2 },
+    ],
+    isBestSelling: false,
+    oldPrice: 543,
+    newPrice: 234,
+    rating: 4.9,
+    reviews: 15,
+  },
+  {
+    id: 223,
+    name: 'Premium milford sound tour ex Queenstown',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/things-images/things-3.jpg',
+    amenities: [
+      { name: '12 hours', icon: Clock },
+      { name: 'Up to 10 people', icon: User2 },
+    ],
+    isBestSelling: false,
+    oldPrice: 543,
+    newPrice: 234,
+    rating: 4.9,
+    reviews: 15,
+  },
+  {
+    id: 276,
+    name: 'Premium milford sound tour ex Queenstown',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/things-images/things-5.jpg',
+    amenities: [
+      { name: '12 hours', icon: Clock },
+      { name: 'Up to 10 people', icon: User2 },
+    ],
+    isBestSelling: true,
+    oldPrice: 543,
+    newPrice: 234,
+    rating: 4.9,
+    reviews: 15,
+  },
+  {
+    id: 216,
+    name: 'Premium milford sound tour ex Queenstown',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/things-images/things-7.jpg',
+    amenities: [
+      { name: '12 hours', icon: Clock },
+      { name: 'Up to 10 people', icon: User2 },
+    ],
+    isBestSelling: false,
+    oldPrice: 543,
+    newPrice: 234,
+    rating: 4.9,
+    reviews: 15,
+  },
+  {
+    id: 976,
+
+    name: 'Premium milford sound tour ex Queenstown',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/things-images/things-4.jpg',
+    amenities: [
+      { name: '12 hours', icon: Clock },
+      { name: 'Up to 10 people', icon: User2 },
+    ],
+    isBestSelling: false,
+    oldPrice: 543,
+    newPrice: 234,
+    rating: 4.9,
+    reviews: 15,
+  },
+  {
+    id: 176,
+    name: 'Premium milford sound tour ex Queenstown',
+    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
+    img: '/images/things-images/things-6.jpg',
+    amenities: [
+      { name: '12 hours', icon: Clock },
+      { name: 'Up to 10 people', icon: User2 },
+    ],
+    isBestSelling: false,
+    oldPrice: 543,
+    newPrice: 234,
+    rating: 4.9,
+    reviews: 15,
+  },
 ];

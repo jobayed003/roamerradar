@@ -397,7 +397,6 @@ const ProfileSection = () => {
                   className='dark:text-foreground text-dark_bg font-medium
             '
                 >
-                  {' '}
                   Spectacular veiws of Queenstown
                 </span>
               </p>

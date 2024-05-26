@@ -77,7 +77,7 @@ const StayProductCard = ({ id, name, amenities, img, price, offerPrice, rating, 
         </div>
       </div>
 
-      <div className='flex justify-between py-6 mx-6 border-t border-[#E6E8EC] dark:border-gray_border text-xs text-gray_text font-poppins'>
+      <div className='flexf justify-between py-6 mx-6 border-t border-[#E6E8EC] dark:border-gray_border text-xs text-gray_text font-poppins'>
         <p className='text-foreground font-semibold'>${offerPrice} total</p>
         <p className='text-foreground font-semibold'>
           ⭐{rating}

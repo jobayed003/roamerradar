@@ -5,7 +5,7 @@ import { Clock, LucideIcon, User2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const cars = [
+const thingsProducts = [
   {
     id: 234,
     name: 'Premium milford sound tour ex Queenstown',
@@ -133,7 +133,7 @@ export const ThingsProduct = () => {
   return (
     <div className='flex flex-col items-center'>
       <div className='grid xl:grid-cols-2 lg:grid-cols-3 md:grid-cols-2 w-full gap-x-3 gap-y-8 mt-8'>
-        {cars.map((item) => (
+        {thingsProducts.map((item) => (
           <ThingsProductCard key={Math.random()} {...item} />
         ))}
       </div>
