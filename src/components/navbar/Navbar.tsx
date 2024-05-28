@@ -31,7 +31,10 @@ const Navbar = () => {
 
   return (
     <nav
-      className='flex items-center justify-between w-full h-[80px] gap-x-8 select-none py-10 lg:py-6 px-4 lg:max-w-7xl mx-auto '
+      className={cn(
+        'flex items-center justify-between w-full h-[80px] gap-x-8 select-none py-10 lg:py-6 px-4 lg:max-w-7xl mx-auto',
+        pathname === '/messages' && 'lg:max-w-full px-20'
+      )}
       ref={navRef}
     >
       <div className='flex space-x-6 items-center'>
