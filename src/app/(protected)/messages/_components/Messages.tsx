@@ -11,7 +11,7 @@ const Messages = () => {
     <>
       <Separator className='dark:bg-dark_russian' />
       <Layout className='lg:max-w-full'>
-        <div className='grid grid-cols-[396px_1fr_496px]'>
+        <div className='grid grid-cols-[18vw_1fr_496px]'>
           <User />
           <Chatbox />
           <ProductView />

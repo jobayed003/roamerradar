@@ -7,14 +7,14 @@ import { FaStar } from 'react-icons/fa';
 
 const User = () => {
   return (
-    <div className='py-8 px-8'>
+    <div className='py-8 px-6 border-r border-gray_border '>
       <LinkButton href='/' label='Go Home'>
         <ArrowLeft className='h-5 w-5 mr-2' />
       </LinkButton>
 
-      <div className='overflow-hidden h-[50%] mt-4'>
-        <div className='flex flex-col overflow-y-scroll overflow-hidden  gap-y-4'>
-          {Array.from({ length: 8 }).map((_, idx) => (
+      <div className='mt-4 h-[calc(100vh-210px)] overflow-y-auto'>
+        <div className='flex flex-col h-full gap-y-4'>
+          {Array.from({ length: 4 }).map((_, idx) => (
             <div
               className='flex gap-x-4 text-sm font-poppins cursor-pointer hover:bg-dark_russian hover:shadow-[0px_40px_32px_-8px_rgba(15_15_15_0.12)] transition-all px-5 py-6 rounded-2xl max-w-[300px]'
               key={idx}
