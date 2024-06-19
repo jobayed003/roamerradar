@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 const ProductView = () => {
   return (
-    <div className='border-r border-gray_border'>
+    <div className='border-r border-gray_border hidden lg:block'>
       <div className='w-full max-h-[300px] h-full relative'>
         <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl ' />
       </div>
