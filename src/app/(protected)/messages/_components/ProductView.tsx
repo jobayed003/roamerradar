@@ -1,14 +1,24 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Bath, Bed, CalendarDays, User, User2 } from 'lucide-react';
+import { Bath, Bed, CalendarDays, ImageIcon, User, User2 } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ProductView = () => {
   return (
     <div className='border-r border-gray_border hidden lg:block'>
-      <div className='w-full max-h-[300px] h-full relative'>
-        <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl ' />
-      </div>
+      <Link href={'/stays-product/233'}>
+        <div className='w-full max-h-[300px] h-72 relative'>
+          <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl ' />
+          <Link
+            href={'/' + 'photo-grid/' + '234'}
+            className='bg-white flex items-center gap-x-4 rounded-full px-3 py-2 absolute z-50 top-4 right-4 text-dark_bg'
+          >
+            <ImageIcon className='w-4 h-4' />
+            <span className='text-sm font-bold'>Show all photos</span>
+          </Link>
+        </div>
+      </Link>
       <div className='p-6'>
         <h1 className='text-2xl mb-2 font-bold'>Spectacular views of Queenstown</h1>
         <div className='flex items-center gap-x-2 pt-2 pb-4'>

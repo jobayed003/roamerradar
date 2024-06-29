@@ -4,12 +4,12 @@ import { format } from 'date-fns';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
-const Chatbox = () => {
+const Chatbox = ({ className }: { className?: string }) => {
   // const previousDate =
   const date = dateFormat(new Date());
 
   return (
-    <div className='w-full md:grid hidden grid-rows-[1fr_100px] border-r border-gray_border h-full overflow-hidden '>
+    <div className={cn('w-full grid-rows-[1fr_100px] border-r border-gray_border h-full overflow-hidden', className)}>
       <div className='flex flex-col gap-y-4 p-12 overflow-y-auto max-h-[calc(100vh-150px)]'>
         <p className='text-xs font-semibold text-center'>{date}</p>
         <MessageBox

@@ -1,13 +1,18 @@
 'use client';
 
 import LinkButton from '@/components/LinkButton';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
+import Chatbox from './Chatbox';
 
 const User = () => {
+  const [isClicked, setIsClicked] = useState(false);
+
   return (
-    <div className='py-8 lg:px-6 px-4 border-r border-gray_border'>
+    <div className='py-8 lg:px-6 px-4 border-r border-gray_border relative'>
       <div className='lg:block md:hidden block ml-6'>
         <LinkButton href='/' label='Go Home'>
           <ArrowLeft className='h-5 w-5 mr-2' />
@@ -23,6 +28,7 @@ const User = () => {
             <div
               className='flex gap-x-4 text-sm font-poppins cursor-pointer hover:bg-dark_russian hover:shadow-[0px_40px_32px_-8px_rgba(15_15_15_0.12)] transition-all px-5 py-6 rounded-2xl lg:max-w-[300px]'
               key={idx}
+              onClick={() => setIsClicked(true)}
             >
               <div>
                 <Image src={'/user.jpg'} alt='user img' width={48} height={48} className='h-12 w-12 rounded-full' />
@@ -50,6 +56,27 @@ const User = () => {
           ))}
         </div>
       </div>
+
+      <AnimatePresence>
+        {isClicked && (
+          <motion.div
+            className='absolute top-0 z-50 bg-dark_bg h-full md:hidden block py-8'
+            initial={{ opacity: 0, x: 200 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 200 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+          >
+            <div className='lg:block md:hidden block ml-6' onClick={() => setIsClicked(false)}>
+              <LinkButton href='/messages' label='Host'>
+                <ArrowLeft className='h-5 w-5 mr-2' />
+              </LinkButton>
+            </div>
+            <div>
+              <Chatbox />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
