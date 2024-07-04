@@ -11,7 +11,7 @@ import * as z from 'zod';
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validateFields = RegisterSchema.safeParse(values);
 
-  if (!validateFields.success) return { error: 'Invalide Fields!' };
+  if (!validateFields.success) return { error: 'Invalid Fields!' };
 
   const { email, name, password } = validateFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);

@@ -9,7 +9,7 @@ import * as z from 'zod';
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validateFields = LoginSchema.safeParse(values);
 
-  if (!validateFields.success) return { error: 'Invalide Fields!' };
+  if (!validateFields.success) return { error: 'Invalid Fields!' };
 
   const { email, password } = validateFields.data;
 

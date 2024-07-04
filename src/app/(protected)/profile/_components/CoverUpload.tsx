@@ -13,7 +13,7 @@ const CoverUpload = ({ img }: { img?: string }) => {
   return (
     <div
       className={cn(
-        'h-52 w-full flex flex-col items-center justify-center text-dark_russian flex-shrink relative transition-all',
+        'h-96 w-full flex flex-col items-center justify-center text-dark_russian flex-shrink relative transition-all',
         isClicked && 'bg-[#0000002c] '
       )}
     >
@@ -38,7 +38,7 @@ const CoverUpload = ({ img }: { img?: string }) => {
         <>
           <div className='absolute border-2 border-dashed border-white rounded-3xl h-11/12 w-[99%] top-2 bottom-2 z-[99]' />
 
-          <div className='absolute text-foreground text-center font-poppins'>
+          <div className='absolute text-white text-center font-poppins'>
             <h1 className='text-2xl font-semibold'>Drag and drop your photo here</h1>
             <p>or click to browse</p>
           </div>

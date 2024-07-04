@@ -1,8 +1,8 @@
 import { Switch } from '@/components/ui/switch';
 
-import { useTransition } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/components/ui/use-toast';
+import { useState, useTransition } from 'react';
 
 const NotificationForm = () => {
   return (
@@ -74,16 +74,23 @@ type ToggleCardProps = {
 };
 
 const ToggleNotification = ({ label, value = false, desc, field }: ToggleCardProps) => {
+  const [isChecked, setIsChecked] = useState(value);
   const [isPending, startTransition] = useTransition();
 
   const onChange = () => {
-    toast({
-      title: 'You changed the following value',
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(field, null, 2)}</code>
-        </pre>
-      ),
+    setIsChecked(!isChecked);
+
+    startTransition(() => {
+      toast({
+        title: 'You changed the following value',
+        description: (
+          <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+            <code className='text-white'>
+              {JSON.stringify(field, null, 2)} : {JSON.stringify(isChecked, null, 2)}
+            </code>
+          </pre>
+        ),
+      });
     });
   };
 
@@ -95,7 +102,7 @@ const ToggleNotification = ({ label, value = false, desc, field }: ToggleCardPro
           <p className='text-gray_text text-sm'>{desc}</p>
         </div>
         <div className='space-y-2'>
-          <Switch disabled={isPending} onCheckedChange={onChange} checked={value}>
+          <Switch disabled={isPending} onCheckedChange={onChange} checked={isChecked}>
             {value ? 'On' : 'Off'}
           </Switch>
         </div>

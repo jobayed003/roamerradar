@@ -1,9 +1,9 @@
 'use client';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
 import { useState } from 'react';
 
 const Data = [
@@ -74,9 +74,10 @@ type ReviewProps = {
 const Review = ({ name, img, desc, id, time }: ReviewProps) => {
   return (
     <div className='flex gap-x-4 mb-4'>
-      <div className='h-16 w-16 relative overflow-hidden rounded-full'>
-        <Image src={img} fill className='absolute object-cover' alt='reviewer img' />
-      </div>
+      <Avatar className='h-16 w-16'>
+        <AvatarImage src={img} />
+        <AvatarFallback>{name}</AvatarFallback>
+      </Avatar>
 
       <div className='flex flex-col'>
         <h1 className='font-medium mb-1'>{name}</h1>

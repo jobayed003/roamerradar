@@ -1,4 +1,5 @@
 import { CarIcon, Clock, Home, Medal, Plane, User2 } from 'lucide-react';
+import { Language } from '../../types';
 
 export const routes = [
   { href: '/', icon: Home, label: 'Stays' },
@@ -183,3 +184,38 @@ export const thingsProduct = [
     reviews: 15,
   },
 ];
+
+export const LANGUAGES = [
+  {
+    value: 'english',
+    label: 'English',
+  },
+  {
+    value: 'hindi',
+    label: 'Hindi',
+  },
+  {
+    value: 'urdu',
+    label: 'Urdu',
+  },
+  {
+    value: 'deutsch',
+    label: 'Deutsch',
+  },
+  {
+    value: 'dutch',
+    label: 'Dutch',
+  },
+  {
+    value: 'french',
+    label: 'French',
+  },
+  {
+    value: 'japanese',
+    label: 'Japanese',
+  },
+  {
+    value: 'chinese',
+    label: 'Chinese',
+  },
+] satisfies Language[];

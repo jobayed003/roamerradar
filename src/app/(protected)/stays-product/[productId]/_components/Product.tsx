@@ -5,6 +5,7 @@ import CustomInput from '@/components/CustomInput';
 import LinkButton from '@/components/LinkButton';
 import NearbyLocations from '@/components/NearbyLocations';
 import Layout from '@/components/ui/Layout';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
@@ -462,9 +463,9 @@ type UserComments = {
 const UserComments = () => {
   return (
     <div className='flex gap-x-4 border-b dark:border-gray_border py-5 text-sm font-poppins'>
-      <div>
-        <Image src={'/user.jpg'} alt='user img' width={48} height={48} className='h-12 w-12 rounded-full' />
-      </div>
+      <Avatar className='h-12 w-12'>
+        <AvatarImage src={'/user.jpg'} />
+      </Avatar>
 
       <div className='w-full'>
         <div className='flex justify-between'>

@@ -27,8 +27,12 @@ export const PersonalInfoSchema = z.object({
   phone: z.string().optional(),
   email: z.string().optional(),
   bio: z.string().optional(),
+  livesIn: z.string().optional(),
+  speaks: z.string().array().optional(),
   website: z.string().optional(),
   twitter: z.string().optional(),
+  facebook: z.string().optional(),
+  instagram: z.string().optional(),
 });
 export const PaymentSchema = z.object({
   number: z.string().min(12),
