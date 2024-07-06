@@ -23,7 +23,7 @@ export const DateRangePicker = ({
     <div className={cn('grid gap-2', className)}>
       <Popover>
         <PopoverTrigger>{children}</PopoverTrigger>
-        <PopoverContent className='w-auto p-0' align='start'>
+        <PopoverContent className='w-auto p-0' align='start' side='top'>
           {isRange && (
             <Calendar
               initialFocus

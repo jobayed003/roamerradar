@@ -36,3 +36,9 @@ export function createSearchParams({ baseUrl, params }: { baseUrl: string; param
 
   return url;
 }
+
+export function getFirstLetters(name: string) {
+  const initials = name.split(' ').map((word) => word[0].toUpperCase());
+
+  return initials.join('');
+}

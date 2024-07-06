@@ -1,6 +1,7 @@
+import ShareButton from '@/components/ShareButton';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Check, Flag, Share } from 'lucide-react';
+import { Check, Flag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { CiFacebook, CiGlobe, CiInstagram, CiStar, CiTwitter } from 'react-icons/ci';
@@ -42,13 +43,11 @@ const ProfileDetails = () => {
       </Link>
 
       <div className='flex gap-x-4 my-8'>
-        <Link href={'/message-center'}>
+        <Link href={'/messages'}>
           <Button variant={'fill'}>Contact</Button>
         </Link>
 
-        <Button variant={'fill'} className='rounded-full px-2 '>
-          <Share />
-        </Button>
+        <ShareButton />
       </div>
 
       <div className='flex gap-x-4 items-center justify-center text-gray_text my-4'>

@@ -3,7 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { cn, getFirstLetters } from '@/lib/utils';
 import { useState } from 'react';
 
 const Data = [
@@ -76,7 +76,7 @@ const Review = ({ name, img, desc, id, time }: ReviewProps) => {
     <div className='flex gap-x-4 mb-4'>
       <Avatar className='h-16 w-16'>
         <AvatarImage src={img} />
-        <AvatarFallback>{name}</AvatarFallback>
+        <AvatarFallback>{getFirstLetters(name)}</AvatarFallback>
       </Avatar>
 
       <div className='flex flex-col'>

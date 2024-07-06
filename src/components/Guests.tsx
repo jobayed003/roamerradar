@@ -46,7 +46,7 @@ const Guests = ({ children }: { children?: React.ReactNode }) => {
         )}
         {children}
       </PopoverTrigger>
-      <PopoverContent className='w-[400px] p-4 rounded-3xl'>
+      <PopoverContent className='w-[400px] p-4 rounded-3xl' side='top'>
         <div className='flex flex-col p-5 gap-y-8 px-4'>
           <div className='flex justify-between pb-2 border-b'>
             <div className='flex flex-col'>

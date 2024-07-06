@@ -5,10 +5,11 @@ import CustomInput from '@/components/CustomInput';
 import LinkButton from '@/components/LinkButton';
 import NearbyLocations from '@/components/NearbyLocations';
 import Layout from '@/components/ui/Layout';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { getFirstLetters } from '@/lib/utils';
 import {
   AlarmClock,
   CalendarDays,
@@ -406,11 +407,12 @@ type UserComments = {
   commentedOn: string;
 };
 
-const UserComments = () => {
+const UserComments = ({ name = 'John Doe' }) => {
   return (
     <div className='flex gap-x-4 border-b dark:border-gray_border py-5 text-sm font-poppins'>
       <Avatar className='h-12 w-12'>
         <AvatarImage src={'/user.jpg'} />
+        <AvatarFallback>{getFirstLetters(name)}</AvatarFallback>
       </Avatar>
 
       <div className='w-full'>

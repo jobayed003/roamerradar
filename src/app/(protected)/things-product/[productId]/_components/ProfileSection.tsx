@@ -1,12 +1,13 @@
 'use client';
 
 import CustomInput from '@/components/CustomInput';
+import ShareButton from '@/components/ShareButton';
 import Layout from '@/components/ui/Layout';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Flag, Home, Share, Smile } from 'lucide-react';
+import { Flag, Home, Smile } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { CiFacebook, CiGlobe, CiInstagram, CiTwitter } from 'react-icons/ci';
@@ -69,7 +70,7 @@ export const ProfileSection = () => {
             </Link>
 
             <div className='flex gap-x-4'>
-              <Link href={'/message-center'}>
+              <Link href={'/messages'}>
                 <Button
                   variant={'fill'}
                   className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold '
@@ -78,12 +79,7 @@ export const ProfileSection = () => {
                 </Button>
               </Link>
 
-              <Button
-                variant={'fill'}
-                className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold rounded-full px-2'
-              >
-                <Share className='text-gray_text' />
-              </Button>
+              <ShareButton />
             </div>
 
             <div className='flex gap-x-4 items-center justify-center text-gray_text my-4'>
