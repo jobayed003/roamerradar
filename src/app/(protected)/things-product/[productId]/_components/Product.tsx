@@ -3,6 +3,7 @@
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import { CarouselProvider } from '@/components/CarouselProvider';
 import LinkButton from '@/components/LinkButton';
+import { ProfileSection } from '@/components/ProfileSection';
 import Layout from '@/components/ui/Layout';
 import { CarouselItem } from '@/components/ui/carousel';
 import { Separator } from '@/components/ui/separator';
@@ -14,7 +15,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { FaSearchPlus, FaStar } from 'react-icons/fa';
 import { ProductSuggestion } from './ProductSuggestion';
-import { ProfileSection } from './ProfileSection';
 import { ReceiptDetails } from './ReceiptDetails';
 
 const icons = [Navigation, Share, Heart, X];

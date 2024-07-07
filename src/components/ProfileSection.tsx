@@ -1,13 +1,13 @@
 'use client';
 
 import CustomInput from '@/components/CustomInput';
-import ShareButton from '@/components/ShareButton';
+import NearbyLocations from '@/components/NearbyLocations';
+import { UserComments } from '@/components/UserComments';
 import Layout from '@/components/ui/Layout';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Flag, Home, Smile } from 'lucide-react';
+import { Flag, Home, Share, Smile } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { CiFacebook, CiGlobe, CiInstagram, CiTwitter } from 'react-icons/ci';
@@ -70,7 +70,7 @@ export const ProfileSection = () => {
             </Link>
 
             <div className='flex gap-x-4'>
-              <Link href={'/messages'}>
+              <Link href={'/message-center'}>
                 <Button
                   variant={'fill'}
                   className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold '
@@ -79,7 +79,12 @@ export const ProfileSection = () => {
                 </Button>
               </Link>
 
-              <ShareButton />
+              <Button
+                variant={'fill'}
+                className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold rounded-full px-2'
+              >
+                <Share className='text-gray_text' />
+              </Button>
             </div>
 
             <div className='flex gap-x-4 items-center justify-center text-gray_text my-4'>
@@ -108,7 +113,7 @@ export const ProfileSection = () => {
         <div className='pt-10 w-full'>
           <div>
             <h1 className='text-2xl font-semibold mb-2'>Add a review</h1>
-            <div className='md:flex hidden gap-x-1 justify-between font-poppins text-sm '>
+            <div className='flex gap-x-1 justify-between font-poppins text-sm '>
               <p className='text-gray_text'>
                 Be the first to review{' '}
                 <span
@@ -141,10 +146,10 @@ export const ProfileSection = () => {
                 </Button>
               </div>
 
-              <div className='md:flex hidden justify-between items-center'>
+              <div className='flex justify-between items-center'>
                 <h1 className='text-2xl font-semibold '>3 comments</h1>
                 <Select>
-                  <SelectTrigger className='md:w-40 h-12 focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
+                  <SelectTrigger className='md:w-40 h-12 w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
                     <SelectValue placeholder={filterItems[0]} />
                   </SelectTrigger>
                   <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red dark:bg-dark_bg'>
@@ -164,53 +169,7 @@ export const ProfileSection = () => {
           </div>
         </div>
       </div>
+      <NearbyLocations title={'Browse by property type'} />
     </Layout>
-  );
-};
-
-type UserComments = {
-  name: string;
-  img: string;
-  starCount: number;
-  comment: string;
-  commentedOn: string;
-};
-
-const UserComments = () => {
-  return (
-    <div className='flex gap-x-4 border-b dark:border-gray_border py-5 text-sm font-poppins'>
-      <Avatar className='h-12 w-12'>
-        <AvatarImage src={'/user.jpg'} />
-      </Avatar>
-
-      <div className='w-full'>
-        <div className='flex justify-between'>
-          <h1 className='font-medium'>John Marston</h1>
-
-          <div className='flex gap-x-1 cursor-pointer'>
-            <FaStar size={20} className='text-yellow-500' />
-            <FaStar size={20} className='text-yellow-500' />
-            <FaStar size={20} className='text-yellow-500' />
-            <FaStar size={20} className='text-yellow-500 ' />
-            <FaStar size={20} className='text-yellow-500' />
-          </div>
-        </div>
-
-        <p className='mt-2 text-[#B1B5C3]'>
-          We had the most spectacular view. Unfortunately it was very hot in the room from 2-830 pm due to no air
-          conditioning and no shade.
-        </p>
-
-        <div className='flex items-center gap-x-4 text-xs'>
-          <p className='text-gray_text'>about 5 hour ago</p>
-          <Button variant={'transparent'} className='p-0 text-xs'>
-            Like
-          </Button>
-          <Button variant={'transparent'} className='p-0 text-xs'>
-            Reply
-          </Button>
-        </div>
-      </div>
-    </div>
   );
 };
