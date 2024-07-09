@@ -11,7 +11,7 @@ const ProductView = () => {
         <div className='w-full max-h-[300px] h-72 relative'>
           <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl ' />
           <Link
-            href={'/' + 'photo-grid/' + '234'}
+            href={'/photo-grid/' + '234'}
             className='bg-white flex items-center gap-x-4 rounded-full px-3 py-2 absolute z-50 top-4 right-4 text-dark_bg'
           >
             <ImageIcon className='w-4 h-4' />

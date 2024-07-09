@@ -13,7 +13,7 @@ import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { ArrowRight, ChevronLeft, FileUp, Pizza, Wifi } from 'lucide-react';
-import { PreviewCard } from './_components/PreviewCard';
+import { PreviewCard } from './PreviewCard';
 
 const houses = {
   name: 'Entire serviced classy mountain house',
