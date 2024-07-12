@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const ProductView = () => {
   return (
-    <div className='border-r border-gray_border hidden lg:block'>
+    <div className='border-r dark:border-gray_border hidden lg:block'>
       <Link href={'/stays-product/233'}>
         <div className='w-full max-h-[300px] h-72 relative'>
           <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl ' />
@@ -56,7 +56,7 @@ const ProductView = () => {
           <Bath className='h-5 w-5 ' />
           <p>1 private bath</p>
         </div>
-        <Separator className='bg-dark_russian my-4' />
+        <Separator className='dark:bg-dark_russian my-4' />
 
         <div className='flex flex-col gap-y-4'>
           <p className='text-sm text-gray_text font-poppins'>

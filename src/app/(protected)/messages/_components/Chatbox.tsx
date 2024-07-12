@@ -9,7 +9,9 @@ const Chatbox = ({ className }: { className?: string }) => {
   const date = dateFormat(new Date());
 
   return (
-    <div className={cn('w-full grid-rows-[1fr_100px] border-r border-gray_border h-full overflow-hidden', className)}>
+    <div
+      className={cn('w-full grid-rows-[1fr_100px] border-r dark:border-gray_border h-full overflow-hidden', className)}
+    >
       <div className='flex flex-col gap-y-4 p-12 overflow-y-auto max-h-[calc(100vh-150px)]'>
         <p className='text-xs font-semibold text-center'>{date}</p>
         <MessageBox
@@ -23,9 +25,9 @@ const Chatbox = ({ className }: { className?: string }) => {
         <MessageBox isSender message={'Hi John, how are you?'} />
       </div>
       <div className='mt-6 px-4 flex w-full'>
-        <Input placeholder='Enter your message' className='border-gray_border bg-transparent rounded-full py-5' />
+        <Input placeholder='Enter your message' className='dark:border-gray_border bg-transparent rounded-full py-5' />
         <div className='relative'>
-          <div className='absolute right-1 top-2 p-1 bg-blue hover:bg-blue-hover rounded-full transition-all cursor-pointer'>
+          <div className='absolute right-1 top-2 p-1 bg-blue hover:bg-blue-hover text-white rounded-full transition-all cursor-pointer'>
             <ArrowRight className='w-5 h-5' />
           </div>
         </div>
@@ -41,7 +43,14 @@ const MessageBox = ({ isSender = false, message }: { isSender?: boolean; message
         {isSender && (
           <Image src='/user.jpg' width={32} height={32} alt='sender image' className='w-8 h-8 rounded-full ' />
         )}
-        <div className={cn('bg-dark_russian px-6 py-4 rounded-[32px]', !isSender && 'bg-blue')}>{message}</div>
+        <div
+          className={cn(
+            'bg-[#F4F5F6] dark:bg-dark_russian px-6 py-4 rounded-[32px]',
+            !isSender && 'dark:bg-blue bg-blue text-white'
+          )}
+        >
+          {message}
+        </div>
       </div>
       {isSender && (
         <div className='self-end mt-4 text-[#b1b5c3] font-semibold text-xs'>{format(new Date(), 'h:mm aaa')}</div>
