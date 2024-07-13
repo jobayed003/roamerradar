@@ -2,23 +2,21 @@
 import { login } from '@/actions/login';
 import { FormError } from '@/components/FormError';
 import { FormSuccess } from '@/components/FormSuccess';
+import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { cn } from '@/lib/utils';
 import { LoginSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-
-const inputClassNames = 'border-gray_border bg-transparent py-5 mb-5';
+import CustomInput from '../CustomInput';
 
 const LoginForm = () => {
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -58,13 +56,13 @@ const LoginForm = () => {
               name='email'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
+                  <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Email Address</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
+                    <CustomInput
+                      props={field}
                       placeholder='john.doe@example.com'
-                      className={cn(inputClassNames)}
                       disabled={isPending}
+                      className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
                     />
                   </FormControl>
                 </FormItem>
@@ -75,9 +73,24 @@ const LoginForm = () => {
               name='password'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Enter a password</FormLabel>
+                  <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Enter a password</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder='*******' className={cn(inputClassNames)} disabled={isPending} />
+                    <div className='relative'>
+                      <CustomInput
+                        props={field}
+                        placeholder='*******'
+                        disabled={isPending}
+                        type={showPassword ? 'text' : 'password'}
+                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
+                      />
+                      <div className='absolute right-3 top-3 z-10 text-gray_text select-none cursor-pointer'>
+                        {showPassword ? (
+                          <EyeOff onClick={() => setShowPassword(false)} />
+                        ) : (
+                          <Eye onClick={() => setShowPassword(true)} />
+                        )}
+                      </div>
+                    </div>
                   </FormControl>
                 </FormItem>
               )}
