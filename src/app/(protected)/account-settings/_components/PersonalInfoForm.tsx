@@ -1,9 +1,11 @@
+'use client';
 import CustomInput from '@/components/CustomInput';
 import LinkButton from '@/components/LinkButton';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { FancyMultiSelect } from '@/components/ui/multiselect';
 import { Textarea } from '@/components/ui/textarea';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { PersonalInfoSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
@@ -13,21 +15,22 @@ import * as z from 'zod';
 
 const PersonalInfoForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string[]>([]);
+  const { user } = useCurrentUser();
 
   const form = useForm<z.infer<typeof PersonalInfoSchema>>({
     resolver: zodResolver(PersonalInfoSchema),
     defaultValues: {
-      display: '',
-      real: '',
-      phone: '',
-      email: '',
-      bio: '',
-      livesIn: '',
-      speaks: [],
-      facebook: '',
-      instagram: '',
-      twitter: '',
-      website: '',
+      displayName: user?.displayName ?? '',
+      realName: user?.realName ?? '',
+      phone: user?.phone ?? '',
+      email: user?.email ?? '',
+      bio: user?.bio ?? '',
+      livesIn: user?.livesIn ?? '',
+      speaks: (user?.speaks as unknown as []) ?? [],
+      facebook: user?.facebook ?? '',
+      instagram: user?.instagram ?? '',
+      twitter: user?.twitter ?? '',
+      website: user?.website ?? '',
     },
   });
 
@@ -51,7 +54,7 @@ const PersonalInfoForm = () => {
             <div className='flex gap-x-6 justify-between w-full'>
               <FormField
                 control={form.control}
-                name='display'
+                name='displayName'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
                     <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Display Name</FormLabel>
@@ -67,7 +70,7 @@ const PersonalInfoForm = () => {
               />
               <FormField
                 control={form.control}
-                name='real'
+                name='realName'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
                     <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Real name</FormLabel>

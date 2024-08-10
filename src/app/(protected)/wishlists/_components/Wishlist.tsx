@@ -13,8 +13,8 @@ import { Separator } from '@/components/ui/separator';
 import { ChevronLeft } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
-const bookingFilters = ['Stays', 'Flights', 'Cars', 'Things to do'];
-const bookingSelectItems = ['Past', 'Upcoming', 'Future'];
+const wishlistsFilter = ['Stays', 'Flights', 'Cars', 'Things to do'];
+const wishlistSelectItems = ['Past', 'Upcoming', 'Future'];
 const steps = [
   { stepName: 'stays', component: <StayProducts /> },
   { stepName: 'flights', component: <FlightDeals /> },
@@ -22,7 +22,7 @@ const steps = [
   { stepName: 'things', component: <StayProducts /> },
 ];
 
-const MyBooking = () => {
+const Wishlist = () => {
   const param = useSearchParams().get('q')?.split(' ')[0];
 
   return (
@@ -35,15 +35,15 @@ const MyBooking = () => {
             <ChevronLeft className='h-5 w-5 mr-2' />
           </LinkButton>
 
-          <BreadcrumbProvider backRoute='/' originRoute='my-bookings' />
+          <BreadcrumbProvider backRoute='/' originRoute='wishlists' />
         </div>
 
         <div>
-          <h1 className='text-5xl font-bold mb-3'>Bookings</h1>
-          <p className='font-medium text-gray_text font-poppins'>You added {8} items to bookings</p>
+          <h1 className='text-5xl font-bold mb-3'>Wishlists</h1>
+          <p className='font-medium text-gray_text font-poppins'>You added {8} items to wishlists</p>
         </div>
 
-        <CategoryFilter filters={bookingFilters} selectItems={bookingSelectItems} />
+        <CategoryFilter filters={wishlistsFilter} selectItems={wishlistSelectItems} />
 
         {steps.map((step) => step.stepName === param && step.component)}
 
@@ -52,4 +52,4 @@ const MyBooking = () => {
     </>
   );
 };
-export default MyBooking;
+export default Wishlist;

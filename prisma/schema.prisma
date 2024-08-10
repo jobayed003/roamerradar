@@ -9,7 +9,16 @@ datasource db {
 
 model User {
   id            String    @id @default(cuid()) @map("_id")
-  name          String?
+  displayName   String?
+  realName      String?
+  phone         String?
+  bio           String?
+  livesIn       String?
+  speaks        String?
+  facebook      String?
+  instagram     String?
+  twitter       String?
+  website       String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
