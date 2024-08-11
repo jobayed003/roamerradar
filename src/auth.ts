@@ -45,7 +45,7 @@ export const {
       const existingAccount = await getAccountByUserId(existingUser.id);
 
       token.isOAuth = !!existingAccount;
-      token.displayName = existingUser.displayName;
+      token.name = existingUser.displayName;
       token.email = existingUser.email;
 
       return token;
