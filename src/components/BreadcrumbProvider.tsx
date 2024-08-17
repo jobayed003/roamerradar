@@ -37,7 +37,7 @@ const BreadcrumbProvider = ({
             href={`/${originRoute === '' ? '' : originRoute}`}
             className={cn(
               'text-gray_text font-bold hover:text-blue',
-              originRoute === pathname && 'text-[#B1B5C3] hover:text-[#b1b5c3]'
+              originRoute === pathname && 'text-gray_light hover:text-gray_light'
             )}
           >
             {originRoute === '' ? 'Stays' : ''}

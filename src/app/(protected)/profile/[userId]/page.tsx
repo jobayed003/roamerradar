@@ -1,11 +1,15 @@
 import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
+import { getUserById } from '@/data/user';
 import { Home, Link2, MessageSquare } from 'lucide-react';
-import CoverUpload from './CoverUpload';
-import ProfileDetails from './ProfileDetails';
-import ProfileReviews from './ProfileReviews';
+import CoverUpload from '../_components/CoverUpload';
+import ProfileDetails from '../_components/ProfileDetails';
+import ProfileReviews from '../_components/ProfileReviews';
 
-const Profile = () => {
+const Profile = async ({ params }: { params: { userId: string } }) => {
+  const { userId } = params;
+  const user = await getUserById(userId);
+
   return (
     <Layout>
       <CoverUpload />
@@ -15,13 +19,10 @@ const Profile = () => {
 
         <div className='flex flex-col gap-y-8 w-full'>
           <div className='flex justify-between items-center'>
-            <h1 className='text-2xl font-semibold'>Hi, I&apos;m Jobayed Hossain</h1>
-            <LinkButton href='/account-settings' label='Edit Your Profile' />
+            <h1 className='text-2xl font-semibold'>Hi, I&apos;m {user?.realName}</h1>
+            <LinkButton href={`/account-settings/${user?.id}`} label='Edit Your Profile' />
           </div>
-          <div className='text-gray_text'>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste quia, suscipit numquam a inventore omnis
-            consectetur odit mollitia aspernatur earum
-          </div>
+          <div className='text-gray_text'>{user?.bio}</div>
 
           <div className='space-y-3 font-poppins max-[400px]:w-2/3'>
             <div className='grid grid-cols-2'>

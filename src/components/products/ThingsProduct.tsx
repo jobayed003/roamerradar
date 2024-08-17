@@ -198,7 +198,7 @@ const ThingsProductCard = ({
             <p className='text-[#58C27D] line-through'>
               ${oldPrice} <br />
             </p>
-            <p className='text-[#B1B5C3] font-semibold'>${newPrice}</p>
+            <p className='text-gray_light font-semibold'>${newPrice}</p>
           </div>
         </div>
 

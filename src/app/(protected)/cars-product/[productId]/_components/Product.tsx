@@ -238,7 +238,7 @@ const ReceiptDetails = () => {
       <div className='flex items-center justify-between mb-8'>
         <div>
           <div className='flex gap-2 text-3xl font-bold'>
-            <h1 className='text-[#b1b5c3] line-through'>${600}</h1>
+            <h1 className='text-gray_light line-through'>${600}</h1>
             <h1>${500}</h1>
             <p className='text-base font-normal self-end text-gray_text'>/day</p>
           </div>
@@ -283,11 +283,11 @@ const ReceiptDetails = () => {
 
           <div className='flex gap-x-2 items-center border border-gray_border px-5 py-1 rounded-3xl'>
             <Button variant={'transparent'} className='p-0'>
-              <Minus className='cursor-pointer text-[#B1B5C3] w-4 h-4' />
+              <Minus className='cursor-pointer text-gray_light w-4 h-4' />
             </Button>
             <p className='w-[1.5rem] text-center'>32</p>
             <Button variant={'transparent'} className='p-0'>
-              <Plus className='cursor-pointer text-[#B1B5C3] w-4 h-4' />
+              <Plus className='cursor-pointer text-gray_light w-4 h-4' />
             </Button>
           </div>
         </div>
@@ -301,11 +301,11 @@ const ReceiptDetails = () => {
 
           <div className='flex gap-x-2 items-center border border-gray_border px-5 py-1 rounded-3xl'>
             <Button variant={'transparent'} className='p-0'>
-              <Minus className='cursor-pointer text-[#B1B5C3] w-4 h-4' />
+              <Minus className='cursor-pointer text-gray_light w-4 h-4' />
             </Button>
             <p className='w-[1.5rem] text-center'>3</p>
             <Button variant={'transparent'} className='p-0'>
-              <Plus className='cursor-pointer text-[#B1B5C3] w-4 h-4' />
+              <Plus className='cursor-pointer text-gray_light w-4 h-4' />
             </Button>
           </div>
         </div>

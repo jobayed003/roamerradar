@@ -85,11 +85,11 @@ const CounterButton = ({ value, text }: { value: number; text: 'adults' | 'child
   return (
     <div className='flex gap-x-2 items-center'>
       <Button variant={'transparent'} className='p-0' disabled={value === 0} onClick={() => setTravelers(text, 'DEC')}>
-        <MinusCircle className='cursor-pointer text-[#B1B5C3]' />
+        <MinusCircle className='cursor-pointer text-gray_light' />
       </Button>
       <p className='w-[1.5rem] text-center'>{value}</p>
       <Button variant={'transparent'} className='p-0' onClick={() => setTravelers(text, 'INC')}>
-        <PlusCircle className='cursor-pointer text-[#B1B5C3]' />
+        <PlusCircle className='cursor-pointer text-gray_light' />
       </Button>
     </div>
   );

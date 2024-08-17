@@ -62,14 +62,14 @@ const ListProperty = () => {
               <div className='font-poppins font-medium'>Property details</div>
               <div className='flex flex-col gap-y-4'>
                 {/* Title Section */}
-                <div className='text-xs font-bold text-[#B1B5C3] uppercase'>Title</div>
+                <div className='text-xs font-bold text-gray_light uppercase'>Title</div>
                 <CustomInput
                   placeholder='e.g. "Spectacular views of Queenstown'
                   className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
                 />
 
                 {/* Price Section */}
-                <div className='text-xs font-bold text-[#B1B5C3] uppercase'>Price</div>
+                <div className='text-xs font-bold text-gray_light uppercase'>Price</div>
                 <div className='flex md:flex-row flex-col gap-x-4'>
                   <div className='relative h-10 w-full basis-2/3 '>
                     <CustomInput
@@ -84,7 +84,7 @@ const ListProperty = () => {
                     </div>
                   </div>
                   <div className='relative h-10 basis-1/3'>
-                    <div className='text-xs font-bold text-[#B1B5C3] uppercase my-4 block md:hidden'>Discount</div>
+                    <div className='text-xs font-bold text-gray_light uppercase my-4 block md:hidden'>Discount</div>
 
                     <CustomInput
                       placeholder='e.g. "10'
@@ -99,7 +99,7 @@ const ListProperty = () => {
 
                 {/* Location Section */}
 
-                <div className='text-xs font-bold text-[#B1B5C3] uppercase mt-2'>Location</div>
+                <div className='text-xs font-bold text-gray_light uppercase mt-2'>Location</div>
                 <div className='relative h-10 basis-1/3'>
                   <CustomInput
                     placeholder='e.g. "Queenstown, Otago, New Zealand'
@@ -112,14 +112,14 @@ const ListProperty = () => {
 
                 <div className='flex gap-x-4'>
                   <div className='w-full'>
-                    <div className='text-xs font-bold text-[#B1B5C3] uppercase my-2'>Bed Room</div>
+                    <div className='text-xs font-bold text-gray_light uppercase my-2'>Bed Room</div>
                     <FieldSelect
                       selectItems={['1', '2', '3', '4']}
                       className='dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec]'
                     />
                   </div>
                   <div className='w-full'>
-                    <div className='text-xs font-bold text-[#B1B5C3] uppercase my-2'>Living Room</div>
+                    <div className='text-xs font-bold text-gray_light uppercase my-2'>Living Room</div>
                     <FieldSelect
                       selectItems={['1', '2', '3', '4']}
                       className='dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec]'
@@ -127,7 +127,7 @@ const ListProperty = () => {
                   </div>
 
                   <div className='w-full'>
-                    <div className='text-xs font-bold text-[#B1B5C3] uppercase my-2'>Kitchen</div>
+                    <div className='text-xs font-bold text-gray_light uppercase my-2'>Kitchen</div>
                     <FieldSelect
                       selectItems={['1', '2', '3', '4']}
                       className='dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec]'
@@ -137,7 +137,7 @@ const ListProperty = () => {
 
                 {/* Description Section */}
                 <div>
-                  <div className='text-xs font-bold text-[#B1B5C3] uppercase my-2'>Description</div>
+                  <div className='text-xs font-bold text-gray_light uppercase my-2'>Description</div>
                   <Textarea
                     spellCheck={false}
                     placeholder='e.g. "Spectacular views of Queenstown'

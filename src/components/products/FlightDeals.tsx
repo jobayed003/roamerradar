@@ -78,7 +78,7 @@ const FlightDetails = ({
 }: FlightDetailsProps) => {
   return (
     <div className='flex flex-col lg:flex-row w-full lg:items-center gap-x-8 gap-y-6 lg:px-4'>
-      <div className='dark:bg-[#B1B5C3] bg-[#F4F5F6] p-3 rounded-lg h-20 lg:w-40 flex justify-center items-center lg:mr-10'>
+      <div className='dark:bg-gray_light bg-[#F4F5F6] p-3 rounded-lg h-20 lg:w-40 flex justify-center items-center lg:mr-10'>
         <Image src={logo} width={100} height={50} alt='airline logo' />
       </div>
       <Separator className='lg:hidden bg-[#E6E8EC] dark:bg-[#353945] mb-2' />

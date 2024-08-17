@@ -1,21 +1,23 @@
 'use client';
+import { updateUser } from '@/actions/updateUser';
 import CustomInput from '@/components/CustomInput';
 import LinkButton from '@/components/LinkButton';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { FancyMultiSelect } from '@/components/ui/multiselect';
 import { Textarea } from '@/components/ui/textarea';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { toast } from '@/components/ui/use-toast';
 import { PersonalInfoSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { User } from '@prisma/client';
 import { X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-const PersonalInfoForm = () => {
+const PersonalInfoForm = ({ user }: { user: User }) => {
   const [selectedLanguage, setSelectedLanguage] = useState<string[]>([]);
-  const { user } = useCurrentUser();
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof PersonalInfoSchema>>({
     resolver: zodResolver(PersonalInfoSchema),
@@ -26,7 +28,7 @@ const PersonalInfoForm = () => {
       email: user?.email ?? '',
       bio: user?.bio ?? '',
       livesIn: user?.livesIn ?? '',
-      speaks: (user?.speaks as unknown as []) ?? [],
+      speaks: user?.speaks,
       facebook: user?.facebook ?? '',
       instagram: user?.instagram ?? '',
       twitter: user?.twitter ?? '',
@@ -36,14 +38,22 @@ const PersonalInfoForm = () => {
 
   const onSubmit = (values: z.infer<typeof PersonalInfoSchema>) => {
     values.speaks = selectedLanguage;
-    console.log(values);
+    startTransition(() => {
+      updateUser(values, user?.id as string)
+        .then((data) =>
+          toast({
+            title: data.success,
+          })
+        )
+        .catch((error) => toast({ title: error }));
+    });
   };
 
   return (
     <div className='grow pl-28 mb-20'>
       <div className='flex items-center justify-between'>
         <h1 className='text-5xl font-bold'>Personal Info</h1>
-        <LinkButton href='/profile' label='View Profile' />
+        <LinkButton href={`/profile/${user?.id}`} label='View Profile' />
       </div>
 
       <div className='my-8 font-medium'>Account info</div>
@@ -57,7 +67,7 @@ const PersonalInfoForm = () => {
                 name='displayName'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Display Name</FormLabel>
+                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Display Name</FormLabel>
                     <FormControl>
                       <CustomInput
                         placeholder='Enter your display name'
@@ -73,7 +83,7 @@ const PersonalInfoForm = () => {
                 name='realName'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Real name</FormLabel>
+                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Real name</FormLabel>
                     <FormControl>
                       <CustomInput
                         placeholder='Enter your real name'
@@ -91,7 +101,7 @@ const PersonalInfoForm = () => {
                 name='phone'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Phone number</FormLabel>
+                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Phone number</FormLabel>
                     <FormControl>
                       <CustomInput
                         placeholder='Phone number'
@@ -107,7 +117,7 @@ const PersonalInfoForm = () => {
                 name='email'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Email</FormLabel>
+                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Email</FormLabel>
                     <FormControl>
                       <CustomInput
                         placeholder='Email'
@@ -122,10 +132,22 @@ const PersonalInfoForm = () => {
             </div>
 
             <div>
-              <Textarea
-                spellCheck={false}
-                placeholder='About yourself in a few words'
-                className='h-[140px] outline-none ring-0 resize-none focus-visible:ring-transparent focus-visible:ring-offset-0 transition-all border-2 border-[#e6e8ec] dark:border-gray_border placeholder:text-gray_text placeholder:font-semibold rounded-xl focus:border-gray_text dark:focus:border-gray_text'
+              <FormField
+                control={form.control}
+                name='bio'
+                render={({ field }) => (
+                  <FormItem className='basis-1/2'>
+                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Bio</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        spellCheck={false}
+                        {...field}
+                        placeholder='About yourself in a few words'
+                        className='h-[140px] outline-none ring-0 resize-none focus-visible:ring-transparent focus-visible:ring-offset-0 transition-all border-2 border-[#e6e8ec] dark:border-gray_border placeholder:text-gray_text placeholder:font-semibold rounded-xl focus:border-gray_text dark:focus:border-gray_text'
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
               />
             </div>
 
@@ -134,7 +156,7 @@ const PersonalInfoForm = () => {
               name='livesIn'
               render={({ field }) => (
                 <FormItem className='basis-1/2'>
-                  <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Lives In</FormLabel>
+                  <FormLabel className='text-xs font-bold text-gray_light uppercase'>Lives In</FormLabel>
                   <FormControl>
                     <CustomInput
                       placeholder='Your location'
@@ -147,9 +169,9 @@ const PersonalInfoForm = () => {
             />
 
             <FormItem className='basis-1/2'>
-              <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Speaks</FormLabel>
+              <FormLabel className='text-xs font-bold text-gray_light uppercase'>Speaks</FormLabel>
               <FormControl>
-                <FancyMultiSelect setSelectedLanguage={setSelectedLanguage} />
+                <FancyMultiSelect speaks={user.speaks} setSelectedLanguage={setSelectedLanguage} />
               </FormControl>
             </FormItem>
           </div>
@@ -162,7 +184,7 @@ const PersonalInfoForm = () => {
               name='facebook'
               render={({ field }) => (
                 <FormItem className='basis-1/2'>
-                  <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Facebook</FormLabel>
+                  <FormLabel className='text-xs font-bold text-gray_light uppercase'>Facebook</FormLabel>
                   <FormControl>
                     <CustomInput
                       placeholder='Your facebook link'
@@ -178,7 +200,7 @@ const PersonalInfoForm = () => {
               name='instagram'
               render={({ field }) => (
                 <FormItem className='basis-1/2'>
-                  <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Instagram</FormLabel>
+                  <FormLabel className='text-xs font-bold text-gray_light uppercase'>Instagram</FormLabel>
                   <FormControl>
                     <CustomInput
                       placeholder='Your instagram link'
@@ -196,7 +218,7 @@ const PersonalInfoForm = () => {
               name='twitter'
               render={({ field }) => (
                 <FormItem className='basis-1/2'>
-                  <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Twitter</FormLabel>
+                  <FormLabel className='text-xs font-bold text-gray_light uppercase'>Twitter</FormLabel>
                   <FormControl>
                     <CustomInput
                       placeholder='@twitter username'
@@ -213,7 +235,7 @@ const PersonalInfoForm = () => {
               name='website'
               render={({ field }) => (
                 <FormItem className='basis-1/2'>
-                  <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Website</FormLabel>
+                  <FormLabel className='text-xs font-bold text-gray_light uppercase'>Website</FormLabel>
                   <FormControl>
                     <CustomInput
                       placeholder='Your site URL'
@@ -227,12 +249,18 @@ const PersonalInfoForm = () => {
           </div>
 
           <div className='flex gap-x-4 items-center'>
-            <Button variant={'fill'} className='font-bold p-6 bg-blue hover:bg-blue-hover text-white' type={'submit'}>
+            <Button
+              variant={'fill'}
+              className='font-bold p-6 bg-blue hover:bg-blue-hover text-white'
+              type={'submit'}
+              disabled={isPending}
+            >
               Update profile
             </Button>
             <Button
               variant={'transparent'}
               onClick={() => form.reset()}
+              type='reset'
               className='text-gray_text font-bold hover:text-blue-hover'
             >
               <X className='w-4 h-4 mr-2' /> Clear all

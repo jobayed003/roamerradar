@@ -59,7 +59,7 @@ const PaymentsForm = () => {
                 name='number'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Card Number</FormLabel>
+                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Card Number</FormLabel>
                     <FormControl>
                       <CustomInput
                         placeholder='XXXX XXXX XXXX XXXX'
@@ -75,7 +75,7 @@ const PaymentsForm = () => {
                 name='name'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Card Holder</FormLabel>
+                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Card Holder</FormLabel>
                     <FormControl>
                       <CustomInput
                         placeholder='JOHN DOE'
@@ -93,7 +93,7 @@ const PaymentsForm = () => {
                 name='expiry'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Expiration date</FormLabel>
+                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Expiration date</FormLabel>
                     <FormControl>
                       <CustomInput
                         placeholder='MM / YY'
@@ -109,7 +109,7 @@ const PaymentsForm = () => {
                 name='cvc'
                 render={({ field }) => (
                   <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>CVC</FormLabel>
+                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>CVC</FormLabel>
                     <FormControl>
                       <CustomInput
                         placeholder='CVC'

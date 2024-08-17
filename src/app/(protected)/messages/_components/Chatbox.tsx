@@ -53,7 +53,7 @@ const MessageBox = ({ isSender = false, message }: { isSender?: boolean; message
         </div>
       </div>
       {isSender && (
-        <div className='self-end mt-4 text-[#b1b5c3] font-semibold text-xs'>{format(new Date(), 'h:mm aaa')}</div>
+        <div className='self-end mt-4 text-gray_light font-semibold text-xs'>{format(new Date(), 'h:mm aaa')}</div>
       )}
     </div>
   );

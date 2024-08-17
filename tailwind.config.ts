@@ -29,6 +29,7 @@ const config = {
         'blue-hover': '#084cfe',
         gray_border: '#353945',
         gray_text: '#777e90',
+        gray_light: '#B1B5C3',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

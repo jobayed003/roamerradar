@@ -56,7 +56,7 @@ const LoginForm = () => {
               name='email'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Email Address</FormLabel>
+                  <FormLabel className='text-xs font-bold text-gray_light uppercase'>Email Address</FormLabel>
                   <FormControl>
                     <CustomInput
                       props={field}
@@ -73,7 +73,7 @@ const LoginForm = () => {
               name='password'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='text-xs font-bold text-[#B1B5C3] uppercase'>Enter a password</FormLabel>
+                  <FormLabel className='text-xs font-bold text-gray_light uppercase'>Enter a password</FormLabel>
                   <FormControl>
                     <div className='relative'>
                       <CustomInput

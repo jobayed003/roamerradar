@@ -16,7 +16,7 @@ export const ReceiptDetails = () => {
       <div className='flex items-center justify-between mb-8'>
         <div>
           <div className='flex gap-2 text-3xl font-bold'>
-            <h1 className='text-[#b1b5c3] line-through'>${124}</h1>
+            <h1 className='text-gray_light line-through'>${124}</h1>
             <h1>${104}</h1>
             <p className='text-base font-normal self-end text-gray_text'>/person</p>
           </div>

@@ -14,7 +14,7 @@ model User {
   phone         String?
   bio           String?
   livesIn       String?
-  speaks        String?
+  speaks        String[]  @default([""])
   facebook      String?
   instagram     String?
   twitter       String?

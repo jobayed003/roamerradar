@@ -34,7 +34,7 @@ export const UserComments = ({ name = 'John Doe' }) => {
           </div>
         </div>
 
-        <p className='mt-2 text-[#B1B5C3]'>
+        <p className='mt-2 text-gray_light'>
           We had the most spectacular view. Unfortunately it was very hot in the room from 2-830 pm due to no air
           conditioning and no shade.
         </p>

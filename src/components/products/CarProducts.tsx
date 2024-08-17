@@ -164,7 +164,7 @@ const CarsProductCard = ({
           <div className='border-2 self-start rounded-md border-[#58C27D] text-green-500 text-xs font-bold px-2 py-1'>
             <p className='text-[#58C27D]'>
               ${price} <br />
-              <span className='text-[#B1B5C3] font-semibold'>/DAY</span>
+              <span className='text-gray_light font-semibold'>/DAY</span>
             </p>
           </div>
         </div>

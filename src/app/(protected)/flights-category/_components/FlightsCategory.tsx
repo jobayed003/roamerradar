@@ -100,7 +100,7 @@ const FlightsCategory = () => {
         <div className='flex flex-col md:flex-row gap-x-16 gap-y-10 my-20 w-full'>
           {isClicked && (
             <div className='w-full md:max-w-64 flex flex-col gap-y-6 '>
-              <div className='text-xs text-[#B1B5C3] font-bold uppercase'>Price Range</div>
+              <div className='text-xs text-gray_light font-bold uppercase'>Price Range</div>
               <Slider
                 className='px-1'
                 defaultValue={[3500]}
@@ -119,7 +119,7 @@ const FlightsCategory = () => {
               </div>
               <Separator className='bg-gray_border mt-4' />
 
-              <div className='text-xs text-[#B1B5C3] font-bold uppercase'>
+              <div className='text-xs text-gray_light font-bold uppercase'>
                 <p>Times</p>
               </div>
 

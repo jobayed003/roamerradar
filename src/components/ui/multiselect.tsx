@@ -10,14 +10,20 @@ import { Command as CommandPrimitive } from 'cmdk';
 import { Dispatch, KeyboardEvent, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { Language } from '../../../types';
 
-export function FancyMultiSelect({ setSelectedLanguage }: { setSelectedLanguage: Dispatch<SetStateAction<string[]>> }) {
+export function FancyMultiSelect({
+  speaks,
+  setSelectedLanguage,
+}: {
+  speaks: string[];
+  setSelectedLanguage: Dispatch<SetStateAction<string[]>>;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<Language[]>([LANGUAGES[1]]);
+  const [selected, setSelected] = useState<Language[]>([]);
   const [inputValue, setInputValue] = useState('');
 
-  const handleUnselect = useCallback((framework: Language) => {
-    setSelected((prev) => prev.filter((s) => s.value !== framework.value));
+  const handleUnselect = useCallback((language: Language) => {
+    setSelected((prev) => prev.filter((s) => s.value !== language.value));
   }, []);
 
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
@@ -45,6 +51,13 @@ export function FancyMultiSelect({ setSelectedLanguage }: { setSelectedLanguage:
     const languages = selected.map((langauge) => langauge.label);
     setSelectedLanguage(languages);
   }, [selected]);
+
+  useEffect(() => {
+    if (speaks) {
+      const languages = speaks.map((value) => ({ value: value.toLowerCase(), label: value }));
+      setSelected(languages);
+    }
+  }, [speaks]);
 
   return (
     <Command onKeyDown={handleKeyDown} className='overflow-visible bg-transparent'>
