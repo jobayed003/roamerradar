@@ -10,12 +10,23 @@ const Profile = async ({ params }: { params: { userId: string } }) => {
   const { userId } = params;
   const user = await getUserById(userId);
 
+  const formatLanguages = () => {
+    const languages = user?.speaks || [];
+
+    if (languages.length === 1) {
+      return languages[0];
+    } else if (languages.length === 2) {
+      return languages.join(' and ');
+    } else {
+      return `${languages.slice(0, -1).join(', ')} and ${languages.at(-1)}`;
+    }
+  };
   return (
     <Layout>
       <CoverUpload />
 
       <div className='flex flex-col lg:flex-row gap-20 py-10 lg:px-6'>
-        <ProfileDetails />
+        <ProfileDetails user={user} />
 
         <div className='flex flex-col gap-y-8 w-full'>
           <div className='flex justify-between items-center'>
@@ -30,7 +41,7 @@ const Profile = async ({ params }: { params: { userId: string } }) => {
                 <Home className='w-4 h-4' />
                 Lives in
               </div>
-              <p className='font-medium'>Auckland, New Zealand</p>
+              <p className='font-medium'>{user?.livesIn}</p>
             </div>
 
             <div className='grid grid-cols-2'>
@@ -38,7 +49,9 @@ const Profile = async ({ params }: { params: { userId: string } }) => {
                 <Link2 className='w-4 h-4' />
                 Account
               </div>
-              <p className='font-medium'>Verified</p>
+              <p className='font-medium'>
+                {user?.emailVerified === null || user?.emailVerified ? 'Verified' : 'Not Verified'}
+              </p>
             </div>
 
             <div className='grid grid-cols-2'>
@@ -46,7 +59,7 @@ const Profile = async ({ params }: { params: { userId: string } }) => {
                 <MessageSquare className='w-4 h-4' />
                 Speak
               </div>
-              <p className='font-medium'>English, Bengali</p>
+              <p className='font-medium'>{formatLanguages()}</p>
             </div>
           </div>
           <ProfileReviews />

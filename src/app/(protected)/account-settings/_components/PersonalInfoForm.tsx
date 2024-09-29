@@ -37,7 +37,7 @@ const PersonalInfoForm = ({ user }: { user: User }) => {
   });
 
   const onSubmit = (values: z.infer<typeof PersonalInfoSchema>) => {
-    values.speaks = selectedLanguage;
+    values.speaks = selectedLanguage.filter(Boolean);
     startTransition(() => {
       updateUser(values, user?.id as string)
         .then((data) =>
@@ -221,7 +221,7 @@ const PersonalInfoForm = ({ user }: { user: User }) => {
                   <FormLabel className='text-xs font-bold text-gray_light uppercase'>Twitter</FormLabel>
                   <FormControl>
                     <CustomInput
-                      placeholder='@twitter username'
+                      placeholder='twitter username'
                       props={field}
                       className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border'
                     />
