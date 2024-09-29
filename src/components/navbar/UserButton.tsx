@@ -41,6 +41,8 @@ const profileLinks = [
 ];
 
 const ProifleOptions = ({ ref }: ProfileProps) => {
+  const { user } = useCurrentUser();
+
   return (
     <motion.div
       className={
@@ -59,7 +61,7 @@ const ProifleOptions = ({ ref }: ProfileProps) => {
       <LinkProvider href='/list-property' icon={<Building2 />} label='List your property' />
 
       <div className='flex justify-center gap-x-2 mt-4'>
-        <Link href={'/account-settings'}>
+        <Link href={`/account-settings/${user?.id}`}>
           <Button variant={'fill'} className='text-white bg-blue hover:bg-blue-hover py-4 px-6'>
             Account
           </Button>

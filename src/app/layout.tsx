@@ -1,7 +1,5 @@
 import { auth } from '@/auth';
-import Footer from '@/components/Footer';
-import Navbar from '@/components/navbar/Navbar';
-import { Separator } from '@/components/ui/separator';
+import MainLayout from '@/components/Layout/MainLayout';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/providers/theme-provider';
@@ -40,11 +38,7 @@ export default async function RootLayout({
       <html lang='en'>
         <body className={cn('', poppins.variable, dmSans.className)}>
           <ThemeProvider attribute='class' defaultTheme='dark'>
-            <Navbar />
-            {children}
-            <div className='justify-self-end'>
-              <Footer />
-            </div>
+            <MainLayout>{children}</MainLayout>
             <Toaster />
           </ThemeProvider>
         </body>

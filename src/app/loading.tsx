@@ -1,5 +1,7 @@
+import LoadingScreen from '@/components/LoadingScreen';
+
 const Loading = () => {
-  return <div className='flex justify-center'>Loading</div>;
+  return <LoadingScreen />;
 };
 
 export default Loading;
