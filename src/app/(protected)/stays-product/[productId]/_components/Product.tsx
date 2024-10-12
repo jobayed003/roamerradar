@@ -1,6 +1,7 @@
 'use client';
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
+import FancyboxWrapper from '@/components/FancyBoxWrapper';
 import LinkButton from '@/components/LinkButton';
 import { ProfileSection } from '@/components/ProfileSection';
 import Layout from '@/components/ui/Layout';
@@ -113,7 +114,14 @@ const Product = () => {
         <div className='py-10'>
           <div className='grid md:grid-cols-4 grid-cols-3 md:grid-rows-3 grid-rows-4 gap-2 h-full'>
             <div className='md:col-span-3 col-span-full md:row-span-full row-span-3 relative group cursor-pointer'>
-              <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl ' />
+              <FancyboxWrapper>
+                <Image
+                  src={'/images/grid-4.jpg'}
+                  alt='Gallery pic'
+                  fill
+                  className='absolute object-fill rounded-2xl '
+                />
+              </FancyboxWrapper>
               <div className='bg-white rounded-full p-4 absolute z-50 top-1/2 right-1/2 invisible group-hover:visible transition-all'>
                 <FaSearchPlus size={14} className='text-gray_text' />
               </div>
@@ -125,15 +133,23 @@ const Product = () => {
                 <span className='text-sm font-bold'>Show all photos</span>
               </Link>
             </div>
-            {galleryImages.map((img) => (
-              <div key={img} className='relative group cursor-pointer'>
-                <Image src={img} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
+            <FancyboxWrapper
+              options={{
+                Carousel: {
+                  infinite: false,
+                },
+              }}
+            >
+              {galleryImages.map((img) => (
+                <div key={img} className='relative group cursor-pointer'>
+                  <Image src={img} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
 
-                <div className='bg-white rounded-full p-4 absolute z-50 top-[40%] left-[40%] invisible group-hover:visible transition-all'>
-                  <FaSearchPlus size={14} className='text-gray_text' />
+                  <div className='bg-white rounded-full p-4 absolute z-50 top-[40%] left-[40%] invisible group-hover:visible transition-all'>
+                    <FaSearchPlus size={14} className='text-gray_text' />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </FancyboxWrapper>
           </div>
         </div>
 
