@@ -11,7 +11,7 @@ const MapProvider = () => {
 
     const mapboxMap = new mapboxgl.Map({
       container: node,
-      accessToken: 'pk.eyJ1Ijoiam9iYXllZDAwMyIsImEiOiJjbHU0YnRtMzYxNmYzMnFwZDE4OHh2cWhiIn0.7LFNKJzuehCadWwkFCKWsQ',
+      accessToken: process.env.NEXT_PUBLIC_MAPBOXGL_ACCESS_TOKEN,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [-74.5, 40],
       zoom: 9,
