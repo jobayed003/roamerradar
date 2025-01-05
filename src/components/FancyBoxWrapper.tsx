@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { Fancybox as NativeFancybox } from '@fancyapps/ui';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
-const FancyboxWrapper = (props) => {
+const FancyboxWrapper = (props: any) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
