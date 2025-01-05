@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
-const Chatbox = ({ className }: { className?: string }) => {
+const Chatbox = ({ className, userId }: { className?: string; userId: string }) => {
   // const previousDate =
   const date = dateFormat(new Date());
 

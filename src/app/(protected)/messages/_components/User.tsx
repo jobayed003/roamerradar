@@ -2,6 +2,7 @@
 
 import LinkButton from '@/components/LinkButton';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { cn, getFirstLetters } from '@/lib/utils';
 import { Avatar } from '@radix-ui/react-avatar';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -12,6 +13,7 @@ import Chatbox from './Chatbox';
 
 const User = () => {
   const [isClicked, setIsClicked] = useState(false);
+  const { user } = useCurrentUser();
 
   return (
     <div className='py-8 border-r dark:border-gray_border relative bg-[#FCFCFD] dark:bg-dark_bg'>
@@ -42,12 +44,12 @@ const User = () => {
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
             <div className='lg:block md:hidden block ml-6' onClick={() => setIsClicked(false)}>
-              <LinkButton href='/messages' label='Host'>
+              <LinkButton href={`/messages/${user?.id}`} label='Host'>
                 <ArrowLeft className='h-5 w-5 mr-2' />
               </LinkButton>
             </div>
             <div>
-              <Chatbox />
+              <Chatbox userId={user?.id!} />
             </div>
           </motion.div>
         )}

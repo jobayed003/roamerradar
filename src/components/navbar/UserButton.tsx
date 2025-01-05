@@ -34,15 +34,14 @@ type ProfileProps = {
   ref?: Ref<HTMLDivElement> | undefined;
 };
 
-const profileLinks = [
-  { label: 'Messages', href: '/messages', icon: <MessageCircleIcon /> },
-  { label: 'Bookings', href: '/my-bookings', icon: <Home /> },
-  { label: 'Wishlists', href: '/wishlists', icon: <Mail /> },
-];
-
 const ProifleOptions = ({ ref }: ProfileProps) => {
   const { user } = useCurrentUser();
 
+  const profileLinks = [
+    { label: 'Messages', href: `/messages/${user?.id}`, icon: <MessageCircleIcon /> },
+    { label: 'Bookings', href: '/my-bookings', icon: <Home /> },
+    { label: 'Wishlists', href: '/wishlists', icon: <Mail /> },
+  ];
   return (
     <motion.div
       className={

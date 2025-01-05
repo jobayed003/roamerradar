@@ -8,15 +8,17 @@ import { Separator } from './ui/separator';
 
 const Footer = () => {
   const pathname = usePathname();
+  const excludedURLsToNotShowFooter = ['/messages'];
+  const shouldHideFooter = excludedURLsToNotShowFooter.some((url) => pathname.startsWith(url));
 
   return (
-    <div className={cn(pathname === '/messages' && 'hidden')}>
+    <div className={cn(shouldHideFooter && 'hidden')}>
       <Separator className='dark:bg-dark_russian bg-[#E6E8EC]' />
 
       <div
         className={cn(
           'lg:max-w-7xl w-full mx-auto pt-8 px-6 pb-4 mt-auto',
-          pathname === '/messages' && 'lg:max-w-full px-20'
+          pathname.startsWith('/messages') && 'lg:max-w-full px-20'
         )}
       >
         <div className='flex justify-between md:flex-row flex-col md:items-center gap-8 py-4 items-start'>
