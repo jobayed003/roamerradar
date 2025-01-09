@@ -43,7 +43,7 @@ const Travel = () => {
             </p>
           </div>
           <div className='lg:w-max text-center md:mt-0 mt-8'>
-            <CTAButton href='/travel-category' />
+            <CTAButton link='/flights-category' />
           </div>
         </div>
         <div className='flex lg:justify-end justify-center'>

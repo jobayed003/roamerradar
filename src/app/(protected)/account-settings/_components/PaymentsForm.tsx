@@ -17,10 +17,10 @@ const PaymentsForm = () => {
   const form = useForm<z.infer<typeof PaymentSchema>>({
     resolver: zodResolver(PaymentSchema),
     defaultValues: {
-      name: 'John Doe',
-      number: 'XXXX XXXX XXXX XXXX',
-      expiry: 'MM',
-      cvc: 'CVC',
+      name: '',
+      number: '',
+      expiry: '',
+      cvc: '',
     },
   });
 
@@ -29,7 +29,7 @@ const PaymentsForm = () => {
   return (
     <div className='grow pl-28 mb-8'>
       <div className='flex items-center justify-between'>
-        <h1 className='text-5xl font-bold'>Payments Methods</h1>
+        <h1 className='text-5xl font-bold'>Payment Methods</h1>
       </div>
       <div className='mt-20 text-2xl font-poppins font-semibold'>Credit card</div>
       <div className='flex items-center justify-between mt-4 my-8'>

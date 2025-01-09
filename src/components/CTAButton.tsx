@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-const CTAButton = ({ href }: { href: string }) => {
+const CTAButton = ({ link }: { link: string }) => {
   return (
-    <Link href={'/' + href}>
+    <Link href={link}>
       <Button
         variant={'primary'}
         size={'lg'}

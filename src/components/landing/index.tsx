@@ -52,7 +52,7 @@ export default function Landing({
         </h1>
         <p className='font-medium lg:text-2xl md:text-xl text-lg text-dark_russian'>Find and book a great experience</p>
 
-        <CTAButton href={pathname === '' ? 'stays-category' : `${pathname}-category`} />
+        <CTAButton link={pathname === '' ? '/stays-category' : `/${pathname}-category`} />
       </div>
 
       <Places />

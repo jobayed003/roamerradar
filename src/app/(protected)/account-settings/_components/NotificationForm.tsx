@@ -86,7 +86,7 @@ const ToggleNotification = ({ label, value = false, desc, field }: ToggleCardPro
         description: (
           <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
             <code className='text-white'>
-              {JSON.stringify(field, null, 2)} : {JSON.stringify(isChecked, null, 2)}
+              {JSON.stringify(field + '_notification', null, 2)} : {JSON.stringify(isChecked, null, 2)}
             </code>
           </pre>
         ),
