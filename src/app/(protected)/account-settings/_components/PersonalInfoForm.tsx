@@ -11,6 +11,7 @@ import { PersonalInfoSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from '@prisma/client';
 import { X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -18,6 +19,7 @@ import * as z from 'zod';
 const PersonalInfoForm = ({ user }: { user: User }) => {
   const [selectedLanguage, setSelectedLanguage] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof PersonalInfoSchema>>({
     resolver: zodResolver(PersonalInfoSchema),
@@ -40,11 +42,12 @@ const PersonalInfoForm = ({ user }: { user: User }) => {
     values.speaks = selectedLanguage.filter(Boolean);
     startTransition(() => {
       updateUser(values, user?.id as string)
-        .then((data) =>
+        .then((data) => {
+          router.refresh();
           toast({
             title: data.success,
-          })
-        )
+          });
+        })
         .catch((error) => toast({ title: error }));
     });
   };
