@@ -6,11 +6,8 @@ const domain = process.env.NEXT_PUBLIC_SITE_URL;
 export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/verify-email?token=${token}`;
 
-  await resend.emails.send({
-    from: 'onboarding@resend.dev',
-    to: email,
-    subject: 'Confirm your Email',
-    html: `
+  try {
+    const htmlContent = `
     <!DOCTYPE html>
     <html>
     <head>
@@ -78,6 +75,19 @@ export const sendVerificationEmail = async (email: string, token: string) => {
       </div>
     </body>
     </html>
-    `,
-  });
+    `;
+    const { data, error } = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: [email],
+      subject: 'Confirm your Email',
+      html: htmlContent,
+    });
+    if (error) {
+      throw new Error(`Failed to send email: ${error.name} - ${error.message}`);
+    }
+    return data;
+  } catch (error) {
+    console.error('Error sending verification email:', error);
+    throw new Error('Failed to send verification email');
+  }
 };
