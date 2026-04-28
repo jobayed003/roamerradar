@@ -12,7 +12,6 @@ export const publicRoutes: string[] = [
   '/my-bookings',
   '/stays-product/[productId]',
 ];
-// I have a separate folder called routes.ts where I am creating a some variables like publicRoutes and privateRoutes. So if I add any route to the public routes array it is excluded from authentication . But I want to add some dynamic routes in this array, how can I do that?
 
 /**
  * An array of routes that are used for authentication.
