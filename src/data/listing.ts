@@ -31,14 +31,15 @@ export async function getListingsByType(type: ListingType, location?: string) {
     const listings = await db.listing.findMany({
       where: {
         type,
-        ...(type === ListingType.STAY ? { placesCount: null } : {}),
+        ...(type === ListingType.STAY ? { placesCount: { isSet: false } } : {}),
         ...(location ? { location } : {}),
       },
       orderBy: { createdAt: 'desc' },
     });
 
     return listings.map(toListingItem);
-  } catch {
+  } catch (error) {
+    console.error('[getListingsByType]', error);
     return [];
   }
 }
@@ -48,13 +49,14 @@ export async function getNearbyDestinations() {
     const listings = await db.listing.findMany({
       where: {
         type: ListingType.STAY,
-        placesCount: { not: null },
+        placesCount: { isSet: true },
       },
       orderBy: { placesCount: 'asc' },
     });
 
     return listings.map(toListingItem);
-  } catch {
+  } catch (error) {
+    console.error('[getNearbyDestinations]', error);
     return [];
   }
 }
@@ -68,15 +70,17 @@ export async function getListingById(id: string) {
   }
 }
 
-export async function getListingCountByType(type: ListingType) {
+export async function getListingCountByType(type: ListingType, location?: string) {
   try {
     return await db.listing.count({
       where: {
         type,
-        ...(type === ListingType.STAY ? { placesCount: null } : {}),
+        ...(type === ListingType.STAY ? { placesCount: { isSet: false } } : {}),
+        ...(location ? { location } : {}),
       },
     });
-  } catch {
+  } catch (error) {
+    console.error('[getListingCountByType]', error);
     return 0;
   }
 }
