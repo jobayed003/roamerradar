@@ -1,9 +1,15 @@
+import { getListingById } from '@/data/listing';
+import { notFound } from 'next/navigation';
 import Product from './_components/Product';
 
-const StayProducts = ({ params }: { params: { productId: string } }) => {
-  const { productId } = params;
+const StayProductPage = async ({ params }: { params: { productId: string } }) => {
+  const listing = await getListingById(params.productId);
 
-  return <Product />;
+  if (!listing) {
+    notFound();
+  }
+
+  return <Product listing={listing} />;
 };
 
-export default StayProducts;
+export default StayProductPage;

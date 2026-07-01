@@ -30,6 +30,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaCheckCircle, FaSearchPlus, FaStar } from 'react-icons/fa';
+import { ListingItem } from '@/types/listing';
 
 const icons = [Navigation, Share, Heart, X];
 
@@ -44,17 +45,17 @@ const amenities = [
   { icon: CreditCard, label: 'ATM' },
 ];
 
-const receiptDetails = [
-  { label: '$109 x 7 nights', price: 833 },
-  { label: '10% campaign discount', price: -83.3 },
-  { label: 'Service fee', price: 103 },
-];
-
-const totalPrice = receiptDetails.reduce((acc, item) => acc + item.price, 0);
-
 const filterItems = ['Newest', 'Popular', 'All'];
 
-const Product = () => {
+const Product = ({ listing }: { listing: ListingItem }) => {
+  const nightlyPrice = listing.offerPrice ?? listing.price;
+  const receiptDetails = [
+    { label: `$${nightlyPrice} x 7 nights`, price: nightlyPrice * 7 },
+    { label: '10% campaign discount', price: -(nightlyPrice * 7 * 0.1) },
+    { label: 'Service fee', price: 103 },
+  ];
+  const totalPrice = receiptDetails.reduce((acc, item) => acc + item.price, 0);
+
   return (
     <>
       <Separator className='dark:bg-dark_russian mb-4 bg-[#E6E8EC]' />
@@ -68,23 +69,23 @@ const Product = () => {
           <BreadcrumbProvider
             backRoute='/'
             originRoute='stays'
-            location='New Zealand'
-            searchedLocation='South Island'
+            location={listing.location ?? 'New Zealand'}
+            searchedLocation={listing.location ?? 'South Island'}
           />
         </div>
 
         <div className='flex md:flex-row flex-col gap-y-6 justify-between'>
           <div className='max-w-2xl'>
-            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>Spectacular views of Queenstown</h1>
+            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>{listing.title}</h1>
 
             <div className='flex items-center flex-wrap gap-3 font-poppins text-sm text-gray_text'>
               <div className='overflow-hidden rounded-full'>
-                <Image src={'/user.jpg'} alt='user img' width={25} height={25} />
+                <Image src={listing.image} alt={listing.title} width={25} height={25} />
               </div>
               <div className='flex items-center gap-x-2 ml-2'>
                 <FaStar size={22} fill='#FFD166' />
                 <p className='font-medium text-white'>
-                  4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
+                  {listing.rating} <span className='ml-1 text-gray_text'>({listing.reviewCount} reviews)</span>
                 </p>
               </div>
 
@@ -95,7 +96,7 @@ const Product = () => {
                 </div>
                 <div className='flex items-center gap-x-2 ml-2'>
                   <Flag className='w-4 h-4 ' />
-                  <p className=''>Queenstown, Otago, New Zealand</p>
+                  <p className=''>{listing.location}</p>
                 </div>
               </div>
             </div>
@@ -213,8 +214,8 @@ const Product = () => {
             <div className='flex items-center justify-between mb-8'>
               <div>
                 <div className='flex gap-2 text-3xl font-bold'>
-                  <h1 className='text-gray_light line-through'>${119}</h1>
-                  <h1>${109}</h1>
+                  <h1 className='text-gray_light line-through'>${listing.price}</h1>
+                  <h1>${nightlyPrice}</h1>
                   <p className='text-base font-normal self-end text-gray_text'>/night</p>
                 </div>
                 <div className='flex gap-2 mt-2'>
@@ -270,8 +271,8 @@ const Product = () => {
               >
                 Save +
               </Button>
-              <Button className='bg-blue hover:bg-blue-hover grow text-white rounded-full h-12 px-6 font-bold'>
-                Reserve
+              <Button asChild className='bg-blue hover:bg-blue-hover grow text-white rounded-full h-12 px-6 font-bold'>
+                <Link href={`/checkout/${listing.id}`}>Reserve</Link>
               </Button>
             </div>
             <div className='pt-8 flex flex-col'>
