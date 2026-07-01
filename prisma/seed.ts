@@ -180,6 +180,7 @@ async function main() {
         price: item.price,
         offerPrice: item.offerPrice,
         amenities: item.amenities,
+        placesCount: null,
       })),
       ...cars.map((item) => ({
         type: ListingType.CAR,

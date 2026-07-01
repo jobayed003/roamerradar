@@ -26,12 +26,20 @@ function toListingItem(listing: {
   };
 }
 
+const stayListingFilter = {
+  placesCount: null,
+} as const;
+
+const nearbyDestinationFilter = {
+  placesCount: { not: null },
+} as const;
+
 export async function getListingsByType(type: ListingType, location?: string) {
   try {
     const listings = await db.listing.findMany({
       where: {
         type,
-        ...(type === ListingType.STAY ? { placesCount: { isSet: false } } : {}),
+        ...(type === ListingType.STAY ? stayListingFilter : {}),
         ...(location ? { location } : {}),
       },
       orderBy: { createdAt: 'desc' },
@@ -49,7 +57,7 @@ export async function getNearbyDestinations() {
     const listings = await db.listing.findMany({
       where: {
         type: ListingType.STAY,
-        placesCount: { isSet: true },
+        ...nearbyDestinationFilter,
       },
       orderBy: { placesCount: 'asc' },
     });
@@ -75,7 +83,7 @@ export async function getListingCountByType(type: ListingType, location?: string
     return await db.listing.count({
       where: {
         type,
-        ...(type === ListingType.STAY ? { placesCount: { isSet: false } } : {}),
+        ...(type === ListingType.STAY ? stayListingFilter : {}),
         ...(location ? { location } : {}),
       },
     });
