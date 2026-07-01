@@ -1,140 +1,32 @@
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { ListingItem } from '@/types/listing';
 import { Clock, LucideIcon, User2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const thingsProducts = [
-  {
-    id: 234,
-    name: 'Premium milford sound tour ex Queenstown',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/things-images/things-1.jpg',
-    amenities: [
-      { name: '12 hours', icon: Clock },
-      { name: 'Up to 10 people', icon: User2 },
-    ],
-    isBestSelling: false,
-    oldPrice: 543,
-    newPrice: 234,
-    rating: 4.9,
-    reviews: 15,
-  },
-  {
-    id: 232,
-    name: 'Premium milford sound tour ex Queenstown',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/things-images/things-4.jpg',
-    amenities: [
-      { name: '12 hours', icon: Clock },
-      { name: 'Up to 10 people', icon: User2 },
-    ],
-    isBestSelling: true,
-    oldPrice: 543,
-    newPrice: 234,
-    rating: 4.9,
-    reviews: 15,
-  },
-  {
-    id: 231,
-    name: 'Premium milford sound tour ex Queenstown',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/things-images/things-2.jpg',
-    amenities: [
-      { name: '12 hours', icon: Clock },
-      { name: 'Up to 10 people', icon: User2 },
-    ],
-    isBestSelling: false,
-    oldPrice: 543,
-    newPrice: 234,
-    rating: 4.9,
-    reviews: 15,
-  },
-  {
-    id: 223,
-    name: 'Premium milford sound tour ex Queenstown',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/things-images/things-3.jpg',
-    amenities: [
-      { name: '12 hours', icon: Clock },
-      { name: 'Up to 10 people', icon: User2 },
-    ],
-    isBestSelling: false,
-    oldPrice: 543,
-    newPrice: 234,
-    rating: 4.9,
-    reviews: 15,
-  },
-  {
-    id: 276,
-    name: 'Premium milford sound tour ex Queenstown',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/things-images/things-5.jpg',
-    amenities: [
-      { name: '12 hours', icon: Clock },
-      { name: 'Up to 10 people', icon: User2 },
-    ],
-    isBestSelling: true,
-    oldPrice: 543,
-    newPrice: 234,
-    rating: 4.9,
-    reviews: 15,
-  },
-  {
-    id: 216,
-    name: 'Premium milford sound tour ex Queenstown',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/things-images/things-7.jpg',
-    amenities: [
-      { name: '12 hours', icon: Clock },
-      { name: 'Up to 10 people', icon: User2 },
-    ],
-    isBestSelling: false,
-    oldPrice: 543,
-    newPrice: 234,
-    rating: 4.9,
-    reviews: 15,
-  },
-  {
-    id: 976,
+const AMENITY_ICONS: Record<string, LucideIcon> = {
+  '12 hours': Clock,
+  'Up to 10 people': User2,
+};
 
-    name: 'Premium milford sound tour ex Queenstown',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/things-images/things-4.jpg',
-    amenities: [
-      { name: '12 hours', icon: Clock },
-      { name: 'Up to 10 people', icon: User2 },
-    ],
-    isBestSelling: false,
-    oldPrice: 543,
-    newPrice: 234,
-    rating: 4.9,
-    reviews: 15,
-  },
-  {
-    id: 176,
-    name: 'Premium milford sound tour ex Queenstown',
-    pickupLocation: '136 - 150, Pentonville Road, Kings Cross, London, UK',
-    img: '/images/things-images/things-6.jpg',
-    amenities: [
-      { name: '12 hours', icon: Clock },
-      { name: 'Up to 10 people', icon: User2 },
-    ],
-    isBestSelling: false,
-    oldPrice: 543,
-    newPrice: 234,
-    rating: 4.9,
-    reviews: 15,
-  },
-];
+type ThingsProductProps = {
+  listings: ListingItem[];
+};
 
-export const ThingsProduct = () => {
+export const ThingsProduct = ({ listings }: ThingsProductProps) => {
+  if (listings.length === 0) {
+    return (
+      <p className='text-gray_text text-center py-8'>No experiences found. Run `npm run db:seed` to populate listings.</p>
+    );
+  }
+
   return (
     <div className='flex flex-col items-center'>
       <div className='grid xl:grid-cols-2 lg:grid-cols-3 md:grid-cols-2 w-full gap-x-3 gap-y-8 mt-8'>
-        {thingsProducts.map((item) => (
-          <ThingsProductCard key={Math.random()} {...item} />
+        {listings.map((listing) => (
+          <ThingsProductCard key={listing.id} listing={listing} />
         ))}
       </div>
 
@@ -146,40 +38,19 @@ export const ThingsProduct = () => {
   );
 };
 
-type ThingsProductCardProps = {
-  id: number;
-  name: string;
-  pickupLocation: string;
-  img: string;
-  amenities: { name: string; icon: LucideIcon }[];
-  isBestSelling: boolean;
-  oldPrice: number;
-  newPrice: number;
-  rating: number;
-  reviews: number;
-};
+const ThingsProductCard = ({ listing }: { listing: ListingItem }) => {
+  const isBestSelling = listing.metadata?.isBestSelling ?? false;
+  const offerPrice = listing.offerPrice ?? listing.price;
 
-const ThingsProductCard = ({
-  id,
-  name,
-  img,
-  amenities,
-  isBestSelling,
-  pickupLocation,
-  oldPrice,
-  newPrice,
-  rating,
-  reviews,
-}: ThingsProductCardProps) => {
   return (
     <Link
-      href={'/things-product/' + id}
+      href={'/things-product/' + listing.id}
       className='grid xl:grid-cols-2 grid-row-2 xl:max-w-[600px] w-full rounded-2xl border dark:border-gray_border border-[#E6E8EC] shadow-sm font-poppins'
     >
       <div className='w-full md:h-72 max-h-[400px] h-96 relative overflow-hidden xl:rounded-s-xl max-xl:rounded-t-xl'>
         <Image
-          src={img}
-          alt='location img'
+          src={listing.image}
+          alt={listing.title}
           className='absolute h-full object-fill hover:scale-110 transition-all duration-1000'
           fill
         />
@@ -192,24 +63,27 @@ const ThingsProductCard = ({
       </div>
       <div className='flex flex-col justify-between gap-y-4 p-6 px-4'>
         <div className='flex justify-between gap-x-4'>
-          <h1 className='font-medium'>{name}</h1>
+          <h1 className='font-medium'>{listing.title}</h1>
 
           <div className='border-2 self-start rounded-md border-[#58C27D] text-green-500 text-xs font-bold px-2 py-1'>
             <p className='text-[#58C27D] line-through'>
-              ${oldPrice} <br />
+              ${listing.price} <br />
             </p>
-            <p className='text-gray_light font-semibold'>${newPrice}</p>
+            <p className='text-gray_light font-semibold'>${offerPrice}</p>
           </div>
         </div>
 
         <div className='flex justify-between text-xs text-gray_text'>
           <div className='flex gap-x-2 mt-2'>
-            {amenities.map((item) => (
-              <div className='flex gap-x-1 items-center' key={item.name}>
-                <item.icon className='w-4 h-4 text-gray_text' />
-                <p className='text-xs text-gray_text font-poppins'>{item.name}</p>
-              </div>
-            ))}
+            {listing.amenities.map((name) => {
+              const Icon = AMENITY_ICONS[name] ?? Clock;
+              return (
+                <div className='flex gap-x-1 items-center' key={name}>
+                  <Icon className='w-4 h-4 text-gray_text' />
+                  <p className='text-xs text-gray_text font-poppins'>{name}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -228,15 +102,15 @@ const ThingsProductCard = ({
 
           <div className='w-full'>
             <p className='text-xs text-gray_text leading-5'>
-              The best 16 passenger small group, intimate and unique, Milford Sound...
+              {listing.description ?? 'The best small group, intimate and unique experience...'}
             </p>
           </div>
         </div>
         <div className='flex justify-between text-xs text-gray_text mt-2'>
-          <p className='text-foreground font-semibold'>${oldPrice} total</p>
+          <p className='text-foreground font-semibold'>${listing.price} total</p>
           <p className='text-foreground font-semibold'>
-            ⭐{rating}
-            <span className='text-gray_text font-normal text-xs'>({reviews} reviews)</span>
+            ⭐{listing.rating}
+            <span className='text-gray_text font-normal text-xs'>({listing.reviewCount} reviews)</span>
           </p>
         </div>
       </div>

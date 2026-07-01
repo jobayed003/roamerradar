@@ -7,23 +7,33 @@ import NearbyLocations from '@/components/NearbyLocations';
 import { CarProducts } from '@/components/products/CarProducts';
 import { FlightDeals } from '@/components/products/FlightDeals';
 import { StayProducts } from '@/components/products/StayProducts';
+import { ThingsProduct } from '@/components/products/ThingsProduct';
 import Layout from '@/components/ui/Layout';
 import { Separator } from '@/components/ui/separator';
+import { ListingItem } from '@/types/listing';
 
 import { ChevronLeft } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
 const bookingFilters = ['Stays', 'Flights', 'Cars', 'Things to do'];
 const bookingSelectItems = ['Past', 'Upcoming', 'Future'];
-const steps = [
-  { stepName: 'stays', component: <StayProducts /> },
-  { stepName: 'flights', component: <FlightDeals /> },
-  { stepName: 'cars', component: <CarProducts /> },
-  { stepName: 'things', component: <StayProducts /> },
-];
 
-const MyBooking = () => {
+type MyBookingProps = {
+  stays: ListingItem[];
+  flights: ListingItem[];
+  cars: ListingItem[];
+  experiences: ListingItem[];
+};
+
+const MyBooking = ({ stays, flights, cars, experiences }: MyBookingProps) => {
   const param = useSearchParams().get('q')?.split(' ')[0];
+
+  const steps = [
+    { stepName: 'stays', component: <StayProducts listings={stays} /> },
+    { stepName: 'flights', component: <FlightDeals listings={flights} /> },
+    { stepName: 'cars', component: <CarProducts listings={cars} /> },
+    { stepName: 'things', component: <ThingsProduct listings={experiences} /> },
+  ];
 
   return (
     <>
@@ -39,7 +49,7 @@ const MyBooking = () => {
         </div>
 
         <div>
-          <h1 className='text-5xl font-bold mb-3'>Bookings</h1>
+          <h1 className='text-5xl font-bold mb-3'>My Bookings</h1>
           <p className='font-medium text-gray_text font-poppins'>You added {8} items to bookings</p>
         </div>
 
@@ -52,4 +62,5 @@ const MyBooking = () => {
     </>
   );
 };
+
 export default MyBooking;

@@ -7,6 +7,7 @@ import LinkButton from '@/components/LinkButton';
 import Panel from '@/components/Panel';
 import { FlightDeals } from '@/components/products/FlightDeals';
 import Layout from '@/components/ui/Layout';
+import { ListingItem } from '@/types/listing';
 import { Button } from '@/components/ui/button';
 import RadioButton from '@/components/ui/radio';
 import { Separator } from '@/components/ui/separator';
@@ -24,7 +25,7 @@ import { useMediaQuery } from 'usehooks-ts';
 const selectItems = ['Recommended', 'Popular', 'In exchange'];
 const filters = ['Cheapest', 'Best', 'With transfers'];
 
-const FlightsCategory = () => {
+const FlightsCategory = ({ listings }: { listings: ListingItem[] }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   const [price, setPrice] = useState([3000, 0]);
@@ -211,7 +212,7 @@ const FlightsCategory = () => {
             </div>
           )}
 
-          <FlightDeals />
+          <FlightDeals listings={listings} />
         </div>
       </Layout>
     </div>

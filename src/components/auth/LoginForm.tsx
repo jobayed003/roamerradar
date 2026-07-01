@@ -1,20 +1,24 @@
 'use client';
-import { login } from '@/actions/login';
 import { FormError } from '@/components/FormError';
-import { FormSuccess } from '@/components/FormSuccess';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { LoginSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { signIn } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { DEFAULT_LOGIN_REDIRECT } from '../../../routes';
 import CustomInput from '../CustomInput';
 
 const LoginForm = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl');
+
   const [error, setError] = useState<string | undefined>('');
-  const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -28,21 +32,26 @@ const LoginForm = () => {
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError('');
-    setSuccess('');
 
-    startTransition(() => {
-      login(values)
-        .then((data) => {
-          if (data?.error) {
-            form.reset();
-            setError(data?.error);
-          }
-          if (data?.success) {
-            form.reset();
-            setSuccess(data?.success);
-          }
-        })
-        .catch(() => setError('Something went wrong!'));
+    startTransition(async () => {
+      try {
+        const result = await signIn('credentials', {
+          email: values.email,
+          password: values.password,
+          redirect: false,
+        });
+
+        if (result?.error) {
+          form.reset();
+          setError('Invalid credentials or email not verified.');
+          return;
+        }
+
+        router.push(callbackUrl || DEFAULT_LOGIN_REDIRECT);
+        router.refresh();
+      } catch {
+        setError('Something went wrong!');
+      }
     });
   };
 
@@ -98,7 +107,6 @@ const LoginForm = () => {
           </div>
 
           <FormError message={error} />
-          <FormSuccess message={success} />
           <Button
             disabled={isPending}
             variant={'fill'}

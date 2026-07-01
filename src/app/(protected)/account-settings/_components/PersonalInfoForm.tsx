@@ -41,7 +41,7 @@ const PersonalInfoForm = ({ user }: { user: User }) => {
   const onSubmit = (values: z.infer<typeof PersonalInfoSchema>) => {
     values.speaks = selectedLanguage.filter(Boolean);
     startTransition(() => {
-      updateUser(values, user?.id as string)
+      updateUser(values)
         .then((data) => {
           router.refresh();
           toast({

@@ -2,6 +2,7 @@
 
 import useIsMounted from '@/hooks/useIsMounted';
 import { cn } from '@/lib/utils';
+import { ListingItem } from '@/types/listing';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
@@ -20,11 +21,13 @@ export default function Landing({
   heading,
   className,
   children,
+  nearbyListings = [],
 }: {
   img: string;
   heading: string;
   className?: string;
   children: ReactNode;
+  nearbyListings?: ListingItem[];
 }) {
   const { isMounted } = useIsMounted();
   const pathname = usePathname().replace('/', '');
@@ -61,7 +64,7 @@ export default function Landing({
       <Live />
       <Locations />
 
-      <Nearby />
+      <Nearby nearbyListings={nearbyListings} />
     </div>
   );
 }

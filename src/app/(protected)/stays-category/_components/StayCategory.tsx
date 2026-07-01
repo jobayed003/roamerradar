@@ -13,6 +13,7 @@ import { StayProducts } from '@/components/products/StayProducts';
 import { CarouselItem } from '@/components/ui/carousel';
 import { Input } from '@/components/ui/input';
 import { cn, createSearchParams, getCountryByPlaceName } from '@/lib/utils';
+import { ListingItem } from '@/types/listing';
 import { useBookingDate, useStaysStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
 import Image from 'next/image';
@@ -22,7 +23,7 @@ import { useEffect, useState } from 'react';
 const filters = ['Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
 const selectItems = ['On Sales', 'On Delivery', 'In Exchange'];
 
-const StayCategory = () => {
+const StayCategory = ({ listings, totalCount }: { listings: ListingItem[]; totalCount: number }) => {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
 
@@ -95,8 +96,8 @@ const StayCategory = () => {
         </div>
 
         <div>
-          <h1 className='text-3xl font-bold mb-4'>Over 300 stays</h1>
-          <StayProducts />
+          <h1 className='text-3xl font-bold mb-4'>Over {totalCount || 300} stays</h1>
+          <StayProducts listings={listings} />
         </div>
 
         <div className='flex flex-col md:flex-row justify-between items-center gap-x-4 '>

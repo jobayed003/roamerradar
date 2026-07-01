@@ -54,3 +54,31 @@ model VerificationToken {
 
   @@unique([email, token])
 }
+
+enum ListingType {
+  STAY
+  FLIGHT
+  CAR
+  EXPERIENCE
+}
+
+model Listing {
+  id          String      @id @default(cuid()) @map("_id")
+  type        ListingType
+  title       String
+  description String?
+  location    String?
+  image       String
+  price       Float
+  offerPrice  Float?
+  rating      Float       @default(4.9)
+  reviewCount Int         @default(15)
+  amenities   String[]    @default([])
+  metadata    Json?
+  isFeatured  Boolean     @default(false)
+  isPopular   Boolean     @default(false)
+  driveTime   String?
+  placesCount Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}

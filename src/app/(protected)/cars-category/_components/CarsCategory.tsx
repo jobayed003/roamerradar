@@ -17,6 +17,7 @@ import CategoryFilter from '@/components/CategoryFilter';
 import NearbyLocations from '@/components/NearbyLocations';
 import { CarProducts } from '@/components/products/CarProducts';
 import { CarouselItem } from '@/components/ui/carousel';
+import { ListingItem } from '@/types/listing';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -33,7 +34,7 @@ const pickupLocations = [
   { id: 49, label: 'Demetstrisfort', price: 232 },
 ];
 
-const CarsCategory = () => {
+const CarsCategory = ({ listings }: { listings: ListingItem[] }) => {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
 
@@ -113,7 +114,7 @@ const CarsCategory = () => {
         </div>
 
         <CategoryFilter filters={filters} selectItems={selectItems} />
-        <CarProducts />
+        <CarProducts listings={listings} />
 
         <NearbyLocations />
       </div>

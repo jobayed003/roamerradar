@@ -1,53 +1,52 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { ListingItem } from '@/types/listing';
 import { ArrowRight, Check } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const FlightDeals = () => {
+type FlightDealsProps = {
+  listings: ListingItem[];
+};
+
+export const FlightDeals = ({ listings }: FlightDealsProps) => {
+  if (listings.length === 0) {
+    return <p className='text-gray_text text-center py-8'>No flights found. Run `npm run db:seed` to populate listings.</p>;
+  }
+
   return (
     <div className='flex flex-col gap-y-6 w-full '>
-      {Array.from({ length: 4 }).map(() => (
-        <FlightCard key={Math.random()} />
+      {listings.map((listing) => (
+        <FlightCard key={listing.id} listing={listing} />
       ))}
     </div>
   );
 };
 
-const FlightCard = () => {
+const FlightCard = ({ listing }: { listing: ListingItem }) => {
+  const legs = listing.metadata?.legs ?? [];
+  const provider = listing.metadata?.provider ?? 'eDreams';
+
   return (
     <div className='flex lg:flex-row flex-col gap-x-12 gap-y-6 dark:shadow-[inset_0_0_0_1px_#353945] shadow-[inset_0_0_0_1px_#F4F5F6] hover:shadow-none hover:dark:bg-dark_russian hover:bg-[#F4F5F6] rounded-3xl p-8'>
       <div className='flex flex-col gap-y-8 basis-4/5'>
-        <FlightDetails
-          departingLocation='AKL'
-          takeOffTime='6:45 AM'
-          arrivalLocation='SGN'
-          landingTime='9:45 AM'
-          logo='/images/emirates.svg'
-          type='nonstop'
-        />
-        <FlightDetails
-          departingLocation='SGN'
-          takeOffTime='12:45 AM'
-          arrivalLocation='AKL'
-          landingTime='3:45 AM'
-          logo='/images/emirates.svg'
-          type='nonstop'
-        />
+        {legs.map((leg, index) => (
+          <FlightDetails key={`${listing.id}-${index}`} {...leg} />
+        ))}
       </div>
 
       <Separator className='lg:hidden dark:bg-gray_border bg-[#E6E8EC]' />
       <div className='flex flex-row lg:flex-col justify-between  gap-4  self-end basis-3/12 w-full '>
         <div className='flex items-center gap-x-1 text-gray_text text-xs'>
           <Check className='w-4 h-4 font-bold' />
-          eDreams
+          {provider}
         </div>
-        <Link href={'/flight-deals'} className='h-12 group min-w-[160px]'>
+        <Link href={`/flights-product/${listing.id}`} className='h-12 group min-w-[160px]'>
           <Button
             variant={'outline'}
             className='rounded-full w-full self-end h-12 text-green-500 shadow-[0_0_0_2px_#E6E8EC_inset] dark:shadow-[0_0_0_2px_#777E90_inset] hover:shadow-none hover:dark:shadow-none font-bold hover:bg-blue-hover transition-all'
           >
-            <p className='group-hover:hidden'>${3254}</p>
+            <p className='group-hover:hidden'>${listing.price}</p>
             <div className='hidden group-hover:flex gap-x-3 items-center '>
               <p>View Deal</p>
               <ArrowRight className='w-4 h-4' />

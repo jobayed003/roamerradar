@@ -11,6 +11,7 @@ import MapProvider from '@/components/map/MapProvider';
 import { ThingsProduct } from '@/components/products/ThingsProduct';
 import { Input } from '@/components/ui/input';
 import { cn, createSearchParams, getCountryByPlaceName } from '@/lib/utils';
+import { ListingItem } from '@/types/listing';
 import { useBookingDate, useThingsStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
 import Image from 'next/image';
@@ -20,7 +21,7 @@ import { useEffect, useState } from 'react';
 const filters = ['Sightseeing', 'Transportation', 'Art and Culture', 'City tour'];
 const selectItems = ['Times of day', 'Time of week'];
 
-const ThingsCategory = () => {
+const ThingsCategory = ({ listings }: { listings: ListingItem[] }) => {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
 
@@ -91,7 +92,7 @@ const ThingsCategory = () => {
         </div>
 
         <CategoryFilter filters={filters} selectItems={selectItems} />
-        <ThingsProduct />
+        <ThingsProduct listings={listings} />
 
         <div className='flex flex-col md:flex-row justify-between items-center gap-x-4 '>
           <div className='flex flex-col gap-y-4 md:max-w-[400px] mt-8'>
