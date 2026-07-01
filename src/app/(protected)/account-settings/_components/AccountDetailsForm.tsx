@@ -17,10 +17,16 @@ const links = [
   { label: 'Notification', icon: IoNotificationsOutline },
 ];
 
-const AccountDetailsForm = ({ user }: { user: User }) => {
+const AccountDetailsForm = ({
+  user,
+  connectedProviders,
+}: {
+  user: User;
+  connectedProviders: string[];
+}) => {
   const steps = [
     () => <PersonalInfoForm user={user} />,
-    () => <SecurityForm />,
+    () => <SecurityForm user={user} connectedProviders={connectedProviders} />,
     () => <PaymentsForm />,
     () => <NotificationForm />,
   ];

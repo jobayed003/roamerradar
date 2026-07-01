@@ -5,13 +5,15 @@ import { ArrowRight, Check } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { EmptyListings } from './EmptyListings';
+
 type FlightDealsProps = {
   listings: ListingItem[];
 };
 
 export const FlightDeals = ({ listings }: FlightDealsProps) => {
   if (listings.length === 0) {
-    return <p className='text-gray_text text-center py-8'>No flights found. Run `npm run db:seed` to populate listings.</p>;
+    return <EmptyListings label='flights' />;
   }
 
   return (

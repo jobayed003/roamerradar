@@ -28,7 +28,10 @@ const Nearby = ({ nearbyListings }: NearbyProps) => {
           </p>
         </div>
         {sortedListings.length === 0 ? (
-          <p className='text-center text-gray_text py-8'>No nearby destinations yet. Run `npm run db:seed` to populate.</p>
+          <div className='flex flex-col items-center justify-center py-16 text-center'>
+            <p className='text-lg font-medium'>No nearby destinations available</p>
+            <p className='text-gray_text mt-2 max-w-md'>Check back soon — we&apos;re adding new places to explore.</p>
+          </div>
         ) : (
           <>
             <div className='md:flex hidden flex-wrap justify-center gap-x-8 gap-y-16 my-16 md'>

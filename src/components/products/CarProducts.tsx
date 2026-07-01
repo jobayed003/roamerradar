@@ -6,13 +6,16 @@ import { Navigation, User2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { EmptyListings } from './EmptyListings';
+
 type CarProductsProps = {
   listings: ListingItem[];
+  location?: string;
 };
 
-export const CarProducts = ({ listings }: CarProductsProps) => {
+export const CarProducts = ({ listings, location }: CarProductsProps) => {
   if (listings.length === 0) {
-    return <p className='text-gray_text text-center py-8'>No cars found. Run `npm run db:seed` to populate listings.</p>;
+    return <EmptyListings label='cars' location={location} />;
   }
 
   return (

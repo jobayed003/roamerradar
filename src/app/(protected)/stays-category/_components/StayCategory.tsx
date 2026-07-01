@@ -62,7 +62,7 @@ const StayCategory = ({ listings, totalCount }: { listings: ListingItem[]; total
             <h1 className='text-5xl'>Places to stay</h1>
             <div className='flex gap-x-4 mt-3'>
               <p className='border-2 border-[#58c27d] text-[#58c27d] uppercase p-2 py-1 text-xs rounded-sm font-bold'>
-                300+ stays
+                {totalCount > 0 ? `${totalCount}+ stays` : 'Search stays'}
               </p>
               <p>
                 {travelDates}, {totalTravelers} guests
@@ -92,12 +92,14 @@ const StayCategory = ({ listings, totalCount }: { listings: ListingItem[]; total
 
         <div className='py-8'>
           <h1 className='text-3xl font-bold'>Explore mountains in {location}</h1>
-          <BrowseCarousel />
+          <BrowseCarousel listings={listings.slice(0, 6)} />
         </div>
 
         <div>
-          <h1 className='text-3xl font-bold mb-4'>Over {totalCount || 300} stays</h1>
-          <StayProducts listings={listings} />
+          <h1 className='text-3xl font-bold mb-4'>
+            {totalCount > 0 ? `Over ${totalCount} stays` : 'Stays'}
+          </h1>
+          <StayProducts listings={listings} location={location} />
         </div>
 
         <div className='flex flex-col md:flex-row justify-between items-center gap-x-4 '>
@@ -138,38 +140,57 @@ const StayCategory = ({ listings, totalCount }: { listings: ListingItem[]; total
   );
 };
 
-const BrowseCarousel = () => {
+const BrowseCarousel = ({ listings }: { listings: ListingItem[] }) => {
+  if (listings.length === 0) {
+    return null;
+  }
+
   return (
     <div className='relative'>
       <CarouselProvider buttonClasses='sm:absolute -top-[2.5rem] right-0'>
-        {Array.from({ length: 6 }).map((_, index) => (
-          <CarouselItem key={index} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2 basis-full'>
-            <Link href={'/stays-category'} className='hover:text-blue transition-all flex flex-col items-center'>
-              <div className='flex flex-col gap-y-5 my-20 relative rounded-3xl'>
-                <div className='relative self-center sm:self-start overflow-hidden rounded-3xl'>
-                  <Image
-                    className='hover:scale-110 rounded-3xl duration-500'
-                    src={`/images/browse-${index + 1 > 3 ? index - 2 : index + 1}.jpg`}
-                    alt='nearby image'
-                    width={250}
-                    height={250}
-                  />
-                </div>
-                <div className='absolute top-4 left-4 bg-foreground rounded-full text-white dark:text-dark_russian shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
-                  30% off
-                </div>
+        {listings.map((listing) => {
+          const offerPrice = listing.offerPrice ?? listing.price;
+          const discount =
+            listing.offerPrice && listing.price > listing.offerPrice
+              ? Math.round(((listing.price - listing.offerPrice) / listing.price) * 100)
+              : null;
 
-                <div>
-                  <h1 className='font-medium'>Mountain House</h1>
-                  <div className='flex items-center gap-1 text-gray_text mt-1'>
-                    <Home className='h-4 w-4' />
-                    <p className='text-xs font-poppins font-semibold mt-1'>{(index + 23 * 32332).toLocaleString()}</p>
+          return (
+            <CarouselItem key={listing.id} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2 basis-full'>
+              <Link
+                href={`/stays-product/${listing.id}`}
+                className='hover:text-blue transition-all flex flex-col items-center'
+              >
+                <div className='flex flex-col gap-y-5 my-20 relative rounded-3xl'>
+                  <div className='relative self-center sm:self-start overflow-hidden rounded-3xl'>
+                    <Image
+                      className='hover:scale-110 rounded-3xl duration-500 object-cover'
+                      src={listing.image}
+                      alt={listing.title}
+                      width={250}
+                      height={250}
+                    />
+                  </div>
+                  {discount && (
+                    <div className='absolute top-4 left-4 bg-foreground rounded-full text-white dark:text-dark_russian shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
+                      {discount}% off
+                    </div>
+                  )}
+
+                  <div>
+                    <h1 className='font-medium'>{listing.title}</h1>
+                    <div className='flex items-center gap-1 text-gray_text mt-1'>
+                      <Home className='h-4 w-4' />
+                      <p className='text-xs font-poppins font-semibold mt-1'>
+                        ${offerPrice}/night · ⭐{listing.rating}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          </CarouselItem>
-        ))}
+              </Link>
+            </CarouselItem>
+          );
+        })}
       </CarouselProvider>
     </div>
   );

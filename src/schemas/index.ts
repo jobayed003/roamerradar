@@ -40,3 +40,14 @@ export const PaymentSchema = z.object({
   expiry: z.string().min(4),
   cvc: z.string().min(3),
 });
+
+export const ChangePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, { message: 'Current password is required' }),
+    newPassword: z.string().min(6, { message: 'Minimum 6 characters required' }),
+    confirmPassword: z.string().min(1, { message: 'Please confirm your password' }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });

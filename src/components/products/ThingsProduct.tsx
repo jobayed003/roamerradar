@@ -11,15 +11,16 @@ const AMENITY_ICONS: Record<string, LucideIcon> = {
   'Up to 10 people': User2,
 };
 
+import { EmptyListings } from './EmptyListings';
+
 type ThingsProductProps = {
   listings: ListingItem[];
+  location?: string;
 };
 
-export const ThingsProduct = ({ listings }: ThingsProductProps) => {
+export const ThingsProduct = ({ listings, location }: ThingsProductProps) => {
   if (listings.length === 0) {
-    return (
-      <p className='text-gray_text text-center py-8'>No experiences found. Run `npm run db:seed` to populate listings.</p>
-    );
+    return <EmptyListings label='experiences' location={location} />;
   }
 
   return (

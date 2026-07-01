@@ -1,11 +1,14 @@
-'use client';
-
-import { useSession } from 'next-auth/react';
+import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 
-const AccountPage = () => {
-  const { data } = useSession();
-  return redirect(`/account-settings/${data?.user.id}`);
+const AccountPage = async () => {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect('/auth/login');
+  }
+
+  redirect(`/account-settings/${session.user.id}`);
 };
 
 export default AccountPage;

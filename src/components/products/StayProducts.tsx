@@ -4,6 +4,7 @@ import { ListingItem } from '@/types/listing';
 import { Clock, LucideIcon, Pizza, User2, Wifi } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { EmptyListings } from './EmptyListings';
 
 const AMENITY_ICONS: Record<string, LucideIcon> = {
   'Free Wifi': Wifi,
@@ -14,11 +15,12 @@ const AMENITY_ICONS: Record<string, LucideIcon> = {
 
 type StayProductsProps = {
   listings: ListingItem[];
+  location?: string;
 };
 
-export const StayProducts = ({ listings }: StayProductsProps) => {
+export const StayProducts = ({ listings, location }: StayProductsProps) => {
   if (listings.length === 0) {
-    return <p className='text-gray_text text-center py-8'>No stays found. Run `npm run db:seed` to populate listings.</p>;
+    return <EmptyListings label='stays' location={location} />;
   }
 
   return (
