@@ -54,7 +54,7 @@ const SecurityForm = ({ user, connectedProviders }: SecurityFormProps) => {
   };
 
   const connectProvider = (provider: 'google' | 'github') => {
-    signIn(provider, { callbackUrl: `/account-settings/${user.id}` });
+    signIn(provider, { callbackUrl: '/account-settings' });
   };
 
   return (

@@ -1,134 +1,102 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Bath, Bed, CalendarDays, ImageIcon, User, User2 } from 'lucide-react';
+import ListingPreviewCard from '@/components/ListingPreviewCard';
+import type { ConversationListing, ConversationUser } from '@/types/conversation';
+import { cn } from '@/lib/utils';
+import { CalendarDays, User2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const ProductView = () => {
+type ProductViewProps = {
+  listing: ConversationListing | null;
+  otherUser: ConversationUser | null;
+  className?: string;
+};
+
+const ProductView = ({ listing, otherUser, className }: ProductViewProps) => {
+  if (!listing) {
+    return (
+      <aside
+        className={cn(
+          'border-l dark:border-gray_border min-w-0 overflow-y-auto p-6 text-center text-gray_text',
+          className
+        )}
+      >
+        <p className='text-sm'>Listing details will appear here when you message about a specific property.</p>
+      </aside>
+    );
+  }
+
+  const hostName = otherUser?.displayName ?? otherUser?.name ?? 'Host';
+  const productPath =
+    listing.type === 'STAY'
+      ? `/stays-product/${listing.id}`
+      : listing.type === 'CAR'
+        ? `/cars-product/${listing.id}`
+        : listing.type === 'FLIGHT'
+          ? `/flights-product/${listing.id}`
+          : `/things-product/${listing.id}`;
+
   return (
-    <div className='border-r dark:border-gray_border hidden lg:block'>
-      <Link href={'/stays-product/233'}>
-        <div className='w-full max-h-[300px] h-72 relative'>
-          <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl ' />
-          <Link
-            href={'/photo-grid/' + '234'}
-            className='bg-white flex items-center gap-x-4 rounded-full px-3 py-2 absolute z-50 top-4 right-4 text-dark_bg'
-          >
-            <ImageIcon className='w-4 h-4' />
-            <span className='text-sm font-bold'>Show all photos</span>
-          </Link>
+    <aside
+      className={cn(
+        'border-l dark:border-gray_border min-w-0 overflow-y-auto max-h-[calc(100dvh-5rem)] p-4 xl:p-6',
+        className
+      )}
+    >
+      <ListingPreviewCard listing={listing} />
+      <div className='mt-6 min-w-0'>
+        <div className='flex items-center gap-x-2 pt-2 pb-4 flex-wrap'>
+          <span className='text-gray_text text-sm'>Hosted by</span>
+          {otherUser?.image ? (
+            <Image src={otherUser.image} alt={hostName} width={25} height={25} className='rounded-full shrink-0' />
+          ) : (
+            <div className='w-6 h-6 rounded-full bg-blue text-white text-[10px] flex items-center justify-center font-semibold shrink-0'>
+              {hostName.charAt(0)}
+            </div>
+          )}
+          <p className='font-medium text-sm truncate'>{hostName}</p>
         </div>
-      </Link>
-      <div className='p-6'>
-        <h1 className='text-2xl mb-2 font-bold'>Spectacular views of Queenstown</h1>
-        <div className='flex items-center gap-x-2 pt-2 pb-4'>
-          <span className='text-gray_text'>Hosted by</span>
-          <div>
-            <Image src={'/user.jpg'} alt='user avatar' width={25} height={25} className='rounded-full' />
-          </div>
-          <p className='font-medium'>Jobayed Hossain</p>
-        </div>
+
         <div className='dark:bg-dark_russian bg-[#F4F5F6] rounded-2xl'>
-          <div className='flex items-center flex-wrap p-3'>
-            <div className='flex gap-2 items-center text-gray_text p-3 basis-1/2'>
-              <CalendarDays />
-              <div className='flex flex-col font-poppins'>
-                <p className='text-xs'>Check-in</p>
-                <p className='text-foreground font-medium'>May 15, 2024</p>
+          <div className='flex flex-col sm:flex-row sm:flex-wrap p-2'>
+            <div className='flex gap-2 items-center text-gray_text p-3 min-w-0 flex-1'>
+              <CalendarDays className='shrink-0' />
+              <div className='flex flex-col font-poppins min-w-0'>
+                <p className='text-xs'>Inquiry</p>
+                <p className='text-foreground font-medium text-sm truncate'>About this listing</p>
               </div>
             </div>
 
-            <div className='flex gap-2 items-center text-gray_text p-3 basis-1/2'>
-              <User2 />
-              <div className='flex flex-col'>
-                <p className='text-xs'>Guest</p>
-                <p className='text-foreground font-medium'>2 guests</p>
+            <div className='flex gap-2 items-center text-gray_text p-3 min-w-0 flex-1'>
+              <User2 className='shrink-0' />
+              <div className='flex flex-col min-w-0'>
+                <p className='text-xs'>Host</p>
+                <p className='text-foreground font-medium text-sm truncate'>{hostName}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className='flex items-center gap-x-3 text-gray_text py-4'>
-          <User className='h-5 w-5' />
-          <p>2 guests</p>
-          <Bed className='h-5 w-5' />
-          <p>1 bedroom</p>
-          <Bath className='h-5 w-5 ' />
-          <p>1 private bath</p>
-        </div>
         <Separator className='dark:bg-dark_russian my-4' />
 
-        <div className='flex flex-col gap-y-4'>
-          <p className='text-sm text-gray_text font-poppins'>
-            Described by Queenstown House & Garden magazine as having &apos;one of the best views we&apos;ve ever
-            seen&apos; you will love relaxing in this newly built, architectural house sitting proudly on Queenstown
-            Hill.
-          </p>
+        <div className='flex flex-col gap-y-4 min-w-0'>
+          {listing.description && (
+            <p className='text-sm text-gray_text font-poppins line-clamp-6 break-words'>{listing.description}</p>
+          )}
 
-          <Button
-            variant={'fill'}
-            className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold w-min'
-          >
-            More details
-          </Button>
+          <Link href={productPath}>
+            <Button
+              variant={'fill'}
+              className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold'
+            >
+              More details
+            </Button>
+          </Link>
         </div>
       </div>
-    </div>
+    </aside>
   );
 };
 
 export default ProductView;
-/* 
-
-<div className='flex md:flex-row flex-col gap-y-6 justify-between'>
-<div className='flex lg:flex-row flex-col gap-8 mt-3 py-8 '>
-  <div className='w-full h-full relative'>
-    <Image src={'/images/grid-4.jpg'} alt='Gallery pic' fill className='absolute object-fill rounded-2xl ' />
-  </div>
-
-  <h1 className='text-3xl mb-2 font-bold'>Private room in house</h1>
-  <div className='flex items-center gap-x-2 pt-2 pb-4'>
-    <span className='text-gray_text'>Hosted by</span>
-    <div>
-      <Image src={'/user.jpg'} alt='user avatar' width={25} height={25} className='rounded-full' />
-    </div>
-    <p className='font-medium'>Jobayed Hossain</p>
-  </div>
-
-  <Separator className='bg-dark_russian' />
-  <div className='flex items-center gap-x-3 text-gray_text py-4'>
-    <User className='h-5 w-5' />
-    <p>2 guests</p>
-    <Bed className='h-5 w-5' />
-    <p>1 bedroom</p>
-    <Bath className='h-5 w-5 ' />
-    <p>1 private bath</p>
-  </div>
-
-  <div className='flex flex-col gap-y-4 my-4 text-gray_text'>
-    <p className='font-poppins'>
-      Described by Queenstown House & Garden magazine as having &apos;one of the best views we&apos;ve ever
-      seen&apos; you will love relaxing in this newly built, architectural house sitting proudly on Queenstown
-      Hill.
-    </p>
-  </div>
-
-  <div className='my-8 font-poppins'>
-    <h1 className='text-2xl font-semibold mb-8'>Amenities</h1>
-    <div className='flex flex-wrap items-center gap-8'>
-      {amenities.map((item) => (
-        <div className='flex items-center gap-x-4 basis-2/5 text-gray_text text-sm' key={Math.random()}>
-          <item.icon className='w-5 h-5' />
-          <p>{item.label}</p>
-        </div>
-      ))}
-    </div>
-  </div>
-  <Button
-    variant={'fill'}
-    className='hover:bg-dark_russian dark:hover:bg-gray_border dark:text-white text-dark_bg-dark_russian hover:text-white border-0 shadow-[0_0_0_2px_#E6E8EC_inset] hover:shadow-[0_0_0_2px_#23262F_inset] dark:shadow-[inset_0_0_0_2px_#353945] transition-none duration-200 transition-all font-bold'
-  >
-    More details
-  </Button>
-</div>
-</div> */

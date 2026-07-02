@@ -91,7 +91,7 @@ const StayCategory = ({ listings, totalCount }: { listings: ListingItem[]; total
         <CategoryFilter filters={filters} selectItems={selectItems} />
 
         <div className='py-8'>
-          <h1 className='text-3xl font-bold'>Explore mountains in {location}</h1>
+          <h1 className='text-3xl font-bold mb-6'>Explore mountains in {location}</h1>
           <BrowseCarousel listings={listings.slice(0, 6)} />
         </div>
 
@@ -147,7 +147,7 @@ const BrowseCarousel = ({ listings }: { listings: ListingItem[] }) => {
 
   return (
     <div className='relative'>
-      <CarouselProvider buttonClasses='sm:absolute -top-[2.5rem] right-0'>
+      <CarouselProvider buttonClasses='sm:absolute -top-14 right-0'>
         {listings.map((listing) => {
           const offerPrice = listing.offerPrice ?? listing.price;
           const discount =
@@ -156,33 +156,35 @@ const BrowseCarousel = ({ listings }: { listings: ListingItem[] }) => {
               : null;
 
           return (
-            <CarouselItem key={listing.id} className='pl-1 lg:basis-1/4 md:basis-1/3 min-[400px]:basis-1/2 basis-full'>
-              <Link
-                href={`/stays-product/${listing.id}`}
-                className='hover:text-blue transition-all flex flex-col items-center'
-              >
-                <div className='flex flex-col gap-y-5 my-20 relative rounded-3xl'>
-                  <div className='relative self-center sm:self-start overflow-hidden rounded-3xl'>
+            <CarouselItem
+              key={listing.id}
+              className='pl-4 basis-full min-[400px]:basis-1/2 md:basis-1/3 lg:basis-1/4'
+            >
+              <Link href={`/stays-product/${listing.id}`} className='group flex h-full flex-col'>
+                <div className='flex h-full flex-col gap-3'>
+                  <div className='relative aspect-[4/3] w-full overflow-hidden rounded-3xl'>
                     <Image
-                      className='hover:scale-110 rounded-3xl duration-500 object-cover'
+                      className='object-cover transition-transform duration-500 group-hover:scale-105'
                       src={listing.image}
                       alt={listing.title}
-                      width={250}
-                      height={250}
+                      fill
+                      sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
                     />
+                    {discount && (
+                      <div className='absolute top-3 left-3 bg-foreground rounded-full text-white dark:text-dark_russian shadow-custom font-bold font-poppins text-xs px-3 py-1 uppercase z-10'>
+                        {discount}% off
+                      </div>
+                    )}
                   </div>
-                  {discount && (
-                    <div className='absolute top-4 left-4 bg-foreground rounded-full text-white dark:text-dark_russian shadow-custom font-bold font-poppins text-xs px-4 py-1 uppercase'>
-                      {discount}% off
-                    </div>
-                  )}
 
-                  <div>
-                    <h1 className='font-medium'>{listing.title}</h1>
-                    <div className='flex items-center gap-1 text-gray_text mt-1'>
-                      <Home className='h-4 w-4' />
-                      <p className='text-xs font-poppins font-semibold mt-1'>
-                        ${offerPrice}/night · ⭐{listing.rating}
+                  <div className='flex flex-col gap-1 flex-1'>
+                    <h2 className='font-medium text-sm leading-snug line-clamp-2 text-foreground group-hover:text-blue transition-colors'>
+                      {listing.title}
+                    </h2>
+                    <div className='flex items-center gap-1.5 text-gray_text mt-auto'>
+                      <Home className='h-4 w-4 shrink-0' />
+                      <p className='text-xs font-poppins font-semibold'>
+                        ${offerPrice}/night · ⭐ {listing.rating}
                       </p>
                     </div>
                   </div>

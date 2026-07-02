@@ -1,6 +1,17 @@
-import { ListingType, Prisma } from '@prisma/client';
 import { db } from '@/lib/db';
+import type { ReviewItem, UserSummary } from '@/types/review';
 import { ListingItem, ListingMetadata } from '@/types/listing';
+import { ListingType, Prisma } from '@prisma/client';
+
+export const userSummarySelect = {
+  id: true,
+  displayName: true,
+  name: true,
+  realName: true,
+  image: true,
+  bio: true,
+  website: true,
+} as const;
 
 function toListingItem(listing: {
   id: string;
@@ -19,10 +30,13 @@ function toListingItem(listing: {
   isPopular: boolean;
   driveTime: string | null;
   placesCount: number | null;
+  ownerId: string | null;
+  owner?: UserSummary | null;
 }): ListingItem {
   return {
     ...listing,
     metadata: (listing.metadata as ListingMetadata | null) ?? null,
+    owner: listing.owner ?? null,
   };
 }
 
@@ -71,7 +85,10 @@ export async function getNearbyDestinations() {
 
 export async function getListingById(id: string) {
   try {
-    const listing = await db.listing.findUnique({ where: { id } });
+    const listing = await db.listing.findUnique({
+      where: { id },
+      include: { owner: { select: userSummarySelect } },
+    });
     return listing ? toListingItem(listing) : null;
   } catch {
     return null;

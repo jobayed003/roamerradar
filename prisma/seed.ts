@@ -1,6 +1,16 @@
 import { ListingType, PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
+
+const DEMO_HOST_EMAIL = 'host@demo.roamerradar.com';
+const DEMO_REVIEWER_EMAILS = ['reviewer1@demo.roamerradar.com', 'reviewer2@demo.roamerradar.com'];
+
+const reviewBodies = [
+  'We had the most spectacular view. The host was very responsive and helpful throughout our stay.',
+  'Great location and comfortable space. Would definitely message the host again for future bookings.',
+  'Lovely experience overall. The listing matched the photos and the host answered all our questions quickly.',
+];
 
 const nearbyDestinations = [
   { placesCount: 1230, image: '/images/browse-1.jpg', title: 'New Keagon', driveTime: '1 hour drive' },
@@ -159,6 +169,51 @@ const flights = [
 ];
 
 async function main() {
+  const password = await bcrypt.hash('password123', 10);
+
+  const host = await prisma.user.upsert({
+    where: { email: DEMO_HOST_EMAIL },
+    update: {
+      displayName: 'Jobayed Hossain',
+      realName: 'Jobayed Hossain',
+      image: '/user.jpg',
+      bio: 'Superhost with years of experience hosting travelers across New Zealand.',
+      website: 'https://jobayed.netlify.app',
+    },
+    create: {
+      email: DEMO_HOST_EMAIL,
+      displayName: 'Jobayed Hossain',
+      realName: 'Jobayed Hossain',
+      image: '/user.jpg',
+      bio: 'Superhost with years of experience hosting travelers across New Zealand.',
+      website: 'https://jobayed.netlify.app',
+      password,
+      emailVerified: new Date(),
+    },
+  });
+
+  const reviewers = await Promise.all(
+    DEMO_REVIEWER_EMAILS.map((email, index) =>
+      prisma.user.upsert({
+        where: { email },
+        update: {
+          displayName: index === 0 ? 'John Marston' : 'Kohaku Tora',
+          realName: index === 0 ? 'John Marston' : 'Kohaku Tora',
+          image: index === 0 ? '/user.jpg' : '/images/travel-1.jpg',
+        },
+        create: {
+          email,
+          displayName: index === 0 ? 'John Marston' : 'Kohaku Tora',
+          realName: index === 0 ? 'John Marston' : 'Kohaku Tora',
+          image: index === 0 ? '/user.jpg' : '/images/travel-1.jpg',
+          password,
+          emailVerified: new Date(),
+        },
+      })
+    )
+  );
+
+  await prisma.review.deleteMany();
   await prisma.listing.deleteMany();
 
   await prisma.listing.createMany({
@@ -171,6 +226,7 @@ async function main() {
         placesCount: item.placesCount,
         driveTime: item.driveTime,
         location: item.title,
+        ownerId: host.id,
       })),
       ...stays.map((item) => ({
         type: ListingType.STAY,
@@ -181,6 +237,9 @@ async function main() {
         offerPrice: item.offerPrice,
         amenities: item.amenities,
         placesCount: null,
+        ownerId: host.id,
+        description:
+          'Described by Queenstown House & Garden magazine as having one of the best views we have ever seen.',
       })),
       ...cars.map((item) => ({
         type: ListingType.CAR,
@@ -190,6 +249,7 @@ async function main() {
         price: item.price,
         isPopular: item.isPopular,
         metadata: { supplier: 1, isPopular: item.isPopular },
+        ownerId: host.id,
       })),
       ...experiences.map((item) => ({
         type: ListingType.EXPERIENCE,
@@ -200,6 +260,7 @@ async function main() {
         offerPrice: item.offerPrice,
         amenities: ['12 hours', 'Up to 10 people'],
         metadata: { isBestSelling: item.isBestSelling },
+        ownerId: host.id,
       })),
       ...flights.map((item) => ({
         type: ListingType.FLIGHT,
@@ -207,11 +268,35 @@ async function main() {
         image: '/images/emirates.svg',
         price: item.price,
         metadata: item.metadata,
+        ownerId: host.id,
       })),
     ],
   });
 
-  console.log('Seeded listings successfully');
+  const seededListings = await prisma.listing.findMany({
+    where: {
+      type: { in: [ListingType.STAY, ListingType.CAR, ListingType.EXPERIENCE] },
+      placesCount: null,
+    },
+    take: 6,
+  });
+
+  for (const listing of seededListings) {
+    for (let index = 0; index < reviewers.length; index++) {
+      const reviewer = reviewers[index];
+
+      await prisma.review.create({
+        data: {
+          listingId: listing.id,
+          userId: reviewer.id,
+          rating: index === 0 ? 5 : 4,
+          body: reviewBodies[index] ?? reviewBodies[0],
+        },
+      });
+    }
+  }
+
+  console.log('Seeded listings, demo users, and reviews successfully');
 }
 
 main()

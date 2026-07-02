@@ -31,7 +31,7 @@ const Profile = async ({ params }: { params: { userId: string } }) => {
         <div className='flex flex-col gap-y-8 w-full'>
           <div className='flex justify-between items-center'>
             <h1 className='text-2xl font-semibold'>Hi, I&apos;m {user?.realName}</h1>
-            <LinkButton href={`/account-settings/${user?.id}`} label='Edit Your Profile' />
+            <LinkButton href='/account-settings' label='Edit Your Profile' />
           </div>
           <div className='text-gray_text'>{user?.bio}</div>
 

@@ -1,4 +1,5 @@
 import { ListingType } from '@prisma/client';
+import type { UserSummary } from '@/types/review';
 
 export type FlightLeg = {
   departingLocation: string;
@@ -34,4 +35,5 @@ export type ListingItem = {
   isPopular: boolean;
   driveTime: string | null;
   placesCount: number | null;
+  owner: UserSummary | null;
 };

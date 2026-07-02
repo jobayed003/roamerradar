@@ -30,6 +30,10 @@ model User {
   paymentMethods         PaymentMethod[]
   bookings               Booking[]
   notificationPreference NotificationPreference?
+  conversationParticipants ConversationParticipant[]
+  sentMessages             Message[]
+  ownedListings            Listing[]                 @relation("ListingOwner")
+  reviews                  Review[]
   accountCreated         DateTime                @default(now())
 }
 
@@ -86,12 +90,31 @@ model Listing {
   isPopular   Boolean     @default(false)
   driveTime   String?
   placesCount Int?
+  ownerId     String?
+  owner       User?         @relation("ListingOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  reviews     Review[]
   bookings    Booking[]
+  conversations Conversation[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   @@index([type])
   @@index([location])
+  @@index([ownerId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  listingId String
+  userId    String
+  rating    Int
+  body      String   @db.Text
+  createdAt DateTime @default(now())
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
+  @@index([userId])
 }
 
 model NotificationPreference {
@@ -142,4 +165,41 @@ model Booking {
 
   @@index([userId])
   @@index([listingId])
+}
+
+model Conversation {
+  id           String                    @id @default(cuid())
+  listingId    String?
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+  listing      Listing?                  @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@index([listingId])
+  @@index([updatedAt])
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  userId         String
+  lastReadAt     DateTime?
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  body           String       @db.Text
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
 }

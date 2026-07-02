@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect('/auth/login');
   }
 

@@ -23,6 +23,10 @@ export const {
       return true;
     },
     async session({ session, user, token }) {
+      if (token.invalid) {
+        return { ...session, user: undefined };
+      }
+
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
@@ -40,13 +44,16 @@ export const {
 
       const existingUser = await getUserById(token.sub);
 
-      if (!existingUser) return token;
+      if (!existingUser) {
+        return { ...token, invalid: true };
+      }
 
       const existingAccount = await getAccountByUserId(existingUser.id);
 
       token.isOAuth = !!existingAccount;
       token.name = existingUser.displayName;
       token.email = existingUser.email;
+      token.invalid = false;
 
       return token;
     },

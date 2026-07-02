@@ -53,3 +53,11 @@ export const NotificationPreferenceSchema = z.object({
   remindersText: z.boolean(),
   remindersBrowser: z.boolean(),
 });
+
+export const SendMessageSchema = z.object({
+  body: z
+    .string()
+    .trim()
+    .min(1, { message: 'Message cannot be empty' })
+    .max(2000, { message: 'Message is too long' }),
+});

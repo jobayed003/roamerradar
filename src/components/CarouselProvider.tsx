@@ -23,7 +23,7 @@ export const CarouselProvider = ({
       }}
       className={cn('w-full', className)}
     >
-      <CarouselContent className='-ml-1'>{children}</CarouselContent>
+      <CarouselContent className='-ml-4 items-stretch'>{children}</CarouselContent>
       <div className={cn('flex items-center gap-x-4 justify-center mt-5', buttonClasses)}>
         <CarouselPrevious
           className='static translate-x-0 translate-y-0 hover:border-2 hover:dark:text-white text-gray_text dark:border-gray_text border-[#e6e8ec]'

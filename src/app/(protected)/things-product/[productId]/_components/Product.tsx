@@ -3,6 +3,7 @@
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import { CarouselProvider } from '@/components/CarouselProvider';
 import LinkButton from '@/components/LinkButton';
+import ListingHostRow from '@/components/ListingHostRow';
 import { ProfileSection } from '@/components/ProfileSection';
 import Layout from '@/components/ui/Layout';
 import { CarouselItem } from '@/components/ui/carousel';
@@ -14,6 +15,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { FaSearchPlus, FaStar } from 'react-icons/fa';
+import { ListingItem } from '@/types/listing';
+import type { ReviewItem } from '@/types/review';
 import { ProductSuggestion } from './ProductSuggestion';
 import { ReceiptDetails } from './ReceiptDetails';
 
@@ -28,7 +31,7 @@ const galleryImages = [
 
 const filters = ['Sightseeing', 'Transportation', 'Art and Culture'];
 
-const Product = ({ productId }: { productId: string }) => {
+const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewItem[] }) => {
   const [selected, setSelected] = useState(filters[0]);
 
   return (
@@ -51,9 +54,7 @@ const Product = ({ productId }: { productId: string }) => {
 
         <div className='flex md:flex-row flex-col gap-y-6 justify-between'>
           <div className='max-w-2xl'>
-            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>
-              Premium milford sound tour ex queenstown
-            </h1>
+            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>{listing.title}</h1>
 
             <div className='flex items-center flex-wrap gap-3 font-poppins text-sm text-gray_text'>
               <div className='overflow-hidden rounded-full'>
@@ -130,13 +131,7 @@ const Product = ({ productId }: { productId: string }) => {
         <div className='flex lg:flex-row flex-col gap-8 mt-3 py-8 '>
           <div className='basis-7/12'>
             <h1 className='text-3xl mb-2 font-bold'>Amazing experience</h1>
-            <div className='flex items-center gap-x-2 pt-2 pb-4'>
-              <span className='text-gray_text'>Hosted by</span>
-              <div>
-                <Image src={'/user.jpg'} alt='user avatar' width={25} height={25} className='rounded-full' />
-              </div>
-              <p className='font-medium'>Jobayed Hossain</p>
-            </div>
+            <ListingHostRow owner={listing.owner} listingId={listing.id} />
 
             <div className='flex items-center flex-wrap gap-y-8 mb-16'>
               <div className='flex items-center gap-x-3 basis-1/2'>
@@ -200,7 +195,7 @@ const Product = ({ productId }: { productId: string }) => {
 
       <Separator className='mt-10 mb-20 dark:bg-dark_russian' />
 
-      <ProfileSection />
+      <ProfileSection host={listing.owner} listing={listing} reviews={reviews} />
 
       <Layout className='my-20'>
         <div className='flex flex-col gap-y-4 items-center justify-center font-poppins'>
@@ -228,7 +223,7 @@ const Product = ({ productId }: { productId: string }) => {
         <div className='flex w-full gap-x-4 mt-8'>
           <CarouselProvider buttonClasses='mt-8 right-0'>
             {thingsProduct
-              .filter((item) => item.id !== +productId)
+              .filter((item) => String(item.id) !== listing.id)
               .map((item, index) => (
                 <CarouselItem
                   key={index}
