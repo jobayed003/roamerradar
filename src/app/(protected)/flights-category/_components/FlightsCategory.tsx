@@ -12,67 +12,117 @@ import { Button } from '@/components/ui/button';
 import RadioButton from '@/components/ui/radio';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
+import {
+  filterFlightListings,
+  getFlightPriceBounds,
+  getLowestPriceByStop,
+  type StopFilter,
+} from '@/lib/flight-utils';
 import { createSearchParams } from '@/lib/utils';
 import { useBookingDate, useFlightStore } from '@/stores/useData';
 import { addDays, addMinutes, format } from 'date-fns';
 import { ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IoCloseCircle } from 'react-icons/io5';
 import { useMediaQuery } from 'usehooks-ts';
 
 const selectItems = ['Recommended', 'Popular', 'In exchange'];
 const filters = ['Cheapest', 'Best', 'With transfers'];
 
-const FlightsCategory = ({ listings }: { listings: ListingItem[] }) => {
+const FlightsCategory = ({
+  listings,
+  searchError,
+  routeLabel,
+  source,
+}: {
+  listings: ListingItem[];
+  searchError?: string;
+  routeLabel?: string;
+  source?: 'amadeus' | 'unavailable';
+}) => {
   const [isClicked, setIsClicked] = useState(false);
+  const [stopFilters, setStopFilters] = useState<StopFilter[]>([]);
 
-  const [price, setPrice] = useState([3000, 0]);
+  const priceBounds = useMemo(() => getFlightPriceBounds(listings), [listings]);
+  const lowestByStop = useMemo(() => getLowestPriceByStop(listings), [listings]);
+
+  const [priceRange, setPriceRange] = useState<[number, number]>([priceBounds.min, priceBounds.max]);
   const [takeOfftime, setTakeOffTime] = useState([25, 75]);
   const [landingTime, setLandingTime] = useState([25, 75]);
-  const [radioValues, setRadioValues] = useState({ nonStop: true, oneStop: false, twoPlusStops: false });
 
   const matches = useMediaQuery('(min-width: 768px)');
-
   const router = useRouter();
-
-  const { flyingFrom } = useFlightStore();
+  const { flyingFrom, flyingTo } = useFlightStore();
   const { date } = useBookingDate();
+
+  useEffect(() => {
+    setPriceRange([priceBounds.min, priceBounds.max]);
+  }, [priceBounds.min, priceBounds.max]);
 
   const takeOffMinutesToAddStart = Math.round((takeOfftime[0] / 100) * 1440);
   const takeOffMinutesToAddEnd = Math.round((takeOfftime[1] / 100) * 1440);
   const landingMinutesToAddStart = Math.round((landingTime[0] / 100) * 1440);
   const landingMinutesToAddEnd = Math.round((landingTime[1] / 100) * 1440);
 
-  const takeOffNextDay = addDays(date?.from!, 1);
-  const landingNextDay = addDays(date?.to!, 1);
+  const takeOffNextDay = addDays(date?.from ?? new Date(), 1);
+  const landingNextDay = addDays(date?.to ?? date?.from ?? new Date(), 1);
 
-  const takeoffStart = addMinutes(takeOffNextDay.setHours(0, 0, 0, 0), takeOffMinutesToAddStart);
-  const takeoffEnd = addMinutes(takeOffNextDay.setHours(24)!, takeOffMinutesToAddEnd);
+  const takeoffStart = addMinutes(new Date(takeOffNextDay).setHours(0, 0, 0, 0), takeOffMinutesToAddStart);
+  const takeoffEnd = addMinutes(new Date(takeOffNextDay).setHours(0, 0, 0, 0), takeOffMinutesToAddEnd);
+  const landingStart = addMinutes(new Date(landingNextDay).setHours(0, 0, 0, 0), landingMinutesToAddStart);
+  const landingEnd = addMinutes(new Date(landingNextDay).setHours(0, 0, 0, 0), landingMinutesToAddEnd);
 
-  const landingStart = addMinutes(landingNextDay.setHours(0, 0, 0, 0), landingMinutesToAddStart);
-  const landingEnd = addMinutes(landingNextDay.setHours(24)!, landingMinutesToAddEnd);
+  const filteredListings = useMemo(
+    () =>
+      filterFlightListings(listings, {
+        priceRange,
+        stopFilters,
+        flyingFrom,
+        flyingTo,
+      }),
+    [listings, priceRange, stopFilters, flyingFrom, flyingTo]
+  );
+
+  const originLabel = flyingFrom.trim() || 'Departure';
+  const destinationLabel = flyingTo.trim() || 'Arrival';
 
   useEffect(() => {
-    const url = createSearchParams({ baseUrl: '/flights-category', params: flyingFrom });
+    if (!flyingFrom.trim()) {
+      return;
+    }
 
-    router.push(url.toLowerCase());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flyingFrom]);
+    const url = createSearchParams({ baseUrl: '/flights-category', params: flyingFrom.trim() });
+    router.replace(url);
+  }, [flyingFrom, router]);
 
   useEffect(() => {
-    if (matches) setIsClicked(true);
+    if (matches) {
+      setIsClicked(true);
+    }
   }, [matches]);
+
+  const toggleStopFilter = (filter: StopFilter) => {
+    setStopFilters((current) =>
+      current.includes(filter) ? current.filter((item) => item !== filter) : [...current, filter]
+    );
+  };
+
+  const resetFilters = () => {
+    setPriceRange([priceBounds.min, priceBounds.max]);
+    setStopFilters([]);
+    setTakeOffTime([25, 75]);
+    setLandingTime([25, 75]);
+  };
+
+  const formatPrice = (value: number | null) => (value === null ? '—' : `$${value.toLocaleString()}`);
 
   return (
     <div>
-      <div
-        className={
-          'h-60 w-full flex flex-col justify-center text-dark_russian p-20 pt-24 flex-shrink relative mt-4 mb-32 '
-        }
-      >
-        <Image src={'/images/bg-car.jpg'} fill className={'object-cover -z-10 absolute'} alt='hero image' />
+      <div className='h-60 w-full flex flex-col justify-center text-dark_russian p-20 pt-24 flex-shrink relative mt-4 mb-32'>
+        <Image src='/images/flight.avif' fill className='object-cover -z-10 absolute' alt='Flights hero' />
+        <div className='absolute inset-0 -z-10 bg-black/35' />
         <Panel className='lg:-bottom-16 lg:max-w-7xl 2xl:mx-auto mx-8'>
           <div className='flex flex-col lg:p-10 p-5'>
             <Flights />
@@ -80,139 +130,149 @@ const FlightsCategory = ({ listings }: { listings: ListingItem[] }) => {
         </Panel>
       </div>
 
-      <Layout className='lg:px-20 px-10 mt-72 lg:mt-0 pb-20 w-auto'>
-        <div className='flex justify-between'>
+      <Layout className='lg:px-20 px-4 sm:px-10 mt-72 lg:mt-0 pb-20 w-auto max-w-7xl mx-auto'>
+        <div className='flex justify-between gap-4 flex-wrap'>
           <LinkButton href='/' label='Go Home'>
             <ChevronLeft className='h-5 w-5 mr-2' />
           </LinkButton>
-
           <BreadcrumbProvider backRoute='flights-category' originRoute='flights' />
         </div>
 
+        <div className='mt-10 mb-6'>
+          <h1 className='text-3xl sm:text-4xl font-bold'>Flight deals</h1>
+          <p className='text-gray_text mt-2 text-sm sm:text-base'>
+            {filteredListings.length} of {listings.length} flights
+            {routeLabel
+              ? ` · ${routeLabel}`
+              : flyingFrom.trim() && flyingTo.trim()
+                ? ` · ${flyingFrom} → ${flyingTo}`
+                : flyingFrom.trim()
+                  ? ` · from ${flyingFrom}`
+                  : ''}
+            {source === 'amadeus' && listings.length > 0 ? ' · Live airline fares' : ''}
+          </p>
+          {searchError && (
+            <div className='mt-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100'>
+              {searchError}
+            </div>
+          )}
+        </div>
+
         <CategoryFilter filters={filters} selectItems={selectItems} className='md:flex-row-reverse flex-col-reverse' />
+
         <Button
-          className='md:hidden w-full hover:bg-[#353945] py-6 rounded-full dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec]'
-          variant={'outline'}
+          className='md:hidden w-full hover:bg-[#353945] py-6 rounded-full dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] mt-4'
+          variant='outline'
           onClick={() => setIsClicked(!isClicked)}
         >
-          Advanced Filter
+          {isClicked ? 'Hide filters' : 'Advanced filters'}
         </Button>
 
-        <div className='flex flex-col md:flex-row gap-x-16 gap-y-10 my-20 w-full'>
+        <div className='flex flex-col md:flex-row gap-x-10 gap-y-10 my-10 w-full'>
           {isClicked && (
-            <div className='w-full md:max-w-64 flex flex-col gap-y-6 '>
-              <div className='text-xs text-gray_light font-bold uppercase'>Price Range</div>
+            <aside className='w-full md:max-w-72 shrink-0 flex flex-col gap-y-6'>
+              <div className='text-xs text-gray_light font-bold uppercase'>Price range</div>
               <Slider
                 className='px-1'
-                defaultValue={[3500]}
-                max={5000}
-                min={1000}
+                min={priceBounds.min}
+                max={priceBounds.max}
                 step={50}
-                values={price}
+                value={priceRange}
+                values={priceRange}
                 showLabel
                 label='$'
-                onValueChange={(value: number[]) => setPrice(value)}
+                onValueChange={(value: number[]) => setPriceRange([value[0], value[1] ?? value[0]])}
               />
-
               <div className='flex justify-between font-bold text-sm'>
-                <p>$1000</p>
-                <p>$5000</p>
+                <p>${priceRange[0].toLocaleString()}</p>
+                <p>${priceRange[1].toLocaleString()}</p>
               </div>
-              <Separator className='bg-gray_border mt-4' />
+              <Separator className='bg-gray_border mt-2' />
 
-              <div className='text-xs text-gray_light font-bold uppercase'>
-                <p>Times</p>
-              </div>
-
+              <div className='text-xs text-gray_light font-bold uppercase'>Times</div>
               <div className='text-gray_text'>
                 <p className='font-medium'>Take-off</p>
-                <p className='text-xs'>South Island (SIZ)</p>
+                <p className='text-xs truncate'>{originLabel}</p>
               </div>
               <Slider
-                defaultValue={[25, 75]}
                 min={0}
                 max={100}
                 step={2.1}
                 minStepsBetweenThumbs={1}
+                value={takeOfftime}
                 values={takeOfftime}
                 onValueChange={(value: number[]) => setTakeOffTime(value)}
               />
-
-              <div className='flex justify-between font-bold text-sm'>
-                <p>
-                  {format(date?.from!, 'EEE')}
-                  <span className='ml-1'>{format(takeoffStart!, 'h:mm a')}</span>
-                </p>
-                <p>{format(takeoffEnd!, 'h:mm a')}</p>
+              <div className='flex justify-between font-bold text-sm gap-2'>
+                <p className='truncate'>{format(takeoffStart, 'EEE h:mm a')}</p>
+                <p className='truncate'>{format(takeoffEnd, 'h:mm a')}</p>
               </div>
+
               {date?.to && (
                 <>
                   <div className='text-gray_text'>
                     <p className='font-medium'>Landing</p>
-                    <p className='text-xs'>South Island (SIZ)</p>
+                    <p className='text-xs truncate'>{destinationLabel}</p>
                   </div>
                   <Slider
-                    defaultValue={[25, 75]}
                     min={0}
                     max={100}
                     step={2.1}
                     minStepsBetweenThumbs={1}
+                    value={landingTime}
                     values={landingTime}
                     onValueChange={(value: number[]) => setLandingTime(value)}
                   />
-
-                  <div className='flex justify-between font-bold text-sm'>
-                    <p>
-                      {format(date?.to!, 'EEE')}
-                      <span className='ml-1'>{format(landingStart!, 'h:mm a')}</span>
-                    </p>
-                    <p>{format(landingEnd!, 'h:mm a')}</p>
+                  <div className='flex justify-between font-bold text-sm gap-2'>
+                    <p className='truncate'>{format(landingStart, 'EEE h:mm a')}</p>
+                    <p className='truncate'>{format(landingEnd, 'h:mm a')}</p>
                   </div>
                 </>
               )}
-              <Separator className='bg-gray_border mt-4' />
 
-              <div className='flex flex-col'>
-                <div className='flex justify-between items-center'>
+              <Separator className='bg-gray_border mt-2' />
+
+              <div className='flex flex-col gap-y-3'>
+                <div className='flex justify-between items-center gap-3'>
                   <RadioButton
-                    showCheck={radioValues.nonStop}
-                    onChange={() => setRadioValues({ ...radioValues, nonStop: !radioValues.nonStop })}
+                    showCheck={stopFilters.includes('nonstop')}
+                    onChange={() => toggleStopFilter('nonstop')}
                     label='Nonstop'
                   />
-                  <div className='text-gray_text font-medium'>${'2,334'}</div>
+                  <div className='text-gray_text font-medium text-sm'>{formatPrice(lowestByStop.nonstop)}</div>
                 </div>
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center gap-3'>
                   <RadioButton
-                    showCheck={radioValues.oneStop}
-                    onChange={() => setRadioValues({ ...radioValues, oneStop: !radioValues.oneStop })}
-                    label='1 Stop'
+                    showCheck={stopFilters.includes('oneStop')}
+                    onChange={() => toggleStopFilter('oneStop')}
+                    label='1 stop'
                   />
-                  <div className='text-gray_text font-medium'>${'1,334'}</div>
+                  <div className='text-gray_text font-medium text-sm'>{formatPrice(lowestByStop.oneStop)}</div>
                 </div>
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center gap-3'>
                   <RadioButton
-                    showCheck={radioValues.twoPlusStops}
-                    onChange={() => setRadioValues({ ...radioValues, twoPlusStops: !radioValues.twoPlusStops })}
+                    showCheck={stopFilters.includes('twoPlusStops')}
+                    onChange={() => toggleStopFilter('twoPlusStops')}
                     label='2+ stops'
                   />
-                  <div className='text-gray_text font-medium'>${'734'}</div>
+                  <div className='text-gray_text font-medium text-sm'>{formatPrice(lowestByStop.twoPlusStops)}</div>
                 </div>
               </div>
 
-              <Separator className='bg-gray_border mt-4' />
+              <Separator className='bg-gray_border mt-2' />
 
               <Button
-                variant={'transparent'}
+                variant='transparent'
                 className='text-gray_text self-start px-0 font-bold text-sm hover:dark:text-white hover:text-foreground'
-                onClick={() => setRadioValues({ nonStop: false, oneStop: false, twoPlusStops: false })}
+                onClick={resetFilters}
               >
                 <IoCloseCircle className='mr-1' size={20} />
-                Reset Filter
+                Reset filters
               </Button>
-            </div>
+            </aside>
           )}
 
-          <FlightDeals listings={listings} />
+          <FlightDeals listings={filteredListings} hasActiveFilters={filteredListings.length !== listings.length} />
         </div>
       </Layout>
     </div>

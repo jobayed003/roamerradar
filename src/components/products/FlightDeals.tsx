@@ -8,16 +8,28 @@ import Link from 'next/link';
 import { EmptyListings } from './EmptyListings';
 
 type FlightDealsProps = {
-  listings: ListingItem[];
+  listings?: ListingItem[];
+  hasActiveFilters?: boolean;
 };
 
-export const FlightDeals = ({ listings }: FlightDealsProps) => {
+export const FlightDeals = ({ listings = [], hasActiveFilters }: FlightDealsProps) => {
   if (listings.length === 0) {
-    return <EmptyListings label='flights' />;
+    return (
+      <div className='w-full'>
+        {hasActiveFilters ? (
+          <div className='rounded-3xl border dark:border-gray_border p-10 text-center'>
+            <h2 className='text-xl font-bold mb-2'>No flights match your filters</h2>
+            <p className='text-gray_text text-sm'>Try adjusting the price range or stop preferences.</p>
+          </div>
+        ) : (
+          <EmptyListings label='flights' />
+        )}
+      </div>
+    );
   }
 
   return (
-    <div className='flex flex-col gap-y-6 w-full '>
+    <div className='flex flex-col gap-y-6 w-full min-w-0'>
       {listings.map((listing) => (
         <FlightCard key={listing.id} listing={listing} />
       ))}
@@ -30,33 +42,41 @@ const FlightCard = ({ listing }: { listing: ListingItem }) => {
   const provider = listing.metadata?.provider ?? 'eDreams';
 
   return (
-    <div className='flex lg:flex-row flex-col gap-x-12 gap-y-6 dark:shadow-[inset_0_0_0_1px_#353945] shadow-[inset_0_0_0_1px_#F4F5F6] hover:shadow-none hover:dark:bg-dark_russian hover:bg-[#F4F5F6] rounded-3xl p-8'>
-      <div className='flex flex-col gap-y-8 basis-4/5'>
-        {legs.map((leg, index) => (
-          <FlightDetails key={`${listing.id}-${index}`} {...leg} />
-        ))}
+    <article className='flex lg:flex-row flex-col gap-x-8 gap-y-6 dark:shadow-[inset_0_0_0_1px_#353945] shadow-[inset_0_0_0_1px_#F4F5F6] hover:shadow-none hover:dark:bg-dark_russian hover:bg-[#F4F5F6] rounded-3xl p-6 sm:p-8 min-w-0 transition-colors'>
+      <div className='flex flex-col gap-y-6 flex-1 min-w-0'>
+        <div className='min-w-0'>
+          <h2 className='font-bold text-lg truncate'>{listing.title}</h2>
+          <p className='text-xs text-gray_text mt-1'>Round-trip · via {provider}</p>
+        </div>
+
+        {legs.length === 0 ? (
+          <p className='text-sm text-gray_text'>Flight details unavailable.</p>
+        ) : (
+          legs.map((leg, index) => <FlightDetails key={`${listing.id}-${index}`} {...leg} />)
+        )}
       </div>
 
       <Separator className='lg:hidden dark:bg-gray_border bg-[#E6E8EC]' />
-      <div className='flex flex-row lg:flex-col justify-between  gap-4  self-end basis-3/12 w-full '>
+
+      <div className='flex flex-row lg:flex-col justify-between items-end gap-4 lg:w-44 shrink-0 w-full'>
         <div className='flex items-center gap-x-1 text-gray_text text-xs'>
-          <Check className='w-4 h-4 font-bold' />
-          {provider}
+          <Check className='w-4 h-4 font-bold shrink-0' />
+          <span className='truncate'>{provider}</span>
         </div>
-        <Link href={`/flights-product/${listing.id}`} className='h-12 group min-w-[160px]'>
+        <Link href={`/flights-product/${listing.id}`} className='h-12 group w-full sm:w-auto min-w-[160px]'>
           <Button
-            variant={'outline'}
-            className='rounded-full w-full self-end h-12 text-green-500 shadow-[0_0_0_2px_#E6E8EC_inset] dark:shadow-[0_0_0_2px_#777E90_inset] hover:shadow-none hover:dark:shadow-none font-bold hover:bg-blue-hover transition-all'
+            variant='outline'
+            className='rounded-full w-full h-12 text-green-500 shadow-[0_0_0_2px_#E6E8EC_inset] dark:shadow-[0_0_0_2px_#777E90_inset] hover:shadow-none hover:dark:shadow-none font-bold hover:bg-blue-hover hover:text-white transition-all'
           >
-            <p className='group-hover:hidden'>${listing.price}</p>
-            <div className='hidden group-hover:flex gap-x-3 items-center '>
-              <p>View Deal</p>
+            <p className='group-hover:hidden'>${listing.price.toLocaleString()}</p>
+            <div className='hidden group-hover:flex gap-x-3 items-center justify-center'>
+              <p>View deal</p>
               <ArrowRight className='w-4 h-4' />
             </div>
           </Button>
         </Link>
       </div>
-    </div>
+    </article>
   );
 };
 
@@ -78,25 +98,32 @@ const FlightDetails = ({
   type,
 }: FlightDetailsProps) => {
   return (
-    <div className='flex flex-col lg:flex-row w-full lg:items-center gap-x-8 gap-y-6 lg:px-4'>
-      <div className='dark:bg-gray_light bg-[#F4F5F6] p-3 rounded-lg h-20 lg:w-40 flex justify-center items-center lg:mr-10'>
-        <Image src={logo} width={100} height={50} alt='airline logo' />
+    <div className='flex flex-col sm:flex-row w-full sm:items-center gap-4 sm:gap-6 min-w-0'>
+      <div className='dark:bg-gray_light bg-[#F4F5F6] p-3 rounded-lg h-16 sm:h-20 w-full sm:w-36 flex justify-center items-center shrink-0'>
+        <Image
+          src={logo}
+          width={100}
+          height={50}
+          alt='Airline logo'
+          className='max-h-10 w-auto object-contain'
+          unoptimized={logo.startsWith('http')}
+        />
       </div>
-      <Separator className='lg:hidden bg-[#E6E8EC] dark:bg-[#353945] mb-2' />
 
-      <div className='flex justify-around items-center basis-4/5'>
-        <div className='text-nowrap text-center'>
-          <h1 className='text-2xl font-semibold'>{departingLocation}</h1>
-          <p className='font-medium text-gray_text text-sm'>{takeOffTime}</p>
+      <div className='flex justify-between sm:justify-around items-center flex-1 min-w-0 gap-2'>
+        <div className='text-center min-w-0'>
+          <h3 className='text-xl sm:text-2xl font-semibold truncate'>{departingLocation}</h3>
+          <p className='font-medium text-gray_text text-xs sm:text-sm'>{takeOffTime}</p>
         </div>
 
-        <div className='text-gray_text text-xs px-4'>
-          <Separator className='bg-[#E6E8EC] dark:bg-[#353945] mb-2' />
-          <p>{type}</p>
+        <div className='text-gray_text text-xs text-center px-2 shrink-0'>
+          <Separator className='bg-[#E6E8EC] dark:bg-[#353945] mb-2 w-16 mx-auto' />
+          <p className='capitalize'>{type}</p>
         </div>
-        <div className='text-nowrap text-center'>
-          <h1 className='text-2xl font-semibold'>{arrivalLocation}</h1>
-          <p className='font-medium text-gray_text text-sm'>{landingTime}</p>
+
+        <div className='text-center min-w-0'>
+          <h3 className='text-xl sm:text-2xl font-semibold truncate'>{arrivalLocation}</h3>
+          <p className='font-medium text-gray_text text-xs sm:text-sm'>{landingTime}</p>
         </div>
       </div>
     </div>
