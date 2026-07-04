@@ -17,7 +17,7 @@ type ListingImageGalleryProps = {
 const ListingImageGallery = ({ images, title }: ListingImageGalleryProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const galleryImages = useMemo(() => [...new Set(images.filter(Boolean))], [images]);
+  const galleryImages = useMemo(() => Array.from(new Set(images.filter(Boolean))), [images]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -34,7 +34,6 @@ const ListingImageGallery = ({ images, title }: ListingImageGalleryProps) => {
         zoom: true,
       },
       animated: true,
-      zoomEffect: true,
     });
 
     return () => {
