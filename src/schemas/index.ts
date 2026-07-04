@@ -34,9 +34,30 @@ export const PersonalInfoSchema = z.object({
   facebook: z.string().optional(),
   instagram: z.string().optional(),
 });
-export const PaymentSchema = z.object({
-  number: z.string().min(12),
-  name: z.string().min(1),
-  expiry: z.string().min(4),
-  cvc: z.string().min(3),
+export const ChangePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, { message: 'Current password is required' }),
+    newPassword: z.string().min(6, { message: 'Minimum 6 characters required' }),
+    confirmPassword: z.string().min(1, { message: 'Please confirm your password' }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
+
+export const NotificationPreferenceSchema = z.object({
+  messageEmail: z.boolean(),
+  messageText: z.boolean(),
+  messageBrowser: z.boolean(),
+  remindersEmail: z.boolean(),
+  remindersText: z.boolean(),
+  remindersBrowser: z.boolean(),
+});
+
+export const SendMessageSchema = z.object({
+  body: z
+    .string()
+    .trim()
+    .min(1, { message: 'Message cannot be empty' })
+    .max(2000, { message: 'Message is too long' }),
 });

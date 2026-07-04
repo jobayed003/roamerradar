@@ -1,7 +1,8 @@
 'use client';
 import Layout from '@/components/ui/Layout';
 import { cn } from '@/lib/utils';
-import { User } from '@prisma/client';
+import { NotificationPreferenceData } from '@/data/notification-preference';
+import { PaymentMethod, User } from '@prisma/client';
 import { CreditCard, LockKeyhole, User2 } from 'lucide-react';
 import { useState } from 'react';
 import { IoNotificationsOutline } from 'react-icons/io5';
@@ -17,12 +18,22 @@ const links = [
   { label: 'Notification', icon: IoNotificationsOutline },
 ];
 
-const AccountDetailsForm = ({ user }: { user: User }) => {
+const AccountDetailsForm = ({
+  user,
+  connectedProviders,
+  paymentMethods,
+  notificationPreferences,
+}: {
+  user: User;
+  connectedProviders: string[];
+  paymentMethods: PaymentMethod[];
+  notificationPreferences: NotificationPreferenceData;
+}) => {
   const steps = [
     () => <PersonalInfoForm user={user} />,
-    () => <SecurityForm />,
-    () => <PaymentsForm />,
-    () => <NotificationForm />,
+    () => <SecurityForm user={user} connectedProviders={connectedProviders} />,
+    () => <PaymentsForm paymentMethods={paymentMethods} />,
+    () => <NotificationForm preferences={notificationPreferences} />,
   ];
   const [selected, setSelected] = useState<number>(0);
 

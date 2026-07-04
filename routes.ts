@@ -9,8 +9,6 @@ export const publicRoutes: string[] = [
   '/flights',
   '/things',
   '/auth/verify-email',
-  '/my-bookings',
-  '/stays-product/[productId]',
 ];
 
 /**

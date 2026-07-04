@@ -2,6 +2,7 @@
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import LinkButton from '@/components/LinkButton';
+import ListingHostRow from '@/components/ListingHostRow';
 import { ProfileSection } from '@/components/ProfileSection';
 import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
@@ -26,6 +27,8 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaCheckCircle, FaSearchPlus, FaStar } from 'react-icons/fa';
+import { ListingItem } from '@/types/listing';
+import type { ReviewItem } from '@/types/review';
 
 const icons = [Navigation, Share, Heart, X];
 
@@ -46,7 +49,7 @@ const totalPrice = receiptDetails.reduce((acc, item) => acc + item.price, 0);
 
 const filterItems = ['Newest', 'Popular', 'All'];
 
-const Product = () => {
+const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewItem[] }) => {
   return (
     <>
       <Separator className='dark:bg-dark_russian mb-4 bg-[#E6E8EC]' />
@@ -67,7 +70,7 @@ const Product = () => {
 
         <div className='flex md:flex-row flex-col gap-y-6 justify-between'>
           <div className='max-w-2xl'>
-            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>Mercedes AMG GT63</h1>
+            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>{listing.title}</h1>
 
             <div className='flex items-center flex-wrap gap-3 font-poppins text-sm text-gray_text'>
               <div className='overflow-hidden rounded-full'>
@@ -155,13 +158,7 @@ const Product = () => {
         <div className='flex lg:flex-row flex-col gap-8 mt-3 py-8 '>
           <div className='basis-7/12'>
             <h1 className='text-3xl mb-2 font-bold'>Car details</h1>
-            <div className='flex items-center gap-x-2 pt-2 pb-4'>
-              <span className='text-gray_text'>Car owner</span>
-              <div>
-                <Image src={'/user.jpg'} alt='user avatar' width={25} height={25} className='rounded-full' />
-              </div>
-              <p className='font-medium'>Jobayed Hossain</p>
-            </div>
+            <ListingHostRow owner={listing.owner} listingId={listing.id} label='Car owner' />
 
             <div className='flex items-center flex-wrap gap-y-8 mb-16'>
               <div className='flex items-center gap-x-3 basis-1/2'>
@@ -227,7 +224,7 @@ const Product = () => {
 
       <Separator className='mt-10 mb-20 dark:bg-dark_russian' />
 
-      <ProfileSection />
+      <ProfileSection host={listing.owner} listing={listing} reviews={reviews} />
     </>
   );
 };

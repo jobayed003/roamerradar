@@ -1,112 +1,98 @@
-import { Switch } from '@/components/ui/switch';
+'use client';
 
+import { updateNotificationPreferences } from '@/actions/notificationPreferences';
+import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/components/ui/use-toast';
+import { NotificationPreferenceData } from '@/data/notification-preference';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
-const NotificationForm = () => {
+type NotificationFormProps = {
+  preferences: NotificationPreferenceData;
+};
+
+type FieldTypes = keyof NotificationPreferenceData;
+
+const NotificationForm = ({ preferences }: NotificationFormProps) => {
+  const [values, setValues] = useState(preferences);
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const updateField = (field: FieldTypes, checked: boolean) => {
+    const previous = values;
+    const next = { ...values, [field]: checked };
+    setValues(next);
+
+    startTransition(() => {
+      updateNotificationPreferences(next).then((result) => {
+        if (result.error) {
+          setValues(previous);
+          toast({ title: result.error, variant: 'destructive' });
+          return;
+        }
+
+        toast({ title: result.success });
+        router.refresh();
+      });
+    });
+  };
+
+  const rows: { field: FieldTypes; label: string; desc: string }[] = [
+    { field: 'messageEmail', label: 'Email', desc: 'Receive notifications via email' },
+    { field: 'messageText', label: 'Text Messages', desc: 'Receive notifications via mobile phone' },
+    { field: 'messageBrowser', label: 'Browser notifications', desc: 'Receive notifications in your browser' },
+    { field: 'remindersEmail', label: 'Email', desc: 'Receive reminders via email' },
+    { field: 'remindersText', label: 'Text Messages', desc: 'Receive reminders via mobile phone' },
+    { field: 'remindersBrowser', label: 'Browser notifications', desc: 'Receive reminders in your browser' },
+  ];
+
   return (
-    <div className='grow pl-28 pb-20 h-[100vh]'>
+    <div className='grow pl-28 pb-20 min-h-[100vh]'>
       <div className='flex items-center justify-between'>
         <h1 className='text-5xl font-bold'>Notification Setting</h1>
       </div>
 
       <div className='mt-16 text-2xl font-poppins font-semibold'>Messages</div>
-
-      <ToggleNotification field='message_email' label='Email' desc='Receive notifications via email' value={false} />
-      <Separator className='dark:bg-gray_border' />
-
-      <ToggleNotification
-        field='message_text'
-        desc='Receive notifications via mobile phone'
-        label='Text Messages'
-        value={false}
-      />
-
-      <Separator className='dark:bg-gray_border' />
-      <ToggleNotification
-        field='message_browser'
-        desc='Receive notifications of your browser'
-        label='Browser notifications'
-        value={false}
-      />
+      {rows.slice(0, 3).map((row) => (
+        <div key={row.field}>
+          <ToggleRow {...row} checked={values[row.field]} disabled={isPending} onChange={updateField} />
+          <Separator className='dark:bg-gray_border' />
+        </div>
+      ))}
 
       <Separator className='dark:bg-gray_border mt-8' />
 
       <div className='mt-16 text-2xl font-poppins font-semibold'>Reminders</div>
-
-      <ToggleNotification field='reminders_email' label='Email' desc='Receive notifications via email' value={false} />
-      <Separator className='dark:bg-gray_border' />
-
-      <ToggleNotification
-        field='reminders_text'
-        desc='Receive notifications via mobile phone'
-        label='Text Messages'
-        value={false}
-      />
-
-      <Separator className='dark:bg-gray_border' />
-      <ToggleNotification
-        field='reminders_browser'
-        desc='Receive notifications of your browser'
-        label='Browser notifications'
-        value={false}
-      />
+      {rows.slice(3).map((row) => (
+        <div key={row.field}>
+          <ToggleRow {...row} checked={values[row.field]} disabled={isPending} onChange={updateField} />
+          <Separator className='dark:bg-gray_border' />
+        </div>
+      ))}
     </div>
   );
 };
 
 export default NotificationForm;
 
-type FieldTypes =
-  | 'message_email'
-  | 'message_text'
-  | 'message_browser'
-  | 'reminders_email'
-  | 'reminders_text'
-  | 'reminders_browser';
-
-type ToggleCardProps = {
-  label: string;
-  value: boolean;
-  desc: string;
+type ToggleRowProps = {
   field: FieldTypes;
+  label: string;
+  desc: string;
+  checked: boolean;
+  disabled: boolean;
+  onChange: (field: FieldTypes, checked: boolean) => void;
 };
 
-const ToggleNotification = ({ label, value = false, desc, field }: ToggleCardProps) => {
-  const [isChecked, setIsChecked] = useState(value);
-  const [isPending, startTransition] = useTransition();
-
-  const onChange = () => {
-    setIsChecked(!isChecked);
-
-    startTransition(() => {
-      toast({
-        title: 'You changed the following value',
-        description: (
-          <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-            <code className='text-white'>
-              {JSON.stringify(field + '_notification', null, 2)} : {JSON.stringify(isChecked, null, 2)}
-            </code>
-          </pre>
-        ),
-      });
-    });
-  };
-
-  return (
-    <div className='rounded-xl py-6'>
-      <div className='flex items-center justify-between'>
-        <div>
-          <p className='font-semibold shrink-0 mb-1'>{label}</p>
-          <p className='text-gray_text text-sm'>{desc}</p>
-        </div>
-        <div className='space-y-2'>
-          <Switch disabled={isPending} onCheckedChange={onChange} checked={isChecked}>
-            {value ? 'On' : 'Off'}
-          </Switch>
-        </div>
+const ToggleRow = ({ field, label, desc, checked, disabled, onChange }: ToggleRowProps) => (
+  <div className='rounded-xl py-6'>
+    <div className='flex items-center justify-between'>
+      <div>
+        <p className='font-semibold shrink-0 mb-1'>{label}</p>
+        <p className='text-gray_text text-sm'>{desc}</p>
       </div>
+      <Switch disabled={disabled} onCheckedChange={(value) => onChange(field, value)} checked={checked} />
     </div>
-  );
-};
+  </div>
+);

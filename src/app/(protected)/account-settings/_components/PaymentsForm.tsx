@@ -1,131 +1,165 @@
-import CustomInput from '@/components/CustomInput';
+'use client';
+
+import { createSetupIntent, deletePaymentMethod, setDefaultPaymentMethod } from '@/actions/paymentMethods';
+import { AddPaymentMethodForm } from '@/components/payments/AddPaymentMethodForm';
+import { StripeElementsProvider } from '@/components/payments/StripeElementsProvider';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import RadioButton from '@/components/ui/radio';
-import { PaymentSchema } from '@/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Separator } from '@/components/ui/separator';
+import { toast } from '@/components/ui/use-toast';
+import { PaymentMethod } from '@prisma/client';
 import Image from 'next/image';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 
-const PaymentsForm = () => {
-  const [isSelected, setIsSelected] = useState(true);
+type PaymentsFormProps = {
+  paymentMethods: PaymentMethod[];
+};
 
-  //TODO: Add payment method
+const brandLabel = (brand: string) => brand.charAt(0).toUpperCase() + brand.slice(1);
 
-  const form = useForm<z.infer<typeof PaymentSchema>>({
-    resolver: zodResolver(PaymentSchema),
-    defaultValues: {
-      name: '',
-      number: '',
-      expiry: '',
-      cvc: '',
-    },
-  });
+const PaymentsForm = ({ paymentMethods }: PaymentsFormProps) => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [isLoadingSetup, setIsLoadingSetup] = useState(false);
 
-  const onSubmit = (values: z.infer<typeof PaymentSchema>) => {};
+  const handleAddPaymentMethod = async () => {
+    setIsLoadingSetup(true);
+    const result = await createSetupIntent();
+    setIsLoadingSetup(false);
+
+    if (result.error || !result.clientSecret) {
+      toast({
+        title: result.error ?? 'Stripe is not configured. Add STRIPE_SECRET_KEY and NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setClientSecret(result.clientSecret);
+    setShowAddForm(true);
+  };
+
+  const handleDelete = (paymentMethodId: string) => {
+    startTransition(() => {
+      deletePaymentMethod(paymentMethodId).then((result) => {
+        if (result.error) {
+          toast({ title: result.error, variant: 'destructive' });
+          return;
+        }
+        toast({ title: result.success });
+        router.refresh();
+      });
+    });
+  };
+
+  const handleSetDefault = (paymentMethodId: string) => {
+    startTransition(() => {
+      setDefaultPaymentMethod(paymentMethodId).then((result) => {
+        if (result.error) {
+          toast({ title: result.error, variant: 'destructive' });
+          return;
+        }
+        toast({ title: result.success });
+        router.refresh();
+      });
+    });
+  };
 
   return (
     <div className='grow pl-28 mb-8'>
       <div className='flex items-center justify-between'>
         <h1 className='text-5xl font-bold'>Payment Methods</h1>
       </div>
-      <div className='mt-20 text-2xl font-poppins font-semibold'>Credit card</div>
-      <div className='flex items-center justify-between mt-4 my-8'>
-        <div className='font-poppins'>
-          <p className='font-semibold leading-9'>Visa ••••••1667</p>
-          <p className='text-gray_text text-xs'>Expiration: 03/2026</p>
-        </div>
 
-        <Button variant={'fill'} className='font-bold p-6 bg-blue hover:bg-blue-hover text-white'>
-          Add Payment Method
-        </Button>
-      </div>
+      <div className='mt-20 text-2xl font-poppins font-semibold'>Saved cards</div>
+
+      {paymentMethods.length === 0 && !showAddForm ? (
+        <p className='text-gray_text mt-6'>No payment methods saved yet.</p>
+      ) : (
+        <div className='mt-6 space-y-4'>
+          {paymentMethods.map((method) => (
+            <div key={method.id} className='flex items-center justify-between gap-4 py-4'>
+              <div className='font-poppins'>
+                <p className='font-semibold leading-9'>
+                  {brandLabel(method.brand)} •••• {method.last4}
+                  {method.isDefault && (
+                    <span className='ml-2 text-xs uppercase text-[#58C27D] border border-[#58C27D] px-2 py-0.5 rounded'>
+                      Default
+                    </span>
+                  )}
+                </p>
+                <p className='text-gray_text text-xs'>
+                  Expiration: {String(method.expMonth).padStart(2, '0')}/{method.expYear}
+                </p>
+              </div>
+              <div className='flex gap-2'>
+                {!method.isDefault && (
+                  <Button
+                    variant='outline'
+                    className='font-bold'
+                    disabled={isPending}
+                    onClick={() => handleSetDefault(method.id)}
+                  >
+                    Set default
+                  </Button>
+                )}
+                <Button
+                  variant='outline'
+                  className='font-bold'
+                  disabled={isPending}
+                  onClick={() => handleDelete(method.id)}
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Separator className='my-8 bg-gray_border' />
+
       <div className='flex items-center justify-between'>
-        <div className='font-poppins font-semibold'>Add new credit card</div>
+        <div className='font-poppins font-semibold'>
+          {showAddForm ? 'Add new credit card' : 'Add a payment method'}
+        </div>
         <div className='flex gap-x-4'>
-          <Image src={'/visa.png'} className='brightness-150' alt='logo master' width={40} height={40} />
-          <Image src={'/master.png'} alt='logo master' width={40} height={40} />
+          <Image src={'/visa.png'} className='brightness-150' alt='Visa' width={40} height={40} />
+          <Image src={'/master.png'} alt='Mastercard' width={40} height={40} />
         </div>
       </div>
 
-      <div className='mt-5'>
-        <Form {...form}>
-          <form className='space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
-            <div className='flex flex-col gap-y-8'>
-              <FormField
-                control={form.control}
-                name='number'
-                render={({ field }) => (
-                  <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Card Number</FormLabel>
-                    <FormControl>
-                      <CustomInput
-                        placeholder='XXXX XXXX XXXX XXXX'
-                        props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='name'
-                render={({ field }) => (
-                  <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Card Holder</FormLabel>
-                    <FormControl>
-                      <CustomInput
-                        placeholder='JOHN DOE'
-                        props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border'
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className='flex gap-x-6 justify-between w-ful'>
-              <FormField
-                control={form.control}
-                name='expiry'
-                render={({ field }) => (
-                  <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>Expiration date</FormLabel>
-                    <FormControl>
-                      <CustomInput
-                        placeholder='MM / YY'
-                        props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border dark:focus:border-gray_text'
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='cvc'
-                render={({ field }) => (
-                  <FormItem className='basis-1/2'>
-                    <FormLabel className='text-xs font-bold text-gray_light uppercase'>CVC</FormLabel>
-                    <FormControl>
-                      <CustomInput
-                        placeholder='CVC'
-                        props={field}
-                        className='h-12 transition-all border-2 border-[#e6e8ec] dark:border-gray_border'
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
+      {!showAddForm ? (
+        <Button
+          variant={'fill'}
+          className='font-bold p-6 mt-6 bg-blue hover:bg-blue-hover text-white'
+          onClick={handleAddPaymentMethod}
+          disabled={isLoadingSetup}
+        >
+          {isLoadingSetup ? 'Loading...' : 'Add Payment Method'}
+        </Button>
+      ) : (
+        clientSecret && (
+          <StripeElementsProvider clientSecret={clientSecret}>
+            <AddPaymentMethodForm
+              onSuccess={() => {
+                setShowAddForm(false);
+                setClientSecret(null);
+              }}
+              onCancel={() => {
+                setShowAddForm(false);
+                setClientSecret(null);
+              }}
+            />
+          </StripeElementsProvider>
+        )
+      )}
 
-            <RadioButton showCheck={isSelected} onChange={() => setIsSelected(!isSelected)} label='Save Card' />
-          </form>
-        </Form>
-      </div>
+      <p className='text-gray_text text-sm mt-8 max-w-lg'>
+        Cards are stored securely by Stripe. RoamerRadar never sees or stores your full card number.
+      </p>
     </div>
   );
 };

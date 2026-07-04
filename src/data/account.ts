@@ -1,5 +1,16 @@
 import { db } from '@/lib/db';
 
+export const getAccountsByUserId = async (userId: string) => {
+  try {
+    return await db.account.findMany({
+      where: { userId },
+      select: { provider: true },
+    });
+  } catch {
+    return [];
+  }
+};
+
 export const getAccountByUserId = async (userId: string) => {
   try {
     const account = await db.account.findFirst({

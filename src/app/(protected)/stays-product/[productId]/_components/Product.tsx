@@ -1,9 +1,11 @@
 'use client';
 
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
-import FancyboxWrapper from '@/components/FancyBoxWrapper';
 import LinkButton from '@/components/LinkButton';
+import ListingHostRow from '@/components/ListingHostRow';
+import ListingImageGallery from '@/components/ListingImageGallery';
 import { ProfileSection } from '@/components/ProfileSection';
+import UserProfileActions from '@/components/UserProfileActions';
 import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -18,7 +20,6 @@ import {
   Flag,
   Heart,
   Home,
-  ImageIcon,
   Navigation,
   Pizza,
   Router,
@@ -29,11 +30,14 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaCheckCircle, FaSearchPlus, FaStar } from 'react-icons/fa';
+import { FaCheckCircle, FaStar } from 'react-icons/fa';
+import { ListingItem } from '@/types/listing';
+import type { ReviewItem } from '@/types/review';
+import { getFirstLetters } from '@/lib/utils';
 
 const icons = [Navigation, Share, Heart, X];
 
-const galleryImages = ['/images/grid-2.jpg', '/images/grid-1.jpg', '/images/grid-3.jpg'];
+const defaultGalleryImages = ['/images/grid-4.jpg', '/images/grid-2.jpg', '/images/grid-1.jpg', '/images/grid-3.jpg'];
 
 const amenities = [
   { icon: Router, label: 'Free wifi 24/7' },
@@ -44,17 +48,19 @@ const amenities = [
   { icon: CreditCard, label: 'ATM' },
 ];
 
-const receiptDetails = [
-  { label: '$109 x 7 nights', price: 833 },
-  { label: '10% campaign discount', price: -83.3 },
-  { label: 'Service fee', price: 103 },
-];
-
-const totalPrice = receiptDetails.reduce((acc, item) => acc + item.price, 0);
-
 const filterItems = ['Newest', 'Popular', 'All'];
 
-const Product = () => {
+const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewItem[] }) => {
+  const nightlyPrice = listing.offerPrice ?? listing.price;
+  const hostName = listing.owner?.displayName ?? listing.owner?.realName ?? listing.owner?.name ?? 'Host';
+  const galleryImages = [listing.image, ...defaultGalleryImages.filter((image) => image !== listing.image)];
+  const receiptDetails = [
+    { label: `$${nightlyPrice} x 7 nights`, price: nightlyPrice * 7 },
+    { label: '10% campaign discount', price: -(nightlyPrice * 7 * 0.1) },
+    { label: 'Service fee', price: 103 },
+  ];
+  const totalPrice = receiptDetails.reduce((acc, item) => acc + item.price, 0);
+
   return (
     <>
       <Separator className='dark:bg-dark_russian mb-4 bg-[#E6E8EC]' />
@@ -68,23 +74,23 @@ const Product = () => {
           <BreadcrumbProvider
             backRoute='/'
             originRoute='stays'
-            location='New Zealand'
-            searchedLocation='South Island'
+            location={listing.location ?? 'New Zealand'}
+            searchedLocation={listing.location ?? 'South Island'}
           />
         </div>
 
         <div className='flex md:flex-row flex-col gap-y-6 justify-between'>
           <div className='max-w-2xl'>
-            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>Spectacular views of Queenstown</h1>
+            <h1 className='md:text-5xl text-3xl font-bold mb-3 leading-tight'>{listing.title}</h1>
 
             <div className='flex items-center flex-wrap gap-3 font-poppins text-sm text-gray_text'>
               <div className='overflow-hidden rounded-full'>
-                <Image src={'/user.jpg'} alt='user img' width={25} height={25} />
+                <Image src={listing.image} alt={listing.title} width={25} height={25} />
               </div>
               <div className='flex items-center gap-x-2 ml-2'>
                 <FaStar size={22} fill='#FFD166' />
                 <p className='font-medium text-white'>
-                  4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
+                  {listing.rating} <span className='ml-1 text-gray_text'>({listing.reviewCount} reviews)</span>
                 </p>
               </div>
 
@@ -95,7 +101,7 @@ const Product = () => {
                 </div>
                 <div className='flex items-center gap-x-2 ml-2'>
                   <Flag className='w-4 h-4 ' />
-                  <p className=''>Queenstown, Otago, New Zealand</p>
+                  <p className=''>{listing.location}</p>
                 </div>
               </div>
             </div>
@@ -111,58 +117,12 @@ const Product = () => {
             ))}
           </div>
         </div>
-        <div className='py-10'>
-          <div className='grid md:grid-cols-4 grid-cols-3 md:grid-rows-3 grid-rows-4 gap-2 h-full'>
-            <div className='md:col-span-3 col-span-full md:row-span-full row-span-3 relative group cursor-pointer'>
-              <FancyboxWrapper>
-                <Image
-                  src={'/images/grid-4.jpg'}
-                  alt='Gallery pic'
-                  fill
-                  className='absolute object-fill rounded-2xl '
-                />
-              </FancyboxWrapper>
-              <div className='bg-white rounded-full p-4 absolute z-50 top-1/2 right-1/2 invisible group-hover:visible transition-all'>
-                <FaSearchPlus size={14} className='text-gray_text' />
-              </div>
-              <Link
-                href={'/' + 'photo-grid'}
-                className='bg-white flex items-center gap-x-4 rounded-full px-3 py-2 absolute z-50 bottom-4 left-4 text-dark_bg'
-              >
-                <ImageIcon className='w-4 h-4' />
-                <span className='text-sm font-bold'>Show all photos</span>
-              </Link>
-            </div>
-            <FancyboxWrapper
-              options={{
-                Carousel: {
-                  infinite: false,
-                },
-              }}
-            >
-              {galleryImages.map((img) => (
-                <div key={img} className='relative group cursor-pointer'>
-                  <Image src={img} alt='Gallery Img' width={400} height={400} className='rounded-2xl' />
-
-                  <div className='bg-white rounded-full p-4 absolute z-50 top-[40%] left-[40%] invisible group-hover:visible transition-all'>
-                    <FaSearchPlus size={14} className='text-gray_text' />
-                  </div>
-                </div>
-              ))}
-            </FancyboxWrapper>
-          </div>
-        </div>
+        <ListingImageGallery images={galleryImages} title={listing.title} />
 
         <div className='flex lg:flex-row flex-col gap-8 mt-3 py-8 '>
           <div className='basis-7/12'>
             <h1 className='text-3xl mb-2 font-bold'>Private room in house</h1>
-            <div className='flex items-center gap-x-2 pt-2 pb-4'>
-              <span className='text-gray_text'>Hosted by</span>
-              <div>
-                <Image src={'/user.jpg'} alt='user avatar' width={25} height={25} className='rounded-full' />
-              </div>
-              <p className='font-medium'>Jobayed Hossain</p>
-            </div>
+            <ListingHostRow owner={listing.owner} listingId={listing.id} />
 
             <Separator className='bg-dark_russian' />
             <div className='flex items-center gap-x-3 text-gray_text py-4'>
@@ -213,8 +173,8 @@ const Product = () => {
             <div className='flex items-center justify-between mb-8'>
               <div>
                 <div className='flex gap-2 text-3xl font-bold'>
-                  <h1 className='text-gray_light line-through'>${119}</h1>
-                  <h1>${109}</h1>
+                  <h1 className='text-gray_light line-through'>${listing.price}</h1>
+                  <h1>${nightlyPrice}</h1>
                   <p className='text-base font-normal self-end text-gray_text'>/night</p>
                 </div>
                 <div className='flex gap-2 mt-2'>
@@ -225,18 +185,29 @@ const Product = () => {
                 </div>
               </div>
               <div className='relative'>
-                <Image
-                  src={'/user.jpg'}
-                  alt='user img'
-                  width={60}
-                  height={70}
-                  className='rounded-full w-16 h-16 object-fill'
-                />
+                {listing.owner?.image ? (
+                  <Image
+                    src={listing.owner.image}
+                    alt={hostName}
+                    width={60}
+                    height={70}
+                    className='rounded-full w-16 h-16 object-fill'
+                  />
+                ) : (
+                  <div className='w-16 h-16 rounded-full bg-blue text-white text-xl flex items-center justify-center font-bold'>
+                    {getFirstLetters(hostName)}
+                  </div>
+                )}
                 <div className='absolute top-0 right-0 z-50 bg-white rounded-full'>
                   <FaCheckCircle className='text-green-400 bg-transparent overflow-hidden rounded-full' size={20} />
                 </div>
               </div>
             </div>
+            {listing.owner && (
+              <div className='mb-4'>
+                <UserProfileActions userId={listing.owner.id} listingId={listing.id} variant='compact' />
+              </div>
+            )}
             <div className='dark:bg-gray_border bg-[#F4F5F6] rounded-2xl'>
               <div className='flex items-center flex-wrap p-3'>
                 <div className='flex gap-2 items-center text-gray_text p-3 basis-1/2'>
@@ -270,8 +241,8 @@ const Product = () => {
               >
                 Save +
               </Button>
-              <Button className='bg-blue hover:bg-blue-hover grow text-white rounded-full h-12 px-6 font-bold'>
-                Reserve
+              <Button asChild className='bg-blue hover:bg-blue-hover grow text-white rounded-full h-12 px-6 font-bold'>
+                <Link href={`/checkout/${listing.id}`}>Reserve</Link>
               </Button>
             </div>
             <div className='pt-8 flex flex-col'>
@@ -299,7 +270,7 @@ const Product = () => {
 
       <Separator className='mt-10 mb-20 dark:bg-dark_russian' />
 
-      <ProfileSection />
+      <ProfileSection host={listing.owner} listing={listing} reviews={reviews} />
     </>
   );
 };

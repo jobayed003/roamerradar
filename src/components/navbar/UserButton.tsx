@@ -38,7 +38,7 @@ const ProifleOptions = ({ ref }: ProfileProps) => {
   const { user } = useCurrentUser();
 
   const profileLinks = [
-    { label: 'Messages', href: `/messages/${user?.id}`, icon: <MessageCircleIcon /> },
+    { label: 'Messages', href: '/messages', icon: <MessageCircleIcon /> },
     { label: 'Bookings', href: '/my-bookings', icon: <Home /> },
     { label: 'Wishlists', href: '/wishlists', icon: <Mail /> },
   ];
@@ -60,7 +60,7 @@ const ProifleOptions = ({ ref }: ProfileProps) => {
       <LinkProvider href='/list-property' icon={<Building2 />} label='List your property' />
 
       <div className='flex justify-center gap-x-2 mt-4'>
-        <Link href={`/account-settings/${user?.id}`}>
+        <Link href='/account-settings'>
           <Button variant={'fill'} className='text-white bg-blue hover:bg-blue-hover py-4 px-6'>
             Account
           </Button>

@@ -3,54 +3,203 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id             String    @id @default(cuid()) @map("_id")
-  name           String?
-  displayName    String?
-  realName       String?
-  phone          String?
-  bio            String?
-  livesIn        String?
-  speaks         String[]  @default([])
-  facebook       String?
-  instagram      String?
-  twitter        String?
-  website        String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  image          String?
-  password       String?
-  accounts       Account[]
-  accountCreated DateTime  @default(now())
+  id                     String                  @id @default(cuid())
+  name                   String?
+  displayName            String?
+  realName               String?
+  phone                  String?
+  bio                    String?
+  livesIn                String?
+  speaks                 String[]                @default([])
+  facebook               String?
+  instagram              String?
+  twitter                String?
+  website                String?
+  email                  String?                 @unique
+  emailVerified          DateTime?
+  image                  String?
+  password               String?
+  stripeCustomerId       String?                 @unique
+  accounts               Account[]
+  paymentMethods         PaymentMethod[]
+  bookings               Booking[]
+  notificationPreference NotificationPreference?
+  conversationParticipants ConversationParticipant[]
+  sentMessages             Message[]
+  ownedListings            Listing[]                 @relation("ListingOwner")
+  reviews                  Review[]
+  accountCreated         DateTime                @default(now())
 }
 
 model Account {
-  id                String  @id @default(cuid()) @map("_id")
+  id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model VerificationToken {
-  id      String   @id @default(cuid()) @map("_id")
+  id      String   @id @default(cuid())
   email   String
   token   String   @unique
   expires DateTime
 
   @@unique([email, token])
+  @@index([email])
+}
+
+enum ListingType {
+  STAY
+  FLIGHT
+  CAR
+  EXPERIENCE
+}
+
+model Listing {
+  id          String      @id @default(cuid())
+  type        ListingType
+  title       String
+  description String?
+  location    String?
+  image       String
+  price       Float
+  offerPrice  Float?
+  rating      Float       @default(4.9)
+  reviewCount Int         @default(15)
+  amenities   String[]    @default([])
+  metadata    Json?
+  isFeatured  Boolean     @default(false)
+  isPopular   Boolean     @default(false)
+  driveTime   String?
+  placesCount Int?
+  ownerId     String?
+  owner       User?         @relation("ListingOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  reviews     Review[]
+  bookings    Booking[]
+  conversations Conversation[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([type])
+  @@index([location])
+  @@index([ownerId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  listingId String
+  userId    String
+  rating    Int
+  body      String   @db.Text
+  createdAt DateTime @default(now())
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
+  @@index([userId])
+}
+
+model NotificationPreference {
+  id               String  @id @default(cuid())
+  userId           String  @unique
+  messageEmail     Boolean @default(true)
+  messageText      Boolean @default(false)
+  messageBrowser   Boolean @default(false)
+  remindersEmail   Boolean @default(true)
+  remindersText    Boolean @default(false)
+  remindersBrowser Boolean @default(false)
+  user             User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PaymentMethod {
+  id                    String   @id @default(cuid())
+  userId                String
+  stripePaymentMethodId String   @unique
+  brand                 String
+  last4                 String
+  expMonth              Int
+  expYear               Int
+  isDefault             Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+enum BookingStatus {
+  PENDING
+  PAID
+  CANCELLED
+  FAILED
+}
+
+model Booking {
+  id                    String        @id @default(cuid())
+  userId                String
+  listingId             String
+  status                BookingStatus @default(PENDING)
+  amount                Float
+  stripePaymentIntentId String?       @unique
+  guests                Int           @default(1)
+  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing               Listing       @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt             DateTime      @default(now())
+
+  @@index([userId])
+  @@index([listingId])
+}
+
+model Conversation {
+  id           String                    @id @default(cuid())
+  listingId    String?
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+  listing      Listing?                  @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@index([listingId])
+  @@index([updatedAt])
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  userId         String
+  lastReadAt     DateTime?
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  body           String       @db.Text
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
 }

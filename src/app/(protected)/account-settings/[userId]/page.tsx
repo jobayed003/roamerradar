@@ -1,14 +1,7 @@
-import { getUserById } from '@/data/user';
-import AccountDetailsForm from '../_components/AccountDetailsForm';
+import { redirect } from 'next/navigation';
 
-const AccountDetailsPage = async ({ params }: { params: { userId: string } }) => {
-  const { userId } = params;
-
-  const user = await getUserById(userId);
-
-  if (!user) return;
-
-  return <AccountDetailsForm user={user} />;
+const AccountDetailsPage = async () => {
+  redirect('/account-settings');
 };
 
 export default AccountDetailsPage;

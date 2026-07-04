@@ -45,7 +45,7 @@ const ProfileDetails = ({ user }: { user?: User }) => {
       </Link>
 
       <div className='flex gap-x-4 my-8'>
-        <Link href={`/messages/${user?.id}`}>
+        <Link href={`/messages/contact/${user?.id}`}>
           <Button variant={'fill'}>Contact</Button>
         </Link>
 
