@@ -1,6 +1,8 @@
 import { ListingType } from '@prisma/client';
 import type { UserSummary } from '@/types/review';
 
+export { ListingType };
+
 export type FlightLeg = {
   departingLocation: string;
   takeOffTime: string;

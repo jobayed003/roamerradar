@@ -1,5 +1,7 @@
+import { getFlightOfferById } from '@/data/flights';
 import { getListingById } from '@/data/listing';
 import { startCheckout } from '@/lib/checkout';
+import { isStripeConfigured } from '@/lib/stripe';
 import { requireAuth } from '@/server/auth/require-auth';
 import { notFound, redirect } from 'next/navigation';
 import CheckoutClient from './_components/CheckoutClient';
@@ -11,10 +13,22 @@ const CheckoutPage = async ({ params }: { params: { listingId: string } }) => {
     redirect('/auth/login');
   }
 
-  const listing = await getListingById(params.listingId);
+  const listing =
+    (await getFlightOfferById(params.listingId)) ?? (await getListingById(params.listingId));
 
   if (!listing) {
     notFound();
+  }
+
+  if (!isStripeConfigured()) {
+    return (
+      <div className='max-w-xl mx-auto py-32 px-6 text-center'>
+        <h1 className='text-2xl font-bold'>Checkout unavailable</h1>
+        <p className='text-gray_text mt-2'>
+          Payments are not configured yet. Add your Stripe keys to continue.
+        </p>
+      </div>
+    );
   }
 
   try {
@@ -42,9 +56,7 @@ const CheckoutPage = async ({ params }: { params: { listingId: string } }) => {
     return (
       <div className='max-w-xl mx-auto py-32 px-6 text-center'>
         <h1 className='text-2xl font-bold'>Checkout unavailable</h1>
-        <p className='text-gray_text mt-2'>
-          Payments are not configured yet. Add your Stripe keys to continue.
-        </p>
+        <p className='text-gray_text mt-2'>Unable to start payment. Check your Stripe configuration.</p>
       </div>
     );
   }

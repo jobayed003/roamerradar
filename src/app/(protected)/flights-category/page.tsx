@@ -1,11 +1,31 @@
-import { getListingsByType } from '@/data/listing';
-import { ListingType } from '@prisma/client';
+import { searchFlights } from '@/data/flights';
 import FlightsCategory from './_components/FlightsCategory';
 
-const FlightsCategoryPage = async () => {
-  const listings = await getListingsByType(ListingType.FLIGHT);
+type FlightsCategoryPageProps = {
+  searchParams: {
+    from?: string;
+    to?: string;
+    departure?: string;
+    return?: string;
+  };
+};
 
-  return <FlightsCategory listings={listings} />;
+const FlightsCategoryPage = async ({ searchParams }: FlightsCategoryPageProps) => {
+  const result = await searchFlights({
+    from: searchParams.from,
+    to: searchParams.to,
+    departureDate: searchParams.departure,
+    returnDate: searchParams.return,
+  });
+
+  return (
+    <FlightsCategory
+      listings={result.listings}
+      searchError={result.error}
+      routeLabel={result.routeLabel}
+      source={result.source}
+    />
+  );
 };
 
 export default FlightsCategoryPage;
