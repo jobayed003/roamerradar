@@ -1,3 +1,4 @@
+import { getFlightOfferById } from '@/data/flights';
 import { db } from '@/lib/db';
 import type { ReviewItem, UserSummary } from '@/types/review';
 import { ListingItem, ListingMetadata } from '@/types/listing';
@@ -84,6 +85,11 @@ export async function getNearbyDestinations() {
 }
 
 export async function getListingById(id: string) {
+  const flightOffer = await getFlightOfferById(id);
+  if (flightOffer) {
+    return flightOffer;
+  }
+
   try {
     const listing = await db.listing.findUnique({
       where: { id },

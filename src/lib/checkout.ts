@@ -1,17 +1,23 @@
+import { getFlightOfferRecord } from '@/data/flights';
 import { getListingById } from '@/data/listing';
 import { getOrCreateStripeCustomer } from '@/lib/stripe-customer';
 import { getStripe } from '@/lib/stripe';
 import { db } from '@/lib/db';
 import { BookingStatus } from '@prisma/client';
 
-export async function startCheckout(userId: string, listingId: string, guests: number = 1) {
-  const listing = await getListingById(listingId);
+export async function startCheckout(userId: string, itemId: string, guests: number = 1) {
+  const flightOffer = await getFlightOfferRecord(itemId);
+  const listing = flightOffer ? null : await getListingById(itemId);
 
-  if (!listing) {
+  if (!flightOffer && !listing) {
     return { error: 'Listing not found.' as const };
   }
 
-  const amount = Math.round((listing.offerPrice ?? listing.price) * 100);
+  const amountValue = flightOffer?.price ?? listing?.offerPrice ?? listing?.price ?? 0;
+  const amount = Math.round(amountValue * 100);
+  const currency = (flightOffer?.currency ?? 'usd').toLowerCase();
+  const title = flightOffer?.title ?? listing!.title;
+  const image = flightOffer?.image ?? listing!.image;
 
   if (amount <= 0) {
     return { error: 'Invalid listing price.' as const };
@@ -22,22 +28,27 @@ export async function startCheckout(userId: string, listingId: string, guests: n
   const booking = await db.booking.create({
     data: {
       userId,
-      listingId: listing.id,
+      flightOfferId: flightOffer?.id,
+      listingId: listing?.id,
       amount: amount / 100,
+      currency: currency.toUpperCase(),
       guests,
       status: BookingStatus.PENDING,
+      title,
+      image,
     },
   });
 
   const paymentIntent = await getStripe().paymentIntents.create({
     amount,
-    currency: 'usd',
+    currency,
     customer: customerId,
     automatic_payment_methods: { enabled: true },
     metadata: {
       bookingId: booking.id,
-      listingId: listing.id,
+      itemId,
       userId,
+      type: flightOffer ? 'flight' : 'listing',
     },
   });
 
@@ -50,8 +61,8 @@ export async function startCheckout(userId: string, listingId: string, guests: n
     clientSecret: paymentIntent.client_secret!,
     bookingId: booking.id,
     amount: amount / 100,
-    listingTitle: listing.title,
-    listingImage: listing.image,
+    listingTitle: title,
+    listingImage: image,
   };
 }
 

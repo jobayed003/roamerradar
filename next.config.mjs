@@ -14,6 +14,12 @@ const nextConfig = {
         port: '',
         protocol: 'https',
       },
+      {
+        hostname: 'images.kiwi.com',
+        pathname: '/**',
+        port: '',
+        protocol: 'https',
+      },
     ],
   },
 };
