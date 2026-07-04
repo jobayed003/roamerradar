@@ -1,10 +1,10 @@
 import {
-  isAmadeusConfigured,
-  mapAmadeusOfferToListing,
+  isDuffelConfigured,
+  mapDuffelOfferToListing,
   resolveLocationCode,
   searchFlightOffers,
-  type AmadeusFlightOffer,
-} from '@/lib/amadeus';
+  type DuffelFlightOffer,
+} from '@/lib/duffel';
 import { db } from '@/lib/db';
 import { ListingItem } from '@/types/listing';
 import { addDays, format } from 'date-fns';
@@ -22,7 +22,7 @@ type SearchFlightsInput = {
 type SearchFlightsResult = {
   listings: ListingItem[];
   error?: string;
-  source: 'amadeus' | 'unavailable';
+  source: 'duffel' | 'unavailable';
   routeLabel?: string;
 };
 
@@ -34,16 +34,16 @@ function defaultReturnDate(departureDate: string) {
   return format(addDays(new Date(departureDate), 7), 'yyyy-MM-dd');
 }
 
-async function cacheOffers(offers: AmadeusFlightOffer[]) {
+async function cacheOffers(offers: DuffelFlightOffer[]) {
   const expiresAt = new Date(Date.now() + OFFER_TTL_MINUTES * 60_000);
   const listings: ListingItem[] = [];
 
   for (const offer of offers) {
-    const listing = mapAmadeusOfferToListing(offer);
+    const listing = mapDuffelOfferToListing(offer);
     const record = await db.flightOffer.create({
       data: {
         price: listing.price,
-        currency: offer.price.currency || 'USD',
+        currency: offer.total_currency || 'USD',
         title: listing.title,
         image: listing.image,
         listingData: listing,
@@ -59,11 +59,12 @@ async function cacheOffers(offers: AmadeusFlightOffer[]) {
 }
 
 export async function searchFlights(input: SearchFlightsInput = {}): Promise<SearchFlightsResult> {
-  if (!isAmadeusConfigured()) {
+  if (!isDuffelConfigured()) {
     return {
       listings: [],
       source: 'unavailable',
-      error: 'Live flight search is not configured. Add AMADEUS_API_KEY and AMADEUS_API_SECRET to your environment.',
+      error:
+        'Live flight search is not configured. Add DUFFEL_ACCESS_TOKEN to your environment. Sign up at https://duffel.com',
     };
   }
 
@@ -81,7 +82,7 @@ export async function searchFlights(input: SearchFlightsInput = {}): Promise<Sea
     if (!originCode) {
       return {
         listings: [],
-        source: 'amadeus',
+        source: 'duffel',
         error: `Could not find an airport for "${fromKeyword}". Try a city name or 3-letter code (e.g. JFK).`,
       };
     }
@@ -89,7 +90,7 @@ export async function searchFlights(input: SearchFlightsInput = {}): Promise<Sea
     if (!destinationCode) {
       return {
         listings: [],
-        source: 'amadeus',
+        source: 'duffel',
         error: `Could not find an airport for "${toKeyword}". Try a city name or 3-letter code (e.g. LHR).`,
       };
     }
@@ -105,7 +106,7 @@ export async function searchFlights(input: SearchFlightsInput = {}): Promise<Sea
     if (offers.length === 0) {
       return {
         listings: [],
-        source: 'amadeus',
+        source: 'duffel',
         routeLabel: `${originCode} → ${destinationCode}`,
         error: 'No flights found for this route and dates. Try different airports or dates.',
       };
@@ -115,13 +116,13 @@ export async function searchFlights(input: SearchFlightsInput = {}): Promise<Sea
 
     return {
       listings,
-      source: 'amadeus',
+      source: 'duffel',
       routeLabel: `${originCode} → ${destinationCode}`,
     };
   } catch (error) {
     return {
       listings: [],
-      source: 'amadeus',
+      source: 'duffel',
       error: error instanceof Error ? error.message : 'Unable to load flights right now.',
     };
   }

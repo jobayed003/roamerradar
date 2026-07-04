@@ -40,7 +40,7 @@ const FlightsCategory = ({
   listings: ListingItem[];
   searchError?: string;
   routeLabel?: string;
-  source?: 'amadeus' | 'unavailable';
+  source?: 'duffel' | 'unavailable';
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [stopFilters, setStopFilters] = useState<StopFilter[]>([]);
@@ -149,7 +149,7 @@ const FlightsCategory = ({
                 : flyingFrom.trim()
                   ? ` · from ${flyingFrom}`
                   : ''}
-            {source === 'amadeus' && listings.length > 0 ? ' · Live airline fares' : ''}
+            {source === 'duffel' && listings.length > 0 ? ' · Live airline fares' : ''}
           </p>
           {searchError && (
             <div className='mt-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100'>
