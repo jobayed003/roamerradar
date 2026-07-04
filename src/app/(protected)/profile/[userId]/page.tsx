@@ -1,14 +1,22 @@
 import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
 import { getUserById } from '@/data/user';
+import { auth } from '@/auth';
 import { Home, Link2, MessageSquare } from 'lucide-react';
+import { notFound } from 'next/navigation';
 import CoverUpload from '../_components/CoverUpload';
 import ProfileDetails from '../_components/ProfileDetails';
 import ProfileReviews from '../_components/ProfileReviews';
 
 const Profile = async ({ params }: { params: { userId: string } }) => {
   const { userId } = params;
-  const user = await getUserById(userId);
+  const [user, session] = await Promise.all([getUserById(userId), auth()]);
+
+  if (!user) {
+    notFound();
+  }
+
+  const canEditCover = session?.user?.id === user.id;
 
   const formatLanguages = () => {
     const languages = user?.speaks || [];
@@ -23,7 +31,7 @@ const Profile = async ({ params }: { params: { userId: string } }) => {
   };
   return (
     <Layout>
-      <CoverUpload />
+      <CoverUpload coverImage={user.coverImage} canEdit={canEditCover} />
 
       <div className='flex flex-col lg:flex-row gap-20 py-10 lg:px-6'>
         <ProfileDetails user={user} />

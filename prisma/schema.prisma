@@ -24,6 +24,7 @@ model User {
   email                    String?                   @unique
   emailVerified            DateTime?
   image                    String?
+  coverImage               String?                   @db.Text
   password                 String?
   stripeCustomerId         String?                   @unique
   accounts                 Account[]
