@@ -1,4 +1,4 @@
-import { routes } from '@/lib/constants';
+import { isCategoryRouteActive, routes } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,12 +16,12 @@ export const Routes = () => {
         <Link
           href={value.href}
           key={value.label}
-          className={cn('pb-7', pathname === value.href && 'border-b border-black dark:border-white')}
+          className={cn('pb-7', isCategoryRouteActive(pathname, value.href) && 'border-b border-black dark:border-white')}
         >
           <div
             className={cn(
               'text-muted-foreground hover:text-foreground font-medium text-sm text-nowrap',
-              pathname === value.href && 'text-foreground '
+              isCategoryRouteActive(pathname, value.href) && 'text-foreground '
             )}
           >
             {value.label}
