@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import { db } from '@/lib/db';
 import { getStripe } from '@/lib/stripe';
 import { BookingStatus } from '@prisma/client';
@@ -9,14 +10,14 @@ export async function POST(req: Request) {
   const body = await req.text();
   const signature = headers().get('stripe-signature');
 
-  if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
+  if (!signature || !env.STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json({ error: 'Webhook not configured' }, { status: 400 });
   }
 
   let event: Stripe.Event;
 
   try {
-    event = getStripe().webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET);
+    event = getStripe().webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET);
   } catch {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }

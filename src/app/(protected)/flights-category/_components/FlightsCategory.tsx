@@ -18,15 +18,16 @@ import {
   getLowestPriceByStop,
   type StopFilter,
 } from '@/lib/flight-utils';
-import { createSearchParams } from '@/lib/utils';
+import { buildFlightsSearchUrl, type FlightsSearchParams } from '@/lib/search-urls';
 import { useBookingDate, useFlightStore } from '@/stores/useData';
-import { addDays, addMinutes, format } from 'date-fns';
+import { addDays, addMinutes, format, parseISO } from 'date-fns';
 import { ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { IoCloseCircle } from 'react-icons/io5';
 import { useMediaQuery } from 'usehooks-ts';
+import { TripOptions } from '../../../../../types';
 
 const selectItems = ['Recommended', 'Popular', 'In exchange'];
 const filters = ['Cheapest', 'Best', 'With transfers'];
@@ -36,11 +37,13 @@ const FlightsCategory = ({
   searchError,
   routeLabel,
   source,
+  initialSearch,
 }: {
   listings: ListingItem[];
   searchError?: string;
   routeLabel?: string;
   source?: 'duffel' | 'unavailable';
+  initialSearch: FlightsSearchParams;
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [stopFilters, setStopFilters] = useState<StopFilter[]>([]);
@@ -54,8 +57,9 @@ const FlightsCategory = ({
 
   const matches = useMediaQuery('(min-width: 768px)');
   const router = useRouter();
-  const { flyingFrom, flyingTo } = useFlightStore();
-  const { date } = useBookingDate();
+  const { flyingFrom, flyingTo, tripType, setLocations, setTripType } = useFlightStore();
+  const { date, setBookingDate } = useBookingDate();
+  const hasHydratedFromUrl = useRef(false);
 
   useEffect(() => {
     setPriceRange([priceBounds.min, priceBounds.max]);
@@ -89,13 +93,47 @@ const FlightsCategory = ({
   const destinationLabel = flyingTo.trim() || 'Arrival';
 
   useEffect(() => {
+    if (hasHydratedFromUrl.current) {
+      return;
+    }
+
+    hasHydratedFromUrl.current = true;
+
+    if (initialSearch.from) {
+      setLocations('flyingFrom', initialSearch.from);
+    }
+
+    if (initialSearch.to) {
+      setLocations('flyingTo', initialSearch.to);
+    }
+
+    if (initialSearch.departure) {
+      setBookingDate({
+        from: parseISO(initialSearch.departure),
+        to: initialSearch.return ? parseISO(initialSearch.return) : undefined,
+      });
+
+      if (!initialSearch.return) {
+        setTripType(TripOptions.ONEWAY);
+      }
+    }
+  }, [initialSearch, setBookingDate, setLocations, setTripType]);
+
+  useEffect(() => {
     if (!flyingFrom.trim()) {
       return;
     }
 
-    const url = createSearchParams({ baseUrl: '/flights-category', params: flyingFrom.trim() });
+    const url = buildFlightsSearchUrl({
+      from: flyingFrom,
+      to: flyingTo,
+      departure: date?.from,
+      return: date?.to,
+      isOneWay: tripType === TripOptions.ONEWAY,
+    });
+
     router.replace(url);
-  }, [flyingFrom, router]);
+  }, [date?.from, date?.to, flyingFrom, flyingTo, router, tripType]);
 
   useEffect(() => {
     if (matches) {
