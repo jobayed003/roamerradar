@@ -155,7 +155,3 @@ Planned improvements (not yet implemented):
 - Shared category page shell to reduce duplication
 - Vitest + Playwright test suite
 - Replace remaining mock data in `constants.ts` with database queries
-
-## License
-
-Private — see repository owner for terms.
