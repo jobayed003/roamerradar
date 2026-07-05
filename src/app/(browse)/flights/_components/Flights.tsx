@@ -39,7 +39,8 @@ const Flights = () => {
   return (
     <div>
       <TripType />
-      <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 px-5 pb-2 items-center relative'>
+      <div className='w-full flex flex-col lg:flex-row lg:items-center'>
+        <div className='grid lg:grid-cols-4 md:grid-rows-1 grid-rows-3 gap-y-4 px-5 pb-2 items-center flex-1 min-w-0'>
         <div className='w-[90%] lg:col-span-1 col-span-2'>
           <div className='flex items-start gap-x-4'>
             <MapPin className='mt-3  w-6 h-6 text-muted-foreground font-bold' />
@@ -106,8 +107,9 @@ const Flights = () => {
             </div>
           </div>
         </DateRangePicker>
+        </div>
 
-        <SearchIcon className='-top-1 -right-1' link={searchUrl} />
+        <SearchIcon link={searchUrl} />
       </div>
     </div>
   );

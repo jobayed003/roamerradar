@@ -1,7 +1,7 @@
 'use client';
 
 import { useCurrentUser } from '@/hooks/useCurrentUser';
-import { routes } from '@/lib/constants';
+import { isCategoryRouteActive, routes } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Equal, User2, X } from 'lucide-react';
@@ -97,7 +97,7 @@ const Navbar = () => {
               <Link
                 key={route.href}
                 href={route.href}
-                className={cn('px-8 py-4', pathname === route.href && 'text-foreground shadow-active')}
+                className={cn('px-8 py-4', isCategoryRouteActive(pathname, route.href) && 'text-foreground shadow-active')}
               >
                 {route.label}
               </Link>

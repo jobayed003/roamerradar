@@ -1,21 +1,25 @@
 import Dropdown from '@/components/ui/dropdown';
+import { getCategoryRouteFromPathname, routes } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { useOptionStore } from '@/stores/useOptionsStore';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CarIcon, ChevronDown, Home, Medal, Plane } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { Ref, useRef } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 import LinkProvider from '../LinkProvider';
 
 const OptionDropdown = () => {
   const { isClicked, onOpen, onClose, onOutsideClick } = useOptionStore();
+  const pathname = usePathname();
+  const activeRoute = getCategoryRouteFromPathname(pathname);
   const ref = useRef(null);
 
   useOnClickOutside(ref, onOutsideClick);
 
   return (
     <Dropdown isClicked={isClicked} onOutsideClick={onOutsideClick} onClose={onClose} onOpen={onOpen}>
-      <p className={'text-sm font-bold select-none'}>Travelers</p>
+      <p className={'text-sm font-bold select-none'}>{activeRoute.label}</p>
       <div>
         <ChevronDown className={cn('h-5 w-5 transition duration-200', isClicked && 'rotate-180')} />
       </div>
@@ -26,13 +30,6 @@ const OptionDropdown = () => {
 };
 
 export default OptionDropdown;
-
-const ITEMS = [
-  { href: '/', icon: <Home />, label: 'Stays' },
-  { href: '/flights', icon: <Plane />, label: 'Flights' },
-  { href: '/cars', icon: <CarIcon />, label: 'Cars' },
-  { href: '/things', icon: <Medal />, label: 'Things to do' },
-];
 
 const Options = ({ ref }: { ref: Ref<HTMLDivElement> | undefined }) => {
   return (
@@ -47,8 +44,8 @@ const Options = ({ ref }: { ref: Ref<HTMLDivElement> | undefined }) => {
       exit={{ opacity: 0, y: 10 }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
     >
-      {ITEMS.map((item) => (
-        <LinkProvider key={item.label} {...item} />
+      {routes.map((route) => (
+        <LinkProvider key={route.label} href={route.href} icon={<route.icon />} label={route.label} />
       ))}
     </motion.div>
   );

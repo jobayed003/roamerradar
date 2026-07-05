@@ -8,6 +8,28 @@ export const routes = [
   { href: '/things', icon: Medal, label: 'Things to do' },
 ];
 
+export function getCategoryRouteFromPathname(pathname: string) {
+  if (pathname.startsWith('/flights')) {
+    return routes.find((route) => route.href === '/flights') ?? routes[0];
+  }
+  if (pathname.startsWith('/cars')) {
+    return routes.find((route) => route.href === '/cars') ?? routes[0];
+  }
+  if (pathname.startsWith('/things')) {
+    return routes.find((route) => route.href === '/things') ?? routes[0];
+  }
+  return routes.find((route) => route.href === '/') ?? routes[0];
+}
+
+export function isCategoryRouteActive(pathname: string, href: string) {
+  if (href === '/') {
+    return pathname === '/' || pathname.startsWith('/stays');
+  }
+
+  const slug = href.slice(1);
+  return pathname === href || pathname.startsWith(`/${slug}-`) || pathname.startsWith(`${href}/`);
+}
+
 export const Places = [
   {
     country: 'France',
