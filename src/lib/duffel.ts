@@ -1,3 +1,4 @@
+import { env, isDuffelConfigured } from '@/env';
 import { format, parseISO } from 'date-fns';
 import { FlightLeg, ListingItem, ListingType } from '@/types/listing';
 
@@ -46,9 +47,7 @@ type DuffelPlacesResponse = {
   data?: DuffelPlace[];
 };
 
-export function isDuffelConfigured() {
-  return Boolean(process.env.DUFFEL_ACCESS_TOKEN?.trim());
-}
+export { isDuffelConfigured };
 
 export function airlineLogo(carrierCode: string) {
   return `https://images.kiwi.com/airlines/64/${carrierCode}.png`;
@@ -63,7 +62,7 @@ function getDuffelHeaders() {
     Accept: 'application/json',
     'Content-Type': 'application/json',
     'Duffel-Version': 'v2',
-    Authorization: `Bearer ${process.env.DUFFEL_ACCESS_TOKEN}`,
+    Authorization: `Bearer ${env.DUFFEL_ACCESS_TOKEN}`,
   };
 }
 

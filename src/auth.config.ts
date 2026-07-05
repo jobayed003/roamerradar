@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import { LoginSchema } from '@/schemas';
 
 import bcrypt from 'bcryptjs';
@@ -9,12 +10,12 @@ import { getUserByEmail } from './data/user';
 export default {
   providers: [
     Github({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
     Credentials({
       async authorize(credentials, request) {

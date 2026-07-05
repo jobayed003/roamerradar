@@ -1,14 +1,15 @@
+import { env, isStripeConfigured } from '@/env';
 import Stripe from 'stripe';
 
 let stripeClient: Stripe | null = null;
 
 export function getStripe() {
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!env.STRIPE_SECRET_KEY) {
     throw new Error('STRIPE_SECRET_KEY is not configured.');
   }
 
   if (!stripeClient) {
-    stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY, {
+    stripeClient = new Stripe(env.STRIPE_SECRET_KEY, {
       typescript: true,
     });
   }
@@ -16,8 +17,4 @@ export function getStripe() {
   return stripeClient;
 }
 
-export function isStripeConfigured() {
-  return Boolean(
-    process.env.STRIPE_SECRET_KEY && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-  );
-}
+export { isStripeConfigured };

@@ -4,12 +4,11 @@ import { DateRangePicker } from '@/components/DatePicker';
 import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { buildFlightsSearchUrl } from '@/lib/search-urls';
 import { cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useFlightStore } from '@/stores/useData';
-import { format } from 'date-fns';
 import { CalendarRange, MapPin } from 'lucide-react';
-import qs from 'query-string';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { TripOptions } from '../../../../../types';
 import TripType from './TripType';
 
@@ -20,16 +19,13 @@ const Flights = () => {
 
   const isOneWay = tripType === TripOptions.ONEWAY;
 
-  const searchUrl = useMemo(() => {
-    const query: Record<string, string> = {};
-
-    if (flyingFrom.trim()) query.from = flyingFrom.trim();
-    if (flyingTo.trim()) query.to = flyingTo.trim();
-    if (date?.from) query.departure = format(date.from, 'yyyy-MM-dd');
-    if (date?.to && !isOneWay) query.return = format(date.to, 'yyyy-MM-dd');
-
-    return qs.stringifyUrl({ url: '/flights-category', query }, { skipEmptyString: true });
-  }, [date?.from, date?.to, flyingFrom, flyingTo, isOneWay]);
+  const searchUrl = buildFlightsSearchUrl({
+    from: flyingFrom,
+    to: flyingTo,
+    departure: date?.from,
+    return: date?.to,
+    isOneWay,
+  });
 
   useEffect(() => {
     isOneWay && setBookingDate({ to: undefined, from: date?.from });

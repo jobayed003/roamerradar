@@ -1,7 +1,8 @@
+import { env } from '@/env';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const domain = process.env.NEXT_PUBLIC_SITE_URL;
+const resend = new Resend(env.RESEND_API_KEY);
+const domain = env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/verify-email?token=${token}`;

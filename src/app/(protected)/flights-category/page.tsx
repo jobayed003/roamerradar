@@ -24,6 +24,12 @@ const FlightsCategoryPage = async ({ searchParams }: FlightsCategoryPageProps) =
       searchError={result.error}
       routeLabel={result.routeLabel}
       source={result.source}
+      initialSearch={{
+        from: searchParams.from,
+        to: searchParams.to,
+        departure: searchParams.departure,
+        return: searchParams.return,
+      }}
     />
   );
 };
