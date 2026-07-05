@@ -115,3 +115,7 @@ export async function getListingCountByType(type: ListingType, location?: string
     return 0;
   }
 }
+
+export async function getDemoFlightListings() {
+  return getListingsByType(ListingType.FLIGHT);
+}

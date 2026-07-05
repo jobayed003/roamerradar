@@ -35,14 +35,16 @@ const filters = ['Cheapest', 'Best', 'With transfers'];
 const FlightsCategory = ({
   listings,
   searchError,
+  searchNotice,
   routeLabel,
   source,
   initialSearch,
 }: {
   listings: ListingItem[];
   searchError?: string;
+  searchNotice?: string;
   routeLabel?: string;
-  source?: 'duffel' | 'unavailable';
+  source?: 'duffel' | 'demo' | 'unavailable';
   initialSearch: FlightsSearchParams;
 }) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -188,7 +190,13 @@ const FlightsCategory = ({
                   ? ` · from ${flyingFrom}`
                   : ''}
             {source === 'duffel' && listings.length > 0 ? ' · Live airline fares' : ''}
+            {source === 'demo' && listings.length > 0 ? ' · Sample flights' : ''}
           </p>
+          {searchNotice && !searchError && (
+            <div className='mt-4 rounded-2xl border border-blue-500/40 bg-blue-500/10 px-4 py-3 text-sm text-blue-100'>
+              {searchNotice}
+            </div>
+          )}
           {searchError && (
             <div className='mt-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100'>
               {searchError}

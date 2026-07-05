@@ -78,7 +78,8 @@ Fill in the required values:
 | `DIRECT_URL` | Yes | Supabase direct URL (port 5432, for migrations) |
 | `AUTH_SECRET` | Yes | Random secret — `openssl rand -base64 32` |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | App URL, e.g. `http://localhost:3000` |
-| `DUFFEL_ACCESS_TOKEN` | For flights | Duffel test token (`duffel_test_…`) |
+| `DUFFEL_ACCESS_TOKEN` | For live flights | Duffel test token (`duffel_test_…`) |
+| `USE_DEMO_FLIGHTS` | Recommended | Set to `true` to use seeded sample flights instead of live Duffel search |
 | `STRIPE_SECRET_KEY` | For payments | Stripe test secret key |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | For payments | Stripe test publishable key |
 | `RESEND_API_KEY` | For email signup | Resend API key |
@@ -103,6 +104,20 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+### Flights in production
+
+By default, flight search needs `DUFFEL_ACCESS_TOKEN`. If that variable is missing in production (e.g. Vercel), the app previously showed no results.
+
+For demo/production preview, set:
+
+```bash
+USE_DEMO_FLIGHTS=true
+```
+
+This serves **seeded sample flights** from the database (same data as wishlists). Live Duffel search is used only when `USE_DEMO_FLIGHTS` is not `true` **and** `DUFFEL_ACCESS_TOKEN` is set. If live search fails, the app falls back to sample flights automatically.
+
+Make sure production has run `npm run db:seed` (or has flight rows in the `Listing` table).
 
 ### Stripe webhooks (local)
 

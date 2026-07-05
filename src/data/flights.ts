@@ -1,3 +1,4 @@
+import { getDemoFlightListings } from '@/data/listing';
 import {
   isDuffelConfigured,
   mapDuffelOfferToListing,
@@ -5,6 +6,7 @@ import {
   searchFlightOffers,
   type DuffelFlightOffer,
 } from '@/lib/duffel';
+import { shouldUseDemoFlights } from '@/env';
 import { db } from '@/lib/db';
 import { ListingItem } from '@/types/listing';
 import { addDays, format } from 'date-fns';
@@ -19,10 +21,11 @@ type SearchFlightsInput = {
   adults?: number;
 };
 
-type SearchFlightsResult = {
+export type SearchFlightsResult = {
   listings: ListingItem[];
   error?: string;
-  source: 'duffel' | 'unavailable';
+  notice?: string;
+  source: 'duffel' | 'demo' | 'unavailable';
   routeLabel?: string;
 };
 
@@ -32,6 +35,73 @@ function defaultDepartureDate() {
 
 function defaultReturnDate(departureDate: string) {
   return format(addDays(new Date(departureDate), 7), 'yyyy-MM-dd');
+}
+
+function filterDemoFlights(listings: ListingItem[], from?: string, to?: string) {
+  const fromCode = from?.trim().toUpperCase();
+  const toCode = to?.trim().toUpperCase();
+
+  if (!fromCode && !toCode) {
+    return listings;
+  }
+
+  const filtered = listings.filter((listing) => {
+    const haystack = `${listing.title} ${listing.location ?? ''}`.toUpperCase();
+    if (fromCode && !haystack.includes(fromCode)) return false;
+    if (toCode && !haystack.includes(toCode)) return false;
+    return true;
+  });
+
+  return filtered.length > 0 ? filtered : listings;
+}
+
+function demoRouteLabel(from?: string, to?: string) {
+  const fromLabel = from?.trim();
+  const toLabel = to?.trim();
+
+  if (fromLabel && toLabel) {
+    return `${fromLabel} → ${toLabel}`;
+  }
+
+  if (fromLabel) {
+    return `from ${fromLabel}`;
+  }
+
+  if (toLabel) {
+    return `to ${toLabel}`;
+  }
+
+  return 'Sample routes';
+}
+
+async function searchDemoFlights(
+  input: SearchFlightsInput,
+  notice?: string
+): Promise<SearchFlightsResult> {
+  const listings = filterDemoFlights(
+    await getDemoFlightListings(),
+    input.from,
+    input.to
+  );
+
+  if (listings.length === 0) {
+    return {
+      listings: [],
+      source: 'unavailable',
+      error: 'No sample flights found. Run npm run db:seed to load demo flight data.',
+    };
+  }
+
+  return {
+    listings,
+    source: 'demo',
+    routeLabel: demoRouteLabel(input.from, input.to),
+    notice:
+      notice ??
+      (isDuffelConfigured()
+        ? 'Showing sample flights (USE_DEMO_FLIGHTS=true).'
+        : 'Showing sample flights. Add DUFFEL_ACCESS_TOKEN for live Duffel search.'),
+  };
 }
 
 async function cacheOffers(offers: DuffelFlightOffer[]) {
@@ -59,19 +129,18 @@ async function cacheOffers(offers: DuffelFlightOffer[]) {
 }
 
 export async function searchFlights(input: SearchFlightsInput = {}): Promise<SearchFlightsResult> {
-  if (!isDuffelConfigured()) {
-    return {
-      listings: [],
-      source: 'unavailable',
-      error:
-        'Live flight search is not configured. Add DUFFEL_ACCESS_TOKEN to your environment. Sign up at https://duffel.com',
-    };
-  }
-
   const fromKeyword = input.from?.trim() || 'NYC';
   const toKeyword = input.to?.trim() || 'LON';
   const departureDate = input.departureDate || defaultDepartureDate();
   const returnDate = input.returnDate || defaultReturnDate(departureDate);
+
+  if (shouldUseDemoFlights()) {
+    return searchDemoFlights({
+      ...input,
+      from: fromKeyword === 'NYC' && !input.from?.trim() ? undefined : fromKeyword,
+      to: toKeyword === 'LON' && !input.to?.trim() ? undefined : toKeyword,
+    });
+  }
 
   try {
     const [originCode, destinationCode] = await Promise.all([
@@ -80,19 +149,11 @@ export async function searchFlights(input: SearchFlightsInput = {}): Promise<Sea
     ]);
 
     if (!originCode) {
-      return {
-        listings: [],
-        source: 'duffel',
-        error: `Could not find an airport for "${fromKeyword}". Try a city name or 3-letter code (e.g. JFK).`,
-      };
+      return searchDemoFlights(input, `Could not find an airport for "${fromKeyword}". Showing sample flights instead.`);
     }
 
     if (!destinationCode) {
-      return {
-        listings: [],
-        source: 'duffel',
-        error: `Could not find an airport for "${toKeyword}". Try a city name or 3-letter code (e.g. LHR).`,
-      };
+      return searchDemoFlights(input, `Could not find an airport for "${toKeyword}". Showing sample flights instead.`);
     }
 
     const offers = await searchFlightOffers({
@@ -104,12 +165,10 @@ export async function searchFlights(input: SearchFlightsInput = {}): Promise<Sea
     });
 
     if (offers.length === 0) {
-      return {
-        listings: [],
-        source: 'duffel',
-        routeLabel: `${originCode} → ${destinationCode}`,
-        error: 'No flights found for this route and dates. Try different airports or dates.',
-      };
+      return searchDemoFlights(
+        input,
+        `No live flights found for ${originCode} → ${destinationCode}. Showing sample flights instead.`
+      );
     }
 
     const listings = await cacheOffers(offers);
@@ -120,11 +179,8 @@ export async function searchFlights(input: SearchFlightsInput = {}): Promise<Sea
       routeLabel: `${originCode} → ${destinationCode}`,
     };
   } catch (error) {
-    return {
-      listings: [],
-      source: 'duffel',
-      error: error instanceof Error ? error.message : 'Unable to load flights right now.',
-    };
+    const message = error instanceof Error ? error.message : 'Unable to load flights right now.';
+    return searchDemoFlights(input, `Live search failed (${message}). Showing sample flights instead.`);
   }
 }
 

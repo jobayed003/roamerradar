@@ -21,6 +21,7 @@ const serverEnvSchema = z.object({
   GITHUB_CLIENT_SECRET: optionalString,
   RESEND_API_KEY: optionalString,
   DUFFEL_ACCESS_TOKEN: optionalString,
+  USE_DEMO_FLIGHTS: optionalString,
   STRIPE_SECRET_KEY: optionalString,
   STRIPE_WEBHOOK_SECRET: optionalString,
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: optionalString,
@@ -67,6 +68,14 @@ export function isStripeConfigured() {
 
 export function isDuffelConfigured() {
   return Boolean(env.DUFFEL_ACCESS_TOKEN);
+}
+
+export function isDemoFlightsMode() {
+  return env.USE_DEMO_FLIGHTS === 'true';
+}
+
+export function shouldUseDemoFlights() {
+  return isDemoFlightsMode() || !isDuffelConfigured();
 }
 
 export function isResendConfigured() {
