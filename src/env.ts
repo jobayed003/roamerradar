@@ -21,6 +21,7 @@ const serverEnvSchema = z.object({
   GITHUB_CLIENT_SECRET: optionalString,
   RESEND_API_KEY: optionalString,
   DUFFEL_ACCESS_TOKEN: optionalString,
+  USE_DEMO_FLIGHTS: optionalString,
   STRIPE_SECRET_KEY: optionalString,
   STRIPE_WEBHOOK_SECRET: optionalString,
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: optionalString,
@@ -67,6 +68,20 @@ export function isStripeConfigured() {
 
 export function isDuffelConfigured() {
   return Boolean(env.DUFFEL_ACCESS_TOKEN);
+}
+
+/** Duffel test tokens start with `duffel_test_` and are safe to use in production for demos. */
+export function isDuffelTestMode() {
+  return env.DUFFEL_ACCESS_TOKEN?.startsWith('duffel_test_') ?? false;
+}
+
+export function isDemoFlightsMode() {
+  return env.USE_DEMO_FLIGHTS === 'true';
+}
+
+/** Demo flights only when explicitly forced or Duffel is not configured. */
+export function shouldUseDemoFlights() {
+  return isDemoFlightsMode() || !isDuffelConfigured();
 }
 
 export function isResendConfigured() {

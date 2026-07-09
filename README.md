@@ -78,7 +78,8 @@ Fill in the required values:
 | `DIRECT_URL` | Yes | Supabase direct URL (port 5432, for migrations) |
 | `AUTH_SECRET` | Yes | Random secret — `openssl rand -base64 32` |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | App URL, e.g. `http://localhost:3000` |
-| `DUFFEL_ACCESS_TOKEN` | For flights | Duffel test token (`duffel_test_…`) |
+| `DUFFEL_ACCESS_TOKEN` | For flights | Duffel **test** token (`duffel_test_…`) — use in production for demo/live API search |
+| `USE_DEMO_FLIGHTS` | Optional | Set to `true` only to skip Duffel and use seeded DB sample flights |
 | `STRIPE_SECRET_KEY` | For payments | Stripe test secret key |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | For payments | Stripe test publishable key |
 | `RESEND_API_KEY` | For email signup | Resend API key |
@@ -103,6 +104,18 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+### Flights in production (Duffel test mode)
+
+Use a Duffel **test access token** in production — no separate environment or SDK switch is required:
+
+```bash
+DUFFEL_ACCESS_TOKEN=duffel_test_xxxxxxxx
+```
+
+Test tokens call the same Duffel API with sandbox data and are intended for deployed demos. Do **not** set `USE_DEMO_FLIGHTS=true` unless you want to bypass Duffel entirely and show seeded database sample flights.
+
+If `DUFFEL_ACCESS_TOKEN` is missing or the API fails, the app falls back to seeded sample flights automatically.
 
 ### Stripe webhooks (local)
 

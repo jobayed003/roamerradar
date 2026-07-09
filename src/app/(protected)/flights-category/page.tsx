@@ -22,8 +22,10 @@ const FlightsCategoryPage = async ({ searchParams }: FlightsCategoryPageProps) =
     <FlightsCategory
       listings={result.listings}
       searchError={result.error}
+      searchNotice={result.notice}
       routeLabel={result.routeLabel}
       source={result.source}
+      duffelTestMode={result.duffelTestMode}
       initialSearch={{
         from: searchParams.from,
         to: searchParams.to,
