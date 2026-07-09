@@ -78,8 +78,8 @@ Fill in the required values:
 | `DIRECT_URL` | Yes | Supabase direct URL (port 5432, for migrations) |
 | `AUTH_SECRET` | Yes | Random secret — `openssl rand -base64 32` |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | App URL, e.g. `http://localhost:3000` |
-| `DUFFEL_ACCESS_TOKEN` | For live flights | Duffel test token (`duffel_test_…`) |
-| `USE_DEMO_FLIGHTS` | Recommended | Set to `true` to use seeded sample flights instead of live Duffel search |
+| `DUFFEL_ACCESS_TOKEN` | For flights | Duffel **test** token (`duffel_test_…`) — use in production for demo/live API search |
+| `USE_DEMO_FLIGHTS` | Optional | Set to `true` only to skip Duffel and use seeded DB sample flights |
 | `STRIPE_SECRET_KEY` | For payments | Stripe test secret key |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | For payments | Stripe test publishable key |
 | `RESEND_API_KEY` | For email signup | Resend API key |
@@ -105,19 +105,17 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### Flights in production
+### Flights in production (Duffel test mode)
 
-By default, flight search needs `DUFFEL_ACCESS_TOKEN`. If that variable is missing in production (e.g. Vercel), the app previously showed no results.
-
-For demo/production preview, set:
+Use a Duffel **test access token** in production — no separate environment or SDK switch is required:
 
 ```bash
-USE_DEMO_FLIGHTS=true
+DUFFEL_ACCESS_TOKEN=duffel_test_xxxxxxxx
 ```
 
-This serves **seeded sample flights** from the database (same data as wishlists). Live Duffel search is used only when `USE_DEMO_FLIGHTS` is not `true` **and** `DUFFEL_ACCESS_TOKEN` is set. If live search fails, the app falls back to sample flights automatically.
+Test tokens call the same Duffel API with sandbox data and are intended for deployed demos. Do **not** set `USE_DEMO_FLIGHTS=true` unless you want to bypass Duffel entirely and show seeded database sample flights.
 
-Make sure production has run `npm run db:seed` (or has flight rows in the `Listing` table).
+If `DUFFEL_ACCESS_TOKEN` is missing or the API fails, the app falls back to seeded sample flights automatically.
 
 ### Stripe webhooks (local)
 

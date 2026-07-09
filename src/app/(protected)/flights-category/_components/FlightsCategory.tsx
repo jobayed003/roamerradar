@@ -38,6 +38,7 @@ const FlightsCategory = ({
   searchNotice,
   routeLabel,
   source,
+  duffelTestMode,
   initialSearch,
 }: {
   listings: ListingItem[];
@@ -45,6 +46,7 @@ const FlightsCategory = ({
   searchNotice?: string;
   routeLabel?: string;
   source?: 'duffel' | 'demo' | 'unavailable';
+  duffelTestMode?: boolean;
   initialSearch: FlightsSearchParams;
 }) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -189,7 +191,11 @@ const FlightsCategory = ({
                 : flyingFrom.trim()
                   ? ` · from ${flyingFrom}`
                   : ''}
-            {source === 'duffel' && listings.length > 0 ? ' · Live airline fares' : ''}
+            {source === 'duffel' && listings.length > 0
+              ? duffelTestMode
+                ? ' · Duffel test fares'
+                : ' · Live airline fares'
+              : ''}
             {source === 'demo' && listings.length > 0 ? ' · Sample flights' : ''}
           </p>
           {searchNotice && !searchError && (

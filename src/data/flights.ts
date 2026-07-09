@@ -6,7 +6,7 @@ import {
   searchFlightOffers,
   type DuffelFlightOffer,
 } from '@/lib/duffel';
-import { shouldUseDemoFlights } from '@/env';
+import { isDuffelTestMode, shouldUseDemoFlights } from '@/env';
 import { db } from '@/lib/db';
 import { ListingItem } from '@/types/listing';
 import { addDays, format } from 'date-fns';
@@ -27,6 +27,7 @@ export type SearchFlightsResult = {
   notice?: string;
   source: 'duffel' | 'demo' | 'unavailable';
   routeLabel?: string;
+  duffelTestMode?: boolean;
 };
 
 function defaultDepartureDate() {
@@ -172,11 +173,16 @@ export async function searchFlights(input: SearchFlightsInput = {}): Promise<Sea
     }
 
     const listings = await cacheOffers(offers);
+    const testMode = isDuffelTestMode();
 
     return {
       listings,
       source: 'duffel',
       routeLabel: `${originCode} → ${destinationCode}`,
+      duffelTestMode: testMode,
+      notice: testMode
+        ? 'Duffel test mode — using a duffel_test_ token. Fares are real API results but for demo only.'
+        : undefined,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to load flights right now.';
