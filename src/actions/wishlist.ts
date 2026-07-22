@@ -1,12 +1,13 @@
 'use server';
 
 import { db } from '@/lib/db';
+import { CuidSchema } from '@/schemas';
 import { requireAuth } from '@/server/auth/require-auth';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 const ListingIdSchema = z.object({
-  listingId: z.string().cuid(),
+  listingId: CuidSchema,
 });
 
 export async function toggleWishlist(input: unknown) {

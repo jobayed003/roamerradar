@@ -99,3 +99,68 @@ export const CreateReviewSchema = z.object({
 export const CancelBookingSchema = z.object({
   bookingId: z.string().cuid(),
 });
+
+export const CuidSchema = z.string().cuid({ message: 'Invalid id.' });
+
+export const StartCheckoutSchema = z.object({
+  itemId: z.string().cuid({ message: 'Invalid listing.' }),
+  guests: z.coerce.number().int().min(1).max(20).optional().default(1),
+  checkIn: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid check-in date.' })
+    .optional(),
+  checkOut: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid check-out date.' })
+    .optional(),
+});
+
+export const CoverImageSchema = z
+  .string()
+  .startsWith('data:image/', { message: 'Invalid image format.' })
+  .max(3_000_000, { message: 'Image is too large. Try a smaller photo.' });
+
+export const VerificationTokenSchema = z.string().min(1, { message: 'Token is required.' });
+
+export const FlightLegSchema = z.object({
+  departingLocation: z.string(),
+  takeOffTime: z.string(),
+  arrivalLocation: z.string(),
+  landingTime: z.string(),
+  logo: z.string(),
+  type: z.string(),
+});
+
+export const ListingMetadataSchema = z
+  .object({
+    supplier: z.number().optional(),
+    isPopular: z.boolean().optional(),
+    isBestSelling: z.boolean().optional(),
+    legs: z.array(FlightLegSchema).optional(),
+    provider: z.string().optional(),
+    offerExpired: z.boolean().optional(),
+    bedrooms: z.number().int().optional(),
+    livingRooms: z.number().int().optional(),
+    kitchens: z.number().int().optional(),
+    gallery: z.array(z.string()).optional(),
+  })
+  .passthrough();
+
+export function parseListingMetadata(value: unknown) {
+  const parsed = ListingMetadataSchema.safeParse(value);
+  return parsed.success ? parsed.data : null;
+}
+
+export const SendMessageInputSchema = z.object({
+  conversationId: z.string().cuid(),
+  body: z
+    .string()
+    .trim()
+    .min(1, { message: 'Message cannot be empty' })
+    .max(2000, { message: 'Message is too long' }),
+});
+
+export const StartConversationSchema = z.object({
+  otherUserId: z.string().cuid(),
+  listingId: z.string().cuid().optional(),
+});

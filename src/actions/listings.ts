@@ -1,9 +1,9 @@
 'use server';
 
 import { db } from '@/lib/db';
-import { CreateListingSchema } from '@/schemas';
+import { CreateListingSchema, ListingMetadataSchema } from '@/schemas';
 import { requireAuth } from '@/server/auth/require-auth';
-import { ListingType } from '@prisma/client';
+import { ListingType, Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 const MAX_IMAGE_LENGTH = 3_000_000;
@@ -49,12 +49,12 @@ export async function createListing(input: unknown) {
         rating: 0,
         reviewCount: 0,
         ownerId: authResult.user.id,
-        metadata: {
+        metadata: ListingMetadataSchema.parse({
           bedrooms: data.bedrooms,
           livingRooms: data.livingRooms,
           kitchens: data.kitchens,
           gallery: data.images.slice(1),
-        },
+        }) as Prisma.InputJsonValue,
       },
     });
 
