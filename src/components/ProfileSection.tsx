@@ -1,5 +1,6 @@
 'use client';
 
+import { createReview } from '@/actions/reviews';
 import CustomInput from '@/components/CustomInput';
 import NearbyLocations from '@/components/NearbyLocations';
 import { UserComments } from '@/components/UserComments';
@@ -8,13 +9,16 @@ import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/components/ui/use-toast';
+import { getFirstLetters } from '@/lib/utils';
 import type { ReviewItem, UserSummary } from '@/types/review';
-import { Flag, Home, Share, Smile } from 'lucide-react';
+import { Flag, Home, Smile } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 import { CiFacebook, CiGlobe, CiInstagram, CiTwitter } from 'react-icons/ci';
 import { FaArrowRight, FaCheckCircle, FaStar } from 'react-icons/fa';
-import { getFirstLetters } from '@/lib/utils';
 
 const filterItems = ['Newest', 'Popular', 'All'];
 
@@ -22,10 +26,36 @@ type ProfileSectionProps = {
   host: UserSummary | null;
   listing: { id: string; title: string; rating: number; reviewCount: number };
   reviews: ReviewItem[];
+  canReview?: boolean;
 };
 
-export const ProfileSection = ({ host, listing, reviews }: ProfileSectionProps) => {
+export const ProfileSection = ({ host, listing, reviews, canReview = false }: ProfileSectionProps) => {
   const hostName = host?.displayName ?? host?.realName ?? host?.name ?? 'Host';
+  const [rating, setRating] = useState(5);
+  const [body, setBody] = useState('');
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const onSubmit = () => {
+    startTransition(async () => {
+      const result = await createReview({
+        listingId: listing.id,
+        rating,
+        body,
+      });
+
+      if ('error' in result && result.error) {
+        toast({ title: result.error });
+        return;
+      }
+
+      toast({ title: 'success' in result ? result.success : 'Review posted.' });
+      setBody('');
+      setRating(5);
+      router.refresh();
+    });
+  };
 
   return (
     <Layout className='lg:px-20 px-8'>
@@ -118,40 +148,66 @@ export const ProfileSection = ({ host, listing, reviews }: ProfileSectionProps) 
             <p className='text-center text-gray_text text-sm'>Host information is not available for this listing.</p>
           )}
         </div>
-        <div className='pt-10 w-full'>
+        <div className='pt-10 w-full' id='reviews'>
           <div>
             <h1 className='text-2xl font-semibold mb-2'>Add a review</h1>
-            <div className='flex gap-x-1 justify-between font-poppins text-sm '>
-              <p className='text-gray_text'>
-                Be the first to review{' '}
-                <span className='dark:text-foreground text-dark_bg font-medium'>{listing.title}</span>
+            {canReview ? (
+              <>
+                <div className='flex gap-x-1 justify-between font-poppins text-sm '>
+                  <p className='text-gray_text'>
+                    Share your experience at{' '}
+                    <span className='dark:text-foreground text-dark_bg font-medium'>{listing.title}</span>
+                  </p>
+
+                  <div className='flex flex-row-reverse gap-x-1'>
+                    {[5, 4, 3, 2, 1].map((value) => (
+                      <button
+                        key={value}
+                        type='button'
+                        aria-label={`${value} stars`}
+                        onClick={() => setRating(value)}
+                        className='cursor-pointer'
+                      >
+                        <FaStar
+                          size={20}
+                          className={value <= rating ? 'text-yellow-500' : 'text-gray_text hover:text-yellow-500'}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className='flex flex-col gap-y-6 my-8 relative'>
+                  <CustomInput
+                    className='h-[72px] font-normal dark:border-gray_border border-2 rounded-3xl text-base placeholder:text-gray_text pr-40'
+                    placeholder='Share your thoughts'
+                    value={body}
+                    onChange={(event) => setBody(event.target.value)}
+                  />
+
+                  <div className='absolute flex items-center gap-x-3 right-4 top-4 transition-all'>
+                    <Smile className='text-gray_text' />
+                    <Button
+                      type='button'
+                      disabled={isPending || body.trim().length < 3}
+                      onClick={onSubmit}
+                      className='bg-blue hover:bg-blue-hover grow text-white rounded-full px-4 py-2 font-bold'
+                    >
+                      {isPending ? 'Posting…' : 'Post it!'} <FaArrowRight className='ml-3 ' />
+                    </Button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <p className='text-sm text-gray_text mb-8'>
+                Book this listing to leave a review once your trip is confirmed.
               </p>
+            )}
 
-              <div className='flex flex-row-reverse gap-x-1 cursor-pointer'>
-                <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500 text-gray_text' />
-                <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500 text-gray_text' />
-                <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500 text-gray_text' />
-                <FaStar size={20} className='peer peer-hover:text-yellow-500 hover:text-yellow-500 text-gray_text' />
-                <FaStar size={20} className='peer peer-hover:text-yellow-500 text-yellow-500 hover:text-yellow-500' />
-              </div>
-            </div>
-
-            <div className='flex flex-col gap-y-6 my-8 relative'>
-              <CustomInput
-                className='h-[72px] font-normal dark:border-gray_border border-2 rounded-3xl text-base placeholder:text-gray_text'
-                placeholder='Share your thoughts'
-              />
-
-              <div className='absolute flex items-center gap-x-3 right-4 top-4 transition-all cursor-pointer'>
-                <Smile className='text-gray_text hover:text-blue-hover' />
-                <Button className='bg-blue hover:bg-blue-hover grow text-white rounded-full px-4 py-2 font-bold'>
-                  Post it! <FaArrowRight className='ml-3 ' />
-                </Button>
-              </div>
-
+            <div className='flex flex-col gap-y-6'>
               <div className='flex justify-between items-center'>
                 <h1 className='text-2xl font-semibold '>
-                  {reviews.length} {reviews.length === 1 ? 'comment' : 'comments'}
+                  {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
                 </h1>
                 <Select>
                   <SelectTrigger className='md:w-40 h-12 w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>

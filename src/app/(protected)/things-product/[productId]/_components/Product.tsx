@@ -5,12 +5,13 @@ import { CarouselProvider } from '@/components/CarouselProvider';
 import LinkButton from '@/components/LinkButton';
 import ListingHostRow from '@/components/ListingHostRow';
 import { ProfileSection } from '@/components/ProfileSection';
+import { WishlistButton } from '@/components/WishlistButton';
 import Layout from '@/components/ui/Layout';
 import { CarouselItem } from '@/components/ui/carousel';
 import { Separator } from '@/components/ui/separator';
 import { thingsProduct } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-import { AtSign, ChevronLeft, Clock, Flag, Heart, IceCream, ImageIcon, Navigation, Share, User, X } from 'lucide-react';
+import { AtSign, ChevronLeft, Clock, Flag, IceCream, ImageIcon, Navigation, Share, User, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -20,7 +21,7 @@ import type { ReviewItem } from '@/types/review';
 import { ProductSuggestion } from './ProductSuggestion';
 import { ReceiptDetails } from './ReceiptDetails';
 
-const icons = [Navigation, Share, Heart, X];
+const icons = [Navigation, Share, X];
 
 const galleryImages = [
   '/images/things-images/product-3.jpg',
@@ -31,7 +32,17 @@ const galleryImages = [
 
 const filters = ['Sightseeing', 'Transportation', 'Art and Culture'];
 
-const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewItem[] }) => {
+const Product = ({
+  listing,
+  reviews,
+  wishlisted = false,
+  canReview = false,
+}: {
+  listing: ListingItem;
+  reviews: ReviewItem[];
+  wishlisted?: boolean;
+  canReview?: boolean;
+}) => {
   const [selected, setSelected] = useState(filters[0]);
 
   return (
@@ -80,10 +91,19 @@ const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewIt
             </div>
           </div>
           <div className='flex gap-3 text-gray_border self-center'>
-            {icons.map((Item) => (
+            {icons.slice(0, 2).map((Item) => (
               <div
                 className='w-10 h-10 flex items-center justify-center rounded-full border-2 dark:border-gray_border hover:border-[#353945] group transition-all hover:bg-[#353945] cursor-pointer'
-                key={Math.random()}
+                key={Item.displayName ?? Item.name}
+              >
+                <Item className='group-hover:text-[#FCFCFD] text-gray_text' />
+              </div>
+            ))}
+            <WishlistButton listingId={listing.id} initialSaved={wishlisted} />
+            {icons.slice(2).map((Item) => (
+              <div
+                className='w-10 h-10 flex items-center justify-center rounded-full border-2 dark:border-gray_border hover:border-[#353945] group transition-all hover:bg-[#353945] cursor-pointer'
+                key={Item.displayName ?? Item.name}
               >
                 <Item className='group-hover:text-[#FCFCFD] text-gray_text' />
               </div>
@@ -195,7 +215,7 @@ const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewIt
 
       <Separator className='mt-10 mb-20 dark:bg-dark_russian' />
 
-      <ProfileSection host={listing.owner} listing={listing} reviews={reviews} />
+      <ProfileSection host={listing.owner} listing={listing} reviews={reviews} canReview={canReview} />
 
       <Layout className='my-20'>
         <div className='flex flex-col gap-y-4 items-center justify-center font-poppins'>

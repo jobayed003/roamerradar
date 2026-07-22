@@ -2,6 +2,7 @@ import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
 import { getListingsByOwnerId } from '@/data/listing';
 import { getPostsByAuthorId } from '@/data/post';
+import { getReviewsAboutHost, getReviewsByUserId } from '@/data/review';
 import { getUserById } from '@/data/user';
 import { auth } from '@/auth';
 import { Home, Link2, MessageSquare } from 'lucide-react';
@@ -12,11 +13,13 @@ import ProfileFeed from '../_components/ProfileFeed';
 
 const Profile = async ({ params }: { params: { userId: string } }) => {
   const { userId } = params;
-  const [user, session, posts, listings] = await Promise.all([
+  const [user, session, posts, listings, reviewsAboutYou, reviewsByYou] = await Promise.all([
     getUserById(userId),
     auth(),
     getPostsByAuthorId(userId),
     getListingsByOwnerId(userId),
+    getReviewsAboutHost(userId),
+    getReviewsByUserId(userId),
   ]);
 
   if (!user) {
@@ -83,6 +86,8 @@ const Profile = async ({ params }: { params: { userId: string } }) => {
             isOwner={isOwner}
             posts={posts}
             listings={listings}
+            reviewsAboutYou={reviewsAboutYou}
+            reviewsByYou={reviewsByYou}
           />
         </div>
       </div>

@@ -1,6 +1,8 @@
 'use client';
 
+import { cancelBooking } from '@/actions/bookings';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 import {
   BookingItem,
   formatBookingStatus,
@@ -11,6 +13,8 @@ import { format } from 'date-fns';
 import { ArrowRight, Calendar, MapPin, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 
 type BookingListProps = {
   bookings: BookingItem[];
@@ -45,6 +49,10 @@ function BookingCard({ booking }: { booking: BookingItem }) {
   const productPath = getBookingProductPath(booking);
   const imageSrc = booking.image || '/images/flight.avif';
   const isRemoteImage = imageSrc.startsWith('http');
+  const [isPending, startTransition] = useTransition();
+  const [confirming, setConfirming] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
   const statusClass =
     booking.status === BookingStatus.PAID
@@ -52,6 +60,20 @@ function BookingCard({ booking }: { booking: BookingItem }) {
       : booking.status === BookingStatus.PENDING
         ? 'text-amber-400 border-amber-400/40 bg-amber-400/10'
         : 'text-gray_text border-gray_border bg-dark_russian';
+
+  const onCancel = () => {
+    startTransition(async () => {
+      const result = await cancelBooking({ bookingId: booking.id });
+      if ('error' in result && result.error) {
+        toast({ title: result.error });
+        setConfirming(false);
+        return;
+      }
+      toast({ title: 'success' in result ? result.success : 'Booking cancelled.' });
+      setConfirming(false);
+      router.refresh();
+    });
+  };
 
   return (
     <article className='flex flex-col sm:flex-row gap-6 rounded-3xl border dark:border-gray_border p-6 sm:p-8'>
@@ -97,16 +119,48 @@ function BookingCard({ booking }: { booking: BookingItem }) {
             {booking.currency} {booking.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
 
-          {productPath ? (
-            <Button asChild variant='outline' className='rounded-full font-bold'>
-              <Link href={productPath}>
-                View details
-                <ArrowRight className='w-4 h-4 ml-2' />
-              </Link>
-            </Button>
-          ) : (
-            <p className='text-xs text-gray_text'>Booking reference: {booking.id.slice(0, 8)}</p>
-          )}
+          <div className='flex flex-wrap gap-2'>
+            {booking.status === BookingStatus.PAID && (
+              confirming ? (
+                <>
+                  <Button
+                    variant='outline'
+                    className='rounded-full font-bold'
+                    disabled={isPending}
+                    onClick={() => setConfirming(false)}
+                  >
+                    Keep booking
+                  </Button>
+                  <Button
+                    className='rounded-full font-bold bg-red-600 hover:bg-red-700 text-white'
+                    disabled={isPending}
+                    onClick={onCancel}
+                  >
+                    {isPending ? 'Cancelling…' : 'Confirm cancel'}
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant='outline'
+                  className='rounded-full font-bold'
+                  onClick={() => setConfirming(true)}
+                >
+                  Cancel booking
+                </Button>
+              )
+            )}
+
+            {productPath ? (
+              <Button asChild variant='outline' className='rounded-full font-bold'>
+                <Link href={productPath}>
+                  View details
+                  <ArrowRight className='w-4 h-4 ml-2' />
+                </Link>
+              </Button>
+            ) : (
+              <p className='text-xs text-gray_text'>Booking reference: {booking.id.slice(0, 8)}</p>
+            )}
+          </div>
         </div>
       </div>
     </article>

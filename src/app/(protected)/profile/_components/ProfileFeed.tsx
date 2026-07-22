@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import type { PostWithDetails } from '@/data/post';
+import type { ProfileReviewItem } from '@/data/review';
 import { resizeImageFile } from '@/lib/image-utils';
 import { cn, getFirstLetters } from '@/lib/utils';
 import type { ListingItem } from '@/types/listing';
@@ -22,6 +23,8 @@ type ProfileFeedProps = {
   isOwner: boolean;
   posts: PostWithDetails[];
   listings: ListingItem[];
+  reviewsAboutYou: ProfileReviewItem[];
+  reviewsByYou: ProfileReviewItem[];
 };
 
 function displayName(user: {
@@ -32,7 +35,14 @@ function displayName(user: {
   return user.displayName || user.realName || user.name || 'Traveler';
 }
 
-const ProfileFeed = ({ currentUserId, isOwner, posts, listings }: ProfileFeedProps) => {
+const ProfileFeed = ({
+  currentUserId,
+  isOwner,
+  posts,
+  listings,
+  reviewsAboutYou,
+  reviewsByYou,
+}: ProfileFeedProps) => {
   const [tab, setTab] = useState<'Posts' | 'Listings' | 'Reviews'>('Posts');
   const tabs = ['Posts', 'Listings', 'Reviews'] as const;
 
@@ -51,14 +61,18 @@ const ProfileFeed = ({ currentUserId, isOwner, posts, listings }: ProfileFeedPro
             onClick={() => setTab(item)}
           >
             {item}
-            {item === 'Posts' ? ` (${posts.length})` : item === 'Listings' ? ` (${listings.length})` : ''}
+            {item === 'Posts'
+              ? ` (${posts.length})`
+              : item === 'Listings'
+                ? ` (${listings.length})`
+                : ` (${reviewsAboutYou.length + reviewsByYou.length})`}
           </Button>
         ))}
       </div>
 
       {tab === 'Posts' && <PostsPanel currentUserId={currentUserId} isOwner={isOwner} posts={posts} />}
       {tab === 'Listings' && <ListingsPanel listings={listings} isOwner={isOwner} />}
-      {tab === 'Reviews' && <ProfileReviews />}
+      {tab === 'Reviews' && <ProfileReviews aboutYou={reviewsAboutYou} byYou={reviewsByYou} />}
     </div>
   );
 };

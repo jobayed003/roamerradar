@@ -1,5 +1,7 @@
+import { auth } from '@/auth';
 import { getListingById } from '@/data/listing';
-import { getReviewsByListingId } from '@/data/review';
+import { canUserReviewListing, getReviewsByListingId } from '@/data/review';
+import { isListingWishlisted } from '@/data/wishlist';
 import { notFound } from 'next/navigation';
 import Product from './_components/Product';
 
@@ -10,9 +12,16 @@ const CarProductPage = async ({ params }: { params: { productId: string } }) => 
     notFound();
   }
 
-  const reviews = await getReviewsByListingId(listing.id);
+  const session = await auth();
+  const [reviews, wishlisted, canReview] = await Promise.all([
+    getReviewsByListingId(listing.id),
+    isListingWishlisted(session?.user?.id, listing.id),
+    canUserReviewListing(session?.user?.id, listing.id),
+  ]);
 
-  return <Product listing={listing} reviews={reviews} />;
+  return (
+    <Product listing={listing} reviews={reviews} wishlisted={wishlisted} canReview={canReview} />
+  );
 };
 
 export default CarProductPage;
