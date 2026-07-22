@@ -3,6 +3,7 @@
 import { getPaymentMethodsByUserId } from '@/data/payment-method';
 import { getOrCreateStripeCustomer, syncStripePaymentMethods } from '@/lib/stripe-customer';
 import { getStripe } from '@/lib/stripe';
+import { CuidSchema } from '@/schemas';
 import { requireAuth } from '@/server/auth/require-auth';
 import { db } from '@/lib/db';
 
@@ -60,9 +61,15 @@ export async function deletePaymentMethod(paymentMethodId: string) {
     return { error: authResult.error };
   }
 
+  const parsedId = CuidSchema.safeParse(paymentMethodId);
+
+  if (!parsedId.success) {
+    return { error: 'Invalid payment method.' };
+  }
+
   try {
     const paymentMethod = await db.paymentMethod.findFirst({
-      where: { id: paymentMethodId, userId: authResult.user.id },
+      where: { id: parsedId.data, userId: authResult.user.id },
     });
 
     if (!paymentMethod) {
@@ -85,9 +92,15 @@ export async function setDefaultPaymentMethod(paymentMethodId: string) {
     return { error: authResult.error };
   }
 
+  const parsedId = CuidSchema.safeParse(paymentMethodId);
+
+  if (!parsedId.success) {
+    return { error: 'Invalid payment method.' };
+  }
+
   try {
     const paymentMethod = await db.paymentMethod.findFirst({
-      where: { id: paymentMethodId, userId: authResult.user.id },
+      where: { id: parsedId.data, userId: authResult.user.id },
     });
 
     if (!paymentMethod) {

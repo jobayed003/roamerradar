@@ -1,10 +1,9 @@
 'use server';
 
 import { db } from '@/lib/db';
+import { CoverImageSchema } from '@/schemas';
 import { requireAuth } from '@/server/auth/require-auth';
 import { revalidatePath } from 'next/cache';
-
-const MAX_COVER_IMAGE_LENGTH = 3_000_000;
 
 export async function updateCoverImage(coverImage: string) {
   const authResult = await requireAuth();
@@ -13,18 +12,16 @@ export async function updateCoverImage(coverImage: string) {
     return { error: authResult.error };
   }
 
-  if (!coverImage.startsWith('data:image/')) {
-    return { error: 'Invalid image format.' };
-  }
+  const parsed = CoverImageSchema.safeParse(coverImage);
 
-  if (coverImage.length > MAX_COVER_IMAGE_LENGTH) {
-    return { error: 'Image is too large. Try a smaller photo.' };
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'Invalid image.' };
   }
 
   try {
     await db.user.update({
       where: { id: authResult.user.id },
-      data: { coverImage },
+      data: { coverImage: parsed.data },
     });
 
     revalidatePath(`/profile/${authResult.user.id}`);

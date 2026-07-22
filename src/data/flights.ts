@@ -9,6 +9,7 @@ import {
 import { isDuffelTestMode, shouldUseDemoFlights } from '@/env';
 import { db } from '@/lib/db';
 import { ListingItem, ListingType } from '@/types/listing';
+import { parseListingMetadata } from '@/schemas';
 import { addDays, format } from 'date-fns';
 
 /** How long a cached Duffel fare stays bookable. Product pages still load after this. */
@@ -200,6 +201,10 @@ export async function getFlightOfferById(id: string): Promise<ListingItem | null
 
   const listing = record.listingData as ListingItem;
   const offerExpired = record.expiresAt < new Date();
+  const metadata = parseListingMetadata({
+    ...(typeof listing.metadata === 'object' && listing.metadata !== null ? listing.metadata : {}),
+    offerExpired,
+  });
 
   return {
     ...listing,
@@ -209,10 +214,7 @@ export async function getFlightOfferById(id: string): Promise<ListingItem | null
     image: record.image,
     title: record.title,
     owner: listing.owner ?? null,
-    metadata: {
-      ...(listing.metadata ?? {}),
-      offerExpired,
-    },
+    metadata,
   };
 }
 

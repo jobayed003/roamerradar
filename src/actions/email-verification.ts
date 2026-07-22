@@ -3,9 +3,16 @@
 import { getUserByEmail } from '@/data/user';
 import { getVerificationTokenByToken } from '@/data/verification-token';
 import { db } from '@/lib/db';
+import { VerificationTokenSchema } from '@/schemas';
 
 export const verification = async (token: string) => {
-  const existingToken = await getVerificationTokenByToken(token);
+  const parsed = VerificationTokenSchema.safeParse(token);
+
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'Invalid token.' };
+  }
+
+  const existingToken = await getVerificationTokenByToken(parsed.data);
 
   if (!existingToken) {
     return { token: 'Token does not exist' };

@@ -163,8 +163,6 @@ Copy the webhook signing secret into `STRIPE_WEBHOOK_SECRET` in `.env.local`.
 
 Planned improvements (not yet implemented):
 
-- Duffel order creation after successful Stripe payment
-- Zod validation for all server action inputs and Prisma JSON fields
-- Shared category page shell to reduce duplication
-- Vitest + Playwright test suite
-- Replace remaining mock data in `constants.ts` with database queries
+- Duffel order creation after successful Stripe payment (optional; demo fares are enough for now)
+- Expand Playwright coverage beyond public smoke tests
+- Move hardcoded Places suggestions into the database

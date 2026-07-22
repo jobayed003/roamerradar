@@ -9,7 +9,7 @@ import {
 import { searchUsers } from '@/data/user';
 import { db } from '@/lib/db';
 import { requireAuth } from '@/server/auth/require-auth';
-import { SendMessageSchema } from '@/schemas';
+import { SendMessageInputSchema, StartConversationSchema } from '@/schemas';
 import { revalidatePath } from 'next/cache';
 
 export async function sendMessage(conversationId: string, body: string) {
@@ -19,13 +19,16 @@ export async function sendMessage(conversationId: string, body: string) {
     return { error: authResult.error };
   }
 
-  const parsed = SendMessageSchema.safeParse({ body });
+  const parsed = SendMessageInputSchema.safeParse({ conversationId, body });
 
   if (!parsed.success) {
-    return { error: parsed.error.flatten().fieldErrors.body?.[0] ?? 'Invalid message' };
+    return { error: parsed.error.errors[0]?.message ?? 'Invalid message' };
   }
 
-  const isParticipant = await isConversationParticipant(conversationId, authResult.user.id);
+  const isParticipant = await isConversationParticipant(
+    parsed.data.conversationId,
+    authResult.user.id
+  );
 
   if (!isParticipant) {
     return { error: 'Conversation not found' };
@@ -34,19 +37,19 @@ export async function sendMessage(conversationId: string, body: string) {
   try {
     const message = await db.message.create({
       data: {
-        conversationId,
+        conversationId: parsed.data.conversationId,
         senderId: authResult.user.id,
         body: parsed.data.body,
       },
     });
 
     await db.conversation.update({
-      where: { id: conversationId },
+      where: { id: parsed.data.conversationId },
       data: { updatedAt: new Date() },
     });
 
     revalidatePath('/messages');
-    revalidatePath(`/messages/${conversationId}`);
+    revalidatePath(`/messages/${parsed.data.conversationId}`);
 
     return {
       success: true,
@@ -69,18 +72,24 @@ export async function startConversation(otherUserId: string, listingId?: string)
     return { error: authResult.error };
   }
 
-  if (authResult.user.id === otherUserId) {
+  const parsed = StartConversationSchema.safeParse({ otherUserId, listingId });
+
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'Invalid conversation request.' };
+  }
+
+  if (authResult.user.id === parsed.data.otherUserId) {
     return { error: 'You cannot message yourself' };
   }
 
-  const otherUser = await db.user.findUnique({ where: { id: otherUserId } });
+  const otherUser = await db.user.findUnique({ where: { id: parsed.data.otherUserId } });
 
   if (!otherUser) {
     return { error: 'User not found' };
   }
 
-  if (listingId) {
-    const listing = await db.listing.findUnique({ where: { id: listingId } });
+  if (parsed.data.listingId) {
+    const listing = await db.listing.findUnique({ where: { id: parsed.data.listingId } });
 
     if (!listing) {
       return { error: 'Listing not found' };
@@ -88,7 +97,11 @@ export async function startConversation(otherUserId: string, listingId?: string)
   }
 
   try {
-    const conversation = await getOrCreateConversation(authResult.user.id, otherUserId, listingId);
+    const conversation = await getOrCreateConversation(
+      authResult.user.id,
+      parsed.data.otherUserId,
+      parsed.data.listingId
+    );
 
     if (!conversation) {
       return { error: 'Unable to start conversation' };

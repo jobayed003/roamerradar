@@ -9,7 +9,6 @@ import { WishlistButton } from '@/components/WishlistButton';
 import Layout from '@/components/ui/Layout';
 import { CarouselItem } from '@/components/ui/carousel';
 import { Separator } from '@/components/ui/separator';
-import { thingsProduct } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { AtSign, ChevronLeft, Clock, Flag, IceCream, ImageIcon, Navigation, Share, User, X } from 'lucide-react';
 import Image from 'next/image';
@@ -37,11 +36,13 @@ const Product = ({
   reviews,
   wishlisted = false,
   canReview = false,
+  relatedListings = [],
 }: {
   listing: ListingItem;
   reviews: ReviewItem[];
   wishlisted?: boolean;
   canReview?: boolean;
+  relatedListings?: ListingItem[];
 }) => {
   const [selected, setSelected] = useState(filters[0]);
 
@@ -242,16 +243,14 @@ const Product = ({
         </div>
         <div className='flex w-full gap-x-4 mt-8'>
           <CarouselProvider buttonClasses='mt-8 right-0'>
-            {thingsProduct
-              .filter((item) => String(item.id) !== listing.id)
-              .map((item, index) => (
-                <CarouselItem
-                  key={index}
-                  className='flex justify-center pl-1 md:basis-1/3 min-[500px]:basis-1/2 basis-full'
-                >
-                  <ProductSuggestion {...item} />
-                </CarouselItem>
-              ))}
+            {relatedListings.map((item) => (
+              <CarouselItem
+                key={item.id}
+                className='flex justify-center pl-1 md:basis-1/3 min-[500px]:basis-1/2 basis-full'
+              >
+                <ProductSuggestion listing={item} />
+              </CarouselItem>
+            ))}
           </CarouselProvider>
         </div>
       </Layout>

@@ -1,7 +1,8 @@
 import { getFlightOfferById } from '@/data/flights';
 import { db } from '@/lib/db';
-import type { ReviewItem, UserSummary } from '@/types/review';
-import { ListingItem, ListingMetadata } from '@/types/listing';
+import { parseListingMetadata } from '@/schemas';
+import type { UserSummary } from '@/types/review';
+import { ListingItem } from '@/types/listing';
 import { ListingType, Prisma } from '@prisma/client';
 
 export const userSummarySelect = {
@@ -36,7 +37,7 @@ function toListingItem(listing: {
 }): ListingItem {
   return {
     ...listing,
-    metadata: (listing.metadata as ListingMetadata | null) ?? null,
+    metadata: parseListingMetadata(listing.metadata),
     owner: listing.owner ?? null,
   };
 }
