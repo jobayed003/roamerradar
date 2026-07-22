@@ -61,3 +61,31 @@ export const SendMessageSchema = z.object({
     .min(1, { message: 'Message cannot be empty' })
     .max(2000, { message: 'Message is too long' }),
 });
+
+export const CreateListingSchema = z.object({
+  title: z.string().trim().min(3, { message: 'Title is required' }).max(120),
+  price: z.coerce.number().positive({ message: 'Price must be greater than 0' }),
+  discountPercent: z.coerce.number().min(0).max(100).optional().default(0),
+  location: z.string().trim().min(2, { message: 'Location is required' }).max(200),
+  description: z.string().trim().max(2000).optional().default(''),
+  bedrooms: z.coerce.number().int().min(1).max(20).optional().default(1),
+  livingRooms: z.coerce.number().int().min(0).max(20).optional().default(1),
+  kitchens: z.coerce.number().int().min(0).max(20).optional().default(1),
+  amenities: z.array(z.string().trim().min(1)).max(4).optional().default([]),
+  images: z
+    .array(z.string().startsWith('data:image/'))
+    .min(1, { message: 'Upload at least one photo' })
+    .max(3),
+  shareOnProfile: z.boolean().optional().default(true),
+});
+
+export const CreatePostSchema = z.object({
+  body: z.string().trim().min(1, { message: 'Post cannot be empty' }).max(2000),
+  image: z.string().startsWith('data:image/').optional().nullable(),
+  listingId: z.string().cuid().optional().nullable(),
+});
+
+export const CreateCommentSchema = z.object({
+  postId: z.string().cuid(),
+  body: z.string().trim().min(1, { message: 'Comment cannot be empty' }).max(1000),
+});

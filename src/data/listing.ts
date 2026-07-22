@@ -119,3 +119,21 @@ export async function getListingCountByType(type: ListingType, location?: string
 export async function getDemoFlightListings() {
   return getListingsByType(ListingType.FLIGHT);
 }
+
+export async function getListingsByOwnerId(ownerId: string) {
+  try {
+    const listings = await db.listing.findMany({
+      where: {
+        ownerId,
+        placesCount: null,
+      },
+      orderBy: { createdAt: 'desc' },
+      include: { owner: { select: userSummarySelect } },
+    });
+
+    return listings.map(toListingItem);
+  } catch (error) {
+    console.error('[getListingsByOwnerId]', error);
+    return [];
+  }
+}
