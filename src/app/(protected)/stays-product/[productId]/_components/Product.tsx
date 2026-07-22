@@ -9,6 +9,7 @@ import UserProfileActions from '@/components/UserProfileActions';
 import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { WishlistButton } from '@/components/WishlistButton';
 import {
   Bath,
   Bed,
@@ -18,7 +19,6 @@ import {
   Computer,
   CreditCard,
   Flag,
-  Heart,
   Home,
   Navigation,
   Pizza,
@@ -43,7 +43,7 @@ import { getFirstLetters } from '@/lib/utils';
 import { useBookingDate, useTravelers } from '@/stores/useData';
 import { useMemo } from 'react';
 
-const icons = [Navigation, Share, Heart, X];
+const icons = [Navigation, Share, X];
 
 const defaultGalleryImages = ['/images/grid-4.jpg', '/images/grid-2.jpg', '/images/grid-1.jpg', '/images/grid-3.jpg'];
 
@@ -58,7 +58,17 @@ const amenities = [
 
 const filterItems = ['Newest', 'Popular', 'All'];
 
-const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewItem[] }) => {
+const Product = ({
+  listing,
+  reviews,
+  wishlisted = false,
+  canReview = false,
+}: {
+  listing: ListingItem;
+  reviews: ReviewItem[];
+  wishlisted?: boolean;
+  canReview?: boolean;
+}) => {
   const { date } = useBookingDate();
   const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
   const guests = Math.max(1, totalTravelers);
@@ -145,10 +155,19 @@ const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewIt
             </div>
           </div>
           <div className='flex gap-3 text-gray_border self-center'>
-            {icons.map((Item) => (
+            {icons.slice(0, 2).map((Item) => (
               <div
                 className='w-10 h-10 flex items-center justify-center rounded-full border-2 dark:border-gray_border hover:border-[#353945] group transition-all hover:bg-[#353945] cursor-pointer'
-                key={Math.random()}
+                key={Item.displayName ?? Item.name}
+              >
+                <Item className='group-hover:text-[#FCFCFD] text-gray_text' />
+              </div>
+            ))}
+            <WishlistButton listingId={listing.id} initialSaved={wishlisted} />
+            {icons.slice(2).map((Item) => (
+              <div
+                className='w-10 h-10 flex items-center justify-center rounded-full border-2 dark:border-gray_border hover:border-[#353945] group transition-all hover:bg-[#353945] cursor-pointer'
+                key={Item.displayName ?? Item.name}
               >
                 <Item className='group-hover:text-[#FCFCFD] text-gray_text' />
               </div>
@@ -314,7 +333,7 @@ const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewIt
 
       <Separator className='mt-10 mb-20 dark:bg-dark_russian' />
 
-      <ProfileSection host={listing.owner} listing={listing} reviews={reviews} />
+      <ProfileSection host={listing.owner} listing={listing} reviews={reviews} canReview={canReview} />
     </>
   );
 };

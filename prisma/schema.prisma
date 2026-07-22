@@ -37,6 +37,7 @@ model User {
   reviews                  Review[]
   posts                    Post[]
   comments                 Comment[]
+  wishlistItems            WishlistItem[]
   accountCreated           DateTime                  @default(now())
 }
 
@@ -99,12 +100,26 @@ model Listing {
   bookings      Booking[]
   conversations Conversation[]
   posts         Post[]
+  wishlistItems WishlistItem[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
   @@index([type])
   @@index([location])
   @@index([ownerId])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  listingId String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, listingId])
+  @@index([userId])
+  @@index([listingId])
 }
 
 model Review {
@@ -179,11 +194,13 @@ model Booking {
   amount                Float
   currency              String        @default("USD")
   stripePaymentIntentId String?       @unique
+  stripeRefundId        String?
   title                 String
   image                 String?
   guests                Int           @default(1)
   checkIn               DateTime?
   checkOut              DateTime?
+  cancelledAt           DateTime?
   user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing               Listing?      @relation(fields: [listingId], references: [id], onDelete: SetNull)
   flightOffer           FlightOffer?  @relation(fields: [flightOfferId], references: [id], onDelete: SetNull)

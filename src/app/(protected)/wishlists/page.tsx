@@ -1,16 +1,18 @@
-import { getListingsByType } from '@/data/listing';
-import { ListingType } from '@prisma/client';
+import { auth } from '@/auth';
+import { getWishlistListings } from '@/data/wishlist';
+import { redirect } from 'next/navigation';
 import Wishlist from './_components/Wishlist';
 
 const WishlistPage = async () => {
-  const [stays, flights, cars, experiences] = await Promise.all([
-    getListingsByType(ListingType.STAY),
-    getListingsByType(ListingType.FLIGHT),
-    getListingsByType(ListingType.CAR),
-    getListingsByType(ListingType.EXPERIENCE),
-  ]);
+  const session = await auth();
 
-  return <Wishlist stays={stays} flights={flights} cars={cars} experiences={experiences} />;
+  if (!session?.user?.id) {
+    redirect('/auth/login?callbackUrl=/wishlists');
+  }
+
+  const listings = await getWishlistListings(session.user.id);
+
+  return <Wishlist listings={listings} />;
 };
 
 export default WishlistPage;

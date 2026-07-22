@@ -3,98 +3,110 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import type { ProfileReviewItem } from '@/data/review';
 import { cn, getFirstLetters } from '@/lib/utils';
+import { formatDistanceToNow } from 'date-fns';
+import Link from 'next/link';
 import { useState } from 'react';
+import { FaStar } from 'react-icons/fa';
 
-const Data = [
-  {
-    id: 'asdflasjdlfjlsdf',
-    name: 'John doe',
-    img: '/images/browse-1.jpg',
-    desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto quidem in saepe',
-    time: 'About 1 hour ago',
-  },
-];
+type ProfileReviewsProps = {
+  aboutYou: ProfileReviewItem[];
+  byYou: ProfileReviewItem[];
+};
 
-const ProfileReviews = () => {
-  const [selected, setSelected] = useState('Review about you');
+const ProfileReviews = ({ aboutYou, byYou }: ProfileReviewsProps) => {
+  const [selected, setSelected] = useState<'about' | 'by'>('about');
+  const reviews = selected === 'about' ? aboutYou : byYou;
 
   return (
     <div className='mb-8'>
-      <div className='flex items-center justify-between my-8'>
-        <h1 className='text-2xl font-semibold sm:block hidden'>2 reviews</h1>
+      <div className='flex items-center justify-between my-8 gap-4 flex-wrap'>
+        <h1 className='text-2xl font-semibold sm:block hidden'>
+          {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
+        </h1>
 
         <div className='flex items-center gap-x-2 font-bold text-sm'>
           <Button
             className={cn(
               'rounded-full transition-all px-4 h-7 font-bold text-sm text-gray_text dark:text-gray_text dark:hover:text-white hover:text-black py-1',
-              selected === 'Review about you' &&
+              selected === 'about' &&
                 'dark:text-background text-background bg-gray_border dark:bg-foreground hover:text-background dark:hover:text-background'
             )}
             variant={'transparent'}
-            onClick={() => setSelected('Review about you')}
+            onClick={() => setSelected('about')}
           >
-            Review about you
+            Reviews about you ({aboutYou.length})
           </Button>
           <Button
             className={cn(
               'rounded-full transition-all px-4 h-7 font-bold text-sm text-gray_text dark:text-gray_text dark:hover:text-white hover:text-black py-1',
-              selected === 'Reviews by you' &&
+              selected === 'by' &&
                 'dark:text-background text-background bg-gray_border dark:bg-foreground hover:text-background dark:hover:text-background'
             )}
             variant={'transparent'}
-            onClick={() => setSelected('Reviews by you')}
+            onClick={() => setSelected('by')}
           >
-            Reviews by you
+            Reviews by you ({byYou.length})
           </Button>
         </div>
       </div>
       <Separator />
 
       <div className='flex flex-col gap-y-3 mt-8'>
-        {Array.from({ length: 2 }).map((item, idx) => (
-          <>
-            <Review key={Math.random()} {...Data[0]} />
-            {idx !== 2 - 1 && <Separator />}
-          </>
-        ))}
+        {reviews.length === 0 ? (
+          <p className='text-gray_text text-sm py-4'>
+            {selected === 'about'
+              ? 'No reviews on your listings yet.'
+              : 'You have not written any reviews yet.'}
+          </p>
+        ) : (
+          reviews.map((review, idx) => (
+            <div key={review.id}>
+              <ReviewRow review={review} />
+              {idx !== reviews.length - 1 && <Separator className='my-4' />}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
 };
 
-type ReviewProps = {
-  id?: string;
-  name: string;
-  img: string;
-  desc: string;
-  time: string;
-};
+function ReviewRow({ review }: { review: ProfileReviewItem }) {
+  const name =
+    review.user.displayName || review.user.realName || review.user.name || 'Traveler';
 
-const Review = ({ name, img, desc, id, time }: ReviewProps) => {
   return (
     <div className='flex gap-x-4 mb-4'>
       <Avatar className='h-16 w-16'>
-        <AvatarImage src={img} />
+        <AvatarImage src={review.user.image ?? undefined} />
         <AvatarFallback>{getFirstLetters(name)}</AvatarFallback>
       </Avatar>
 
-      <div className='flex flex-col'>
-        <h1 className='font-medium mb-1'>{name}</h1>
-        <p className='dark:text-gray_text text-gray_border mb-2'>{desc}</p>
-
-        <div className='flex gap-x-2 items-center text-sm'>
-          <p className='text-gray_text text-xs'>{time}</p>
-
-          <div className='text-white font-poppins text-xs font-semibold hover:text-blue-hover cursor-pointer'>Like</div>
-
-          <div className='text-white font-poppins text-xs font-semibold hover:text-blue-hover cursor-pointer'>
-            Reply
-          </div>
+      <div className='flex flex-col min-w-0'>
+        <div className='flex flex-wrap items-center gap-2 mb-1'>
+          <h1 className='font-medium'>{name}</h1>
+          <span className='flex items-center gap-1 text-xs text-gray_text'>
+            <FaStar className='text-yellow-500' />
+            {review.rating}
+          </span>
+        </div>
+        <p className='dark:text-gray_text text-gray_border mb-2'>{review.body}</p>
+        <div className='flex flex-wrap gap-x-2 items-center text-sm'>
+          <p className='text-gray_text text-xs'>
+            {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
+          </p>
+          <Link
+            href={`/${review.listing.type === 'STAY' ? 'stays' : review.listing.type === 'CAR' ? 'cars' : review.listing.type === 'EXPERIENCE' ? 'things' : 'flights'}-product/${review.listing.id}`}
+            className='text-blue text-xs font-semibold hover:underline'
+          >
+            {review.listing.title}
+          </Link>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default ProfileReviews;
