@@ -24,12 +24,12 @@ type BookingListProps = {
 export function BookingList({ bookings, emptyLabel = 'bookings' }: BookingListProps) {
   if (bookings.length === 0) {
     return (
-      <div className='rounded-3xl border dark:border-gray_border p-12 text-center mt-8'>
+      <div className='rounded-3xl border dark:border-gray_border p-8 sm:p-12 text-center mt-8'>
         <h2 className='text-xl font-bold mb-2'>No {emptyLabel} yet</h2>
         <p className='text-gray_text text-sm max-w-md mx-auto'>
           When you complete a checkout for a stay, flight, car, or experience, it will show up here.
         </p>
-        <Button asChild className='mt-6 rounded-full bg-blue hover:bg-blue-hover text-white'>
+        <Button asChild className='mt-6 w-full sm:w-auto rounded-full bg-blue hover:bg-blue-hover text-white'>
           <Link href='/'>Start exploring</Link>
         </Button>
       </div>
@@ -65,7 +65,7 @@ function BookingCard({ booking }: { booking: BookingItem }) {
     startTransition(async () => {
       const result = await cancelBooking({ bookingId: booking.id });
       if ('error' in result && result.error) {
-        toast({ title: result.error });
+        toast({ title: result.error, variant: 'destructive' });
         setConfirming(false);
         return;
       }
@@ -76,7 +76,7 @@ function BookingCard({ booking }: { booking: BookingItem }) {
   };
 
   return (
-    <article className='flex flex-col sm:flex-row gap-6 rounded-3xl border dark:border-gray_border p-6 sm:p-8'>
+    <article className='flex flex-col sm:flex-row gap-6 rounded-3xl border dark:border-gray_border p-5 sm:p-8'>
       <div className='relative h-48 sm:h-40 sm:w-56 w-full shrink-0 rounded-2xl overflow-hidden bg-[#F4F5F6] dark:bg-dark_russian'>
         <Image
           src={imageSrc}
@@ -122,25 +122,31 @@ function BookingCard({ booking }: { booking: BookingItem }) {
           </span>
         </div>
 
-        <div className='flex flex-wrap items-center justify-between gap-4 mt-auto pt-2'>
+        {confirming && (
+          <p className='text-sm text-gray_text'>
+            Cancel this booking? Eligible payments are refunded to your original method (usually 5–10 business days).
+          </p>
+        )}
+
+        <div className='flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 mt-auto pt-2'>
           <p className='text-2xl font-bold'>
             {booking.currency} {booking.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
 
-          <div className='flex flex-wrap gap-2'>
-            {booking.status === BookingStatus.PAID && (
-              confirming ? (
+          <div className='flex flex-col sm:flex-row gap-2 w-full sm:w-auto'>
+            {booking.status === BookingStatus.PAID &&
+              (confirming ? (
                 <>
                   <Button
                     variant='outline'
-                    className='rounded-full font-bold'
+                    className='rounded-full font-bold w-full sm:w-auto'
                     disabled={isPending}
                     onClick={() => setConfirming(false)}
                   >
                     Keep booking
                   </Button>
                   <Button
-                    className='rounded-full font-bold bg-red-600 hover:bg-red-700 text-white'
+                    className='rounded-full font-bold bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto'
                     disabled={isPending}
                     onClick={onCancel}
                   >
@@ -150,24 +156,23 @@ function BookingCard({ booking }: { booking: BookingItem }) {
               ) : (
                 <Button
                   variant='outline'
-                  className='rounded-full font-bold'
+                  className='rounded-full font-bold w-full sm:w-auto'
                   onClick={() => setConfirming(true)}
                 >
                   Cancel booking
                 </Button>
-              )
-            )}
+              ))}
 
-            {productPath ? (
-              <Button asChild variant='outline' className='rounded-full font-bold'>
+            {productPath && !confirming ? (
+              <Button asChild variant='outline' className='rounded-full font-bold w-full sm:w-auto'>
                 <Link href={productPath}>
                   View details
                   <ArrowRight className='w-4 h-4 ml-2' />
                 </Link>
               </Button>
-            ) : (
-              <p className='text-xs text-gray_text'>Booking reference: {booking.id.slice(0, 8)}</p>
-            )}
+            ) : !productPath && !confirming ? (
+              <p className='text-xs text-gray_text self-center'>Booking reference: {booking.id.slice(0, 8)}</p>
+            ) : null}
           </div>
         </div>
       </div>

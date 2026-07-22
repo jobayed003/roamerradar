@@ -211,6 +211,8 @@ model Booking {
   @@index([flightOfferId])
   @@index([checkIn])
   @@index([checkOut])
+  @@index([userId, listingId, status])
+  @@index([userId, flightOfferId, status])
 }
 
 model Conversation {

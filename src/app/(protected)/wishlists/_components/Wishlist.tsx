@@ -61,17 +61,39 @@ const Wishlist = ({ listings }: WishlistProps) => {
         <CategoryFilter filters={wishlistsFilter} selectItems={['Recently saved']} />
 
         {listings.length === 0 ? (
-          <div className='rounded-3xl border dark:border-gray_border p-12 text-center mt-8'>
+          <div className='rounded-3xl border dark:border-gray_border p-8 sm:p-12 text-center mt-8'>
             <h2 className='text-xl font-bold mb-2'>Nothing saved yet</h2>
             <p className='text-gray_text text-sm max-w-md mx-auto mb-6'>
               Tap the heart on a stay, car, or experience to keep it here for later.
             </p>
-            <Link href='/' className='text-blue font-bold hover:underline'>
+            <Link
+              href='/'
+              className='inline-flex items-center justify-center w-full sm:w-auto rounded-full bg-blue hover:bg-blue-hover text-white font-bold px-6 py-3'
+            >
               Browse stays
             </Link>
           </div>
         ) : active.count === 0 ? (
-          <p className='text-gray_text text-center py-12 mt-4'>No saved {active.stepName} yet.</p>
+          <div className='rounded-3xl border dark:border-gray_border p-8 text-center mt-8'>
+            <h2 className='text-lg font-bold mb-2'>No saved {active.stepName} yet</h2>
+            <p className='text-gray_text text-sm mb-6'>
+              Switch categories above, or keep browsing and tap the heart when something stands out.
+            </p>
+            <Link
+              href={
+                active.stepName === 'flights'
+                  ? '/flights-category'
+                  : active.stepName === 'cars'
+                    ? '/cars-category'
+                    : active.stepName === 'things'
+                      ? '/things-category'
+                      : '/stays-category'
+              }
+              className='inline-flex items-center justify-center w-full sm:w-auto rounded-full border dark:border-gray_border font-bold px-6 py-3 hover:border-blue'
+            >
+              Browse {active.stepName}
+            </Link>
+          </div>
         ) : (
           active.component
         )}

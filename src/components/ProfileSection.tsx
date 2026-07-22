@@ -12,7 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
 import { getFirstLetters } from '@/lib/utils';
 import type { ReviewItem, UserSummary } from '@/types/review';
-import { Flag, Home, Smile } from 'lucide-react';
+import { Flag, Home } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -46,7 +46,7 @@ export const ProfileSection = ({ host, listing, reviews, canReview = false }: Pr
       });
 
       if ('error' in result && result.error) {
-        toast({ title: result.error });
+        toast({ title: result.error, variant: 'destructive' });
         return;
       }
 
@@ -150,16 +150,16 @@ export const ProfileSection = ({ host, listing, reviews, canReview = false }: Pr
         </div>
         <div className='pt-10 w-full' id='reviews'>
           <div>
-            <h1 className='text-2xl font-semibold mb-2'>Add a review</h1>
             {canReview ? (
               <>
-                <div className='flex gap-x-1 justify-between font-poppins text-sm '>
+                <h1 className='text-2xl font-semibold mb-2'>Add a review</h1>
+                <div className='flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between font-poppins text-sm'>
                   <p className='text-gray_text'>
                     Share your experience at{' '}
                     <span className='dark:text-foreground text-dark_bg font-medium'>{listing.title}</span>
                   </p>
 
-                  <div className='flex flex-row-reverse gap-x-1'>
+                  <div className='flex flex-row-reverse gap-x-1 self-start sm:self-auto'>
                     {[5, 4, 3, 2, 1].map((value) => (
                       <button
                         key={value}
@@ -177,40 +177,43 @@ export const ProfileSection = ({ host, listing, reviews, canReview = false }: Pr
                   </div>
                 </div>
 
-                <div className='flex flex-col gap-y-6 my-8 relative'>
+                <div className='flex flex-col gap-3 my-8'>
                   <CustomInput
-                    className='h-[72px] font-normal dark:border-gray_border border-2 rounded-3xl text-base placeholder:text-gray_text pr-40'
+                    className='min-h-[72px] h-auto py-4 font-normal dark:border-gray_border border-2 rounded-3xl text-base placeholder:text-gray_text'
                     placeholder='Share your thoughts'
                     value={body}
                     onChange={(event) => setBody(event.target.value)}
                   />
-
-                  <div className='absolute flex items-center gap-x-3 right-4 top-4 transition-all'>
-                    <Smile className='text-gray_text' />
-                    <Button
-                      type='button'
-                      disabled={isPending || body.trim().length < 3}
-                      onClick={onSubmit}
-                      className='bg-blue hover:bg-blue-hover grow text-white rounded-full px-4 py-2 font-bold'
-                    >
-                      {isPending ? 'Posting…' : 'Post it!'} <FaArrowRight className='ml-3 ' />
-                    </Button>
-                  </div>
+                  <Button
+                    type='button'
+                    disabled={isPending || body.trim().length < 3}
+                    onClick={onSubmit}
+                    className='bg-blue hover:bg-blue-hover text-white rounded-full px-4 py-3 font-bold w-full sm:w-auto sm:self-end'
+                  >
+                    {isPending ? 'Posting…' : 'Post it!'} <FaArrowRight className='ml-3' />
+                  </Button>
                 </div>
               </>
             ) : (
-              <p className='text-sm text-gray_text mb-8'>
-                Book this listing to leave a review once your trip is confirmed.
-              </p>
+              <div className='mb-8 rounded-2xl border dark:border-gray_border p-5'>
+                <h1 className='text-xl font-semibold mb-2'>Reviews</h1>
+                <p className='text-sm text-gray_text'>
+                  Book this listing and complete checkout to leave a review. Hosts and future guests use these notes to
+                  decide where to stay.
+                </p>
+                <Button asChild className='mt-4 rounded-full bg-blue hover:bg-blue-hover text-white font-bold w-full sm:w-auto'>
+                  <Link href={`/checkout/${listing.id}`}>Book to review</Link>
+                </Button>
+              </div>
             )}
 
             <div className='flex flex-col gap-y-6'>
-              <div className='flex justify-between items-center'>
-                <h1 className='text-2xl font-semibold '>
+              <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3'>
+                <h1 className='text-2xl font-semibold'>
                   {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
                 </h1>
                 <Select>
-                  <SelectTrigger className='md:w-40 h-12 w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
+                  <SelectTrigger className='sm:w-40 h-12 w-full focus:ring-0 focus:ring-offset-0 ring-offset-0 font-bold dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] border-0 rounded-xl'>
                     <SelectValue placeholder={filterItems[0]} />
                   </SelectTrigger>
                   <SelectContent className='font-bold shadow-[inset_0_0_0_2px_#353945] border-0 rounded-xl [&_option]:hover:bg-red dark:bg-dark_bg'>
