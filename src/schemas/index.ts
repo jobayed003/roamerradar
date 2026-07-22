@@ -89,3 +89,13 @@ export const CreateCommentSchema = z.object({
   postId: z.string().cuid(),
   body: z.string().trim().min(1, { message: 'Comment cannot be empty' }).max(1000),
 });
+
+export const CreateReviewSchema = z.object({
+  listingId: z.string().cuid(),
+  rating: z.coerce.number().int().min(1).max(5),
+  body: z.string().trim().min(3, { message: 'Review is too short' }).max(2000),
+});
+
+export const CancelBookingSchema = z.object({
+  bookingId: z.string().cuid(),
+});

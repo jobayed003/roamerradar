@@ -8,6 +8,7 @@ export const publicRoutes: string[] = [
   '/cars',
   '/flights',
   '/things',
+  '/support',
   '/auth/verify-email',
 ];
 
