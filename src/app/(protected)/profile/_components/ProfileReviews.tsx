@@ -29,25 +29,27 @@ const ProfileReviews = ({ aboutYou, byYou }: ProfileReviewsProps) => {
         <div className='flex items-center gap-x-2 font-bold text-sm'>
           <Button
             className={cn(
-              'rounded-full transition-all px-4 h-7 font-bold text-sm text-gray_text dark:text-gray_text dark:hover:text-white hover:text-black py-1',
+              'rounded-full transition-all px-3 sm:px-4 h-7 font-bold text-sm text-gray_text dark:text-gray_text dark:hover:text-white hover:text-black py-1',
               selected === 'about' &&
                 'dark:text-background text-background bg-gray_border dark:bg-foreground hover:text-background dark:hover:text-background'
             )}
             variant={'transparent'}
             onClick={() => setSelected('about')}
           >
-            Reviews about you ({aboutYou.length})
+            <span className='sm:hidden'>About ({aboutYou.length})</span>
+            <span className='hidden sm:inline'>Reviews about you ({aboutYou.length})</span>
           </Button>
           <Button
             className={cn(
-              'rounded-full transition-all px-4 h-7 font-bold text-sm text-gray_text dark:text-gray_text dark:hover:text-white hover:text-black py-1',
+              'rounded-full transition-all px-3 sm:px-4 h-7 font-bold text-sm text-gray_text dark:text-gray_text dark:hover:text-white hover:text-black py-1',
               selected === 'by' &&
                 'dark:text-background text-background bg-gray_border dark:bg-foreground hover:text-background dark:hover:text-background'
             )}
             variant={'transparent'}
             onClick={() => setSelected('by')}
           >
-            Reviews by you ({byYou.length})
+            <span className='sm:hidden'>By you ({byYou.length})</span>
+            <span className='hidden sm:inline'>Reviews by you ({byYou.length})</span>
           </Button>
         </div>
       </div>

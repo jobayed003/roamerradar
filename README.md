@@ -163,7 +163,7 @@ Copy the webhook signing secret into `STRIPE_WEBHOOK_SECRET` in `.env.local`.
 
 Planned improvements (not yet implemented):
 
-- Checkout idempotency and flight offer expiry validation
+- Duffel order creation after successful Stripe payment
 - Zod validation for all server action inputs and Prisma JSON fields
 - Shared category page shell to reduce duplication
 - Vitest + Playwright test suite
