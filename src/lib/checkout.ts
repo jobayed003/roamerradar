@@ -1,4 +1,4 @@
-import { getFlightOfferRecord } from '@/data/flights';
+import { getFlightOfferRecord, isFlightOfferBookable } from '@/data/flights';
 import { getListingById } from '@/data/listing';
 import {
   calculateStayPricing,
@@ -25,6 +25,12 @@ export async function startCheckout(userId: string, itemId: string, options: Sta
     return { error: 'Listing not found.' as const };
   }
 
+  if (flightOffer && !isFlightOfferBookable(flightOffer.expiresAt)) {
+    return {
+      error: 'This fare has expired. Search again for current prices.' as const,
+    };
+  }
+
   const checkInDate = parseBookingDate(options.checkIn);
   const checkOutDate = parseBookingDate(options.checkOut);
 
@@ -41,7 +47,11 @@ export async function startCheckout(userId: string, itemId: string, options: Sta
   } else if (listing) {
     const nightlyRate = listing.offerPrice ?? listing.price;
 
-    if (listing.type === ListingType.EXPERIENCE) {
+    if (listing.type === ListingType.FLIGHT) {
+      amountValue = nightlyRate;
+      checkIn = checkInDate;
+      checkOut = checkOutDate;
+    } else if (listing.type === ListingType.EXPERIENCE) {
       const range = ensureStayDateRange(checkInDate, checkOutDate ?? checkInDate);
       checkIn = range.checkIn;
       checkOut = range.checkIn;
