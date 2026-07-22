@@ -7,6 +7,7 @@ type FlightsCategoryPageProps = {
     to?: string;
     departure?: string;
     return?: string;
+    notice?: string;
   };
 };
 
@@ -18,11 +19,16 @@ const FlightsCategoryPage = async ({ searchParams }: FlightsCategoryPageProps) =
     returnDate: searchParams.return,
   });
 
+  const unavailableNotice =
+    searchParams.notice === 'fare-unavailable'
+      ? 'That fare is no longer available. Search again for current prices.'
+      : undefined;
+
   return (
     <FlightsCategory
       listings={result.listings}
       searchError={result.error}
-      searchNotice={result.notice}
+      searchNotice={unavailableNotice ?? result.notice}
       routeLabel={result.routeLabel}
       source={result.source}
       duffelTestMode={result.duffelTestMode}

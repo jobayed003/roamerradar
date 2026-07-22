@@ -33,7 +33,15 @@ import Link from 'next/link';
 import { FaCheckCircle, FaStar } from 'react-icons/fa';
 import { ListingItem } from '@/types/listing';
 import type { ReviewItem } from '@/types/review';
+import {
+  buildCheckoutUrl,
+  calculateStayPricing,
+  ensureStayDateRange,
+  formatStayDate,
+} from '@/lib/booking-pricing';
 import { getFirstLetters } from '@/lib/utils';
+import { useBookingDate, useTravelers } from '@/stores/useData';
+import { useMemo } from 'react';
 
 const icons = [Navigation, Share, X];
 
@@ -61,15 +69,45 @@ const Product = ({
   wishlisted?: boolean;
   canReview?: boolean;
 }) => {
+  const { date } = useBookingDate();
+  const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
+  const guests = Math.max(1, totalTravelers);
+
+  const range = useMemo(
+    () => ensureStayDateRange(date?.from, date?.to),
+    [date?.from, date?.to]
+  );
+
   const nightlyPrice = listing.offerPrice ?? listing.price;
+  const pricing = useMemo(
+    () =>
+      calculateStayPricing({
+        nightlyRate: nightlyPrice,
+        checkIn: range.checkIn,
+        checkOut: range.checkOut,
+      }),
+    [nightlyPrice, range.checkIn, range.checkOut]
+  );
+
   const hostName = listing.owner?.displayName ?? listing.owner?.realName ?? listing.owner?.name ?? 'Host';
   const galleryImages = [listing.image, ...defaultGalleryImages.filter((image) => image !== listing.image)];
+  const metadata = listing.metadata;
+  const bedrooms = metadata?.bedrooms ?? 1;
+
   const receiptDetails = [
-    { label: `$${nightlyPrice} x 7 nights`, price: nightlyPrice * 7 },
-    { label: '10% campaign discount', price: -(nightlyPrice * 7 * 0.1) },
-    { label: 'Service fee', price: 103 },
+    {
+      label: `$${nightlyPrice} x ${pricing.nights} night${pricing.nights === 1 ? '' : 's'}`,
+      price: pricing.subtotal,
+    },
+    { label: 'Service fee', price: pricing.serviceFee },
   ];
-  const totalPrice = receiptDetails.reduce((acc, item) => acc + item.price, 0);
+  const totalPrice = pricing.total;
+  const checkoutHref = buildCheckoutUrl({
+    itemId: listing.id,
+    checkIn: pricing.checkIn,
+    checkOut: pricing.checkOut,
+    guests,
+  });
 
   return (
     <>
@@ -146,9 +184,13 @@ const Product = ({
             <Separator className='bg-dark_russian' />
             <div className='flex items-center gap-x-3 text-gray_text py-4'>
               <User className='h-5 w-5' />
-              <p>2 guests</p>
+              <p>
+                {guests} guest{guests === 1 ? '' : 's'}
+              </p>
               <Bed className='h-5 w-5' />
-              <p>1 bedroom</p>
+              <p>
+                {bedrooms} bedroom{bedrooms === 1 ? '' : 's'}
+              </p>
               <Bath className='h-5 w-5 ' />
               <p>1 private bath</p>
             </div>
@@ -233,14 +275,14 @@ const Product = ({
                   <CalendarDays />
                   <div className='flex flex-col font-poppins'>
                     <p className='text-xs'>Check-in</p>
-                    <p className='text-foreground font-medium'>May 15, 2024</p>
+                    <p className='text-foreground font-medium'>{formatStayDate(pricing.checkIn)}</p>
                   </div>
                 </div>
                 <div className='flex gap-2 border-l items-center dark:border-gray_text text-gray_text p-3 basis-1/2'>
                   <CalendarDays />
                   <div className='flex flex-col'>
                     <p className='text-xs'>Check-out</p>
-                    <p className='text-foreground font-medium'>May 22, 2024</p>
+                    <p className='text-foreground font-medium'>{formatStayDate(pricing.checkOut)}</p>
                   </div>
                 </div>
 
@@ -248,7 +290,9 @@ const Product = ({
                   <User2 />
                   <div className='flex flex-col'>
                     <p className='text-xs'>Guest</p>
-                    <p className='text-foreground font-medium'>2 guests</p>
+                    <p className='text-foreground font-medium'>
+                      {guests} guest{guests === 1 ? '' : 's'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -261,7 +305,7 @@ const Product = ({
                 Save +
               </Button>
               <Button asChild className='bg-blue hover:bg-blue-hover grow text-white rounded-full h-12 px-6 font-bold'>
-                <Link href={`/checkout/${listing.id}`}>Reserve</Link>
+                <Link href={checkoutHref}>Reserve</Link>
               </Button>
             </div>
             <div className='pt-8 flex flex-col'>

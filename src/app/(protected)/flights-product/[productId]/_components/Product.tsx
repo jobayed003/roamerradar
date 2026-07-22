@@ -6,13 +6,30 @@ import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ListingItem } from '@/types/listing';
+import { buildCheckoutUrl } from '@/lib/booking-pricing';
+import { useBookingDate, useTravelers } from '@/stores/useData';
 import { Check, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 const FlightProduct = ({ listing }: { listing: ListingItem }) => {
   const legs = listing.metadata?.legs ?? [];
   const provider = listing.metadata?.provider ?? 'eDreams';
+  const offerExpired = Boolean(listing.metadata?.offerExpired);
+  const { date } = useBookingDate();
+  const guests = useTravelers((state) => Math.max(1, state.adults + state.children + state.toddlers));
+
+  const checkoutHref = useMemo(
+    () =>
+      buildCheckoutUrl({
+        itemId: listing.id,
+        checkIn: date?.from,
+        checkOut: date?.to,
+        guests,
+      }),
+    [listing.id, date?.from, date?.to, guests]
+  );
 
   return (
     <>
@@ -80,13 +97,25 @@ const FlightProduct = ({ listing }: { listing: ListingItem }) => {
               <p className='text-4xl font-bold mt-1'>${listing.price.toLocaleString()}</p>
               <p className='text-xs text-gray_text mt-2'>Includes taxes and fees · per traveler</p>
 
-              <Button asChild className='w-full mt-6 bg-blue hover:bg-blue-hover text-white rounded-full h-12 font-bold'>
-                <Link href={`/checkout/${listing.id}`}>Book flight</Link>
-              </Button>
-
-              <p className='text-xs text-gray_text text-center mt-4'>
-                Free cancellation within 24 hours on eligible fares.
-              </p>
+              {offerExpired ? (
+                <>
+                  <p className='text-sm text-amber-600 dark:text-amber-400 mt-4'>
+                    This fare has expired. Search again for current prices.
+                  </p>
+                  <Button asChild className='w-full mt-4 bg-blue hover:bg-blue-hover text-white rounded-full h-12 font-bold'>
+                    <Link href='/flights-category'>Search flights</Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild className='w-full mt-6 bg-blue hover:bg-blue-hover text-white rounded-full h-12 font-bold'>
+                    <Link href={checkoutHref}>Book flight</Link>
+                  </Button>
+                  <p className='text-xs text-gray_text text-center mt-4'>
+                    Free cancellation within 24 hours on eligible fares.
+                  </p>
+                </>
+              )}
             </div>
           </aside>
         </div>

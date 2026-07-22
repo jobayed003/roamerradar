@@ -209,7 +209,7 @@ const Product = ({
             </div>
           </div>
 
-          <ReceiptDetails />
+          <ReceiptDetails listing={listing} />
         </div>
       </Layout>
 

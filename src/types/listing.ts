@@ -18,6 +18,11 @@ export type ListingMetadata = {
   isBestSelling?: boolean;
   legs?: FlightLeg[];
   provider?: string;
+  offerExpired?: boolean;
+  bedrooms?: number;
+  livingRooms?: number;
+  kitchens?: number;
+  gallery?: string[];
 };
 
 export type ListingItem = {

@@ -15,9 +15,7 @@ import {
   ChevronLeft,
   Flag,
   ImageIcon,
-  Minus,
   Navigation,
-  Plus,
   Settings2Icon,
   Share,
   ShoppingCart,
@@ -29,6 +27,14 @@ import Link from 'next/link';
 import { FaCheckCircle, FaSearchPlus, FaStar } from 'react-icons/fa';
 import { ListingItem } from '@/types/listing';
 import type { ReviewItem } from '@/types/review';
+import {
+  buildCheckoutUrl,
+  calculateStayPricing,
+  ensureStayDateRange,
+  formatStayDate,
+} from '@/lib/booking-pricing';
+import { useBookingDate, useTravelers } from '@/stores/useData';
+import { useMemo } from 'react';
 
 const icons = [Navigation, Share, X];
 
@@ -37,15 +43,6 @@ const galleryImages = [
   '/images/car-images/gallery-4.jpg',
   '/images/car-images/gallery-5.jpg',
 ];
-
-const receiptDetails = [
-  { label: '$500 x 3 nights', price: 1500 },
-  { label: '10% campaign discount', price: -83.3 },
-  { label: '1 child seat', price: 50 },
-  { label: 'Service fee', price: 110 },
-];
-
-const totalPrice = receiptDetails.reduce((acc, item) => acc + item.price, 0);
 
 const filterItems = ['Newest', 'Popular', 'All'];
 
@@ -60,6 +57,35 @@ const Product = ({
   wishlisted?: boolean;
   canReview?: boolean;
 }) => {
+  const { date } = useBookingDate();
+  const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
+  const guests = Math.max(1, totalTravelers);
+  const range = useMemo(() => ensureStayDateRange(date?.from, date?.to), [date?.from, date?.to]);
+  const dailyRate = listing.offerPrice ?? listing.price;
+  const pricing = useMemo(
+    () =>
+      calculateStayPricing({
+        nightlyRate: dailyRate,
+        checkIn: range.checkIn,
+        checkOut: range.checkOut,
+      }),
+    [dailyRate, range.checkIn, range.checkOut]
+  );
+  const receiptDetails = [
+    {
+      label: `$${dailyRate} x ${pricing.nights} day${pricing.nights === 1 ? '' : 's'}`,
+      price: pricing.subtotal,
+    },
+    { label: 'Service fee', price: pricing.serviceFee },
+  ];
+  const totalPrice = pricing.total;
+  const checkoutHref = buildCheckoutUrl({
+    itemId: listing.id,
+    checkIn: pricing.checkIn,
+    checkOut: pricing.checkOut,
+    guests,
+  });
+
   return (
     <>
       <Separator className='dark:bg-dark_russian mb-4 bg-[#E6E8EC]' />
@@ -237,7 +263,15 @@ const Product = ({
             </div>
           </div>
 
-          <ReceiptDetails />
+          <ReceiptDetails
+            listing={listing}
+            receiptDetails={receiptDetails}
+            totalPrice={totalPrice}
+            dailyRate={dailyRate}
+            dateLabel={`${formatStayDate(pricing.checkIn)} - ${formatStayDate(pricing.checkOut)}`}
+            checkoutHref={checkoutHref}
+            cancelBy={formatStayDate(pricing.checkIn)}
+          />
         </div>
       </Layout>
 
@@ -248,20 +282,38 @@ const Product = ({
   );
 };
 
-const ReceiptDetails = () => {
+const ReceiptDetails = ({
+  listing,
+  receiptDetails,
+  totalPrice,
+  dailyRate,
+  dateLabel,
+  checkoutHref,
+  cancelBy,
+}: {
+  listing: ListingItem;
+  receiptDetails: { label: string; price: number }[];
+  totalPrice: number;
+  dailyRate: number;
+  dateLabel: string;
+  checkoutHref: string;
+  cancelBy: string;
+}) => {
   return (
     <div className='dark:bg-dark_russian border dark:border-gray_border p-8 lg:max-w-md w-full rounded-3xl h-min'>
       <div className='flex items-center justify-between mb-8'>
         <div>
           <div className='flex gap-2 text-3xl font-bold'>
-            <h1 className='text-gray_light line-through'>${600}</h1>
-            <h1>${500}</h1>
+            {listing.offerPrice != null && listing.offerPrice < listing.price && (
+              <h1 className='text-gray_light line-through'>${listing.price}</h1>
+            )}
+            <h1>${dailyRate}</h1>
             <p className='text-base font-normal self-end text-gray_text'>/day</p>
           </div>
           <div className='flex gap-2 mt-2'>
             <FaStar size={22} fill='#FFD166' />
             <p className='font-medium text-foreground'>
-              4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
+              {listing.rating} <span className='ml-1 text-gray_text'>({listing.reviewCount} reviews)</span>
             </p>
           </div>
         </div>
@@ -283,56 +335,17 @@ const ReceiptDetails = () => {
           <CalendarDays className='w-5 h-5' />
           <div className='flex flex-col font-poppins'>
             <p className='text-xs'>Date</p>
-            <p className='text-foreground font-medium'>May 15, 2024 - May 22, 2024</p>
+            <p className='text-foreground font-medium'>{dateLabel}</p>
           </div>
         </div>
       </div>
-      <div className='my-6'>
-        <h1 className='text-2xl font-semibold mb-4 text-foreground'>Extras</h1>
-        <div className='flex items-center justify-between gap-4'>
-          <div className='basis-2/3'>
-            <p>Payable on collection</p>
-            <p className='text-gray_text text-xs mt-2'>
-              if you reserve any of these extras you&apos;ll pay for them at the counter.
-            </p>
-          </div>
-
-          <div className='flex gap-x-2 items-center border border-gray_border px-5 py-1 rounded-3xl'>
-            <Button variant={'transparent'} className='p-0'>
-              <Minus className='cursor-pointer text-gray_light w-4 h-4' />
-            </Button>
-            <p className='w-[1.5rem] text-center'>32</p>
-            <Button variant={'transparent'} className='p-0'>
-              <Plus className='cursor-pointer text-gray_light w-4 h-4' />
-            </Button>
-          </div>
-        </div>
-        <Separator className='bg-gray_border my-6' />
-
-        <div className='flex items-center justify-between gap-4'>
-          <div className='basis-2/3'>
-            <p>Child seat</p>
-            <p className='text-gray_text text-xs mt-2'>$50</p>
-          </div>
-
-          <div className='flex gap-x-2 items-center border border-gray_border px-5 py-1 rounded-3xl'>
-            <Button variant={'transparent'} className='p-0'>
-              <Minus className='cursor-pointer text-gray_light w-4 h-4' />
-            </Button>
-            <p className='w-[1.5rem] text-center'>3</p>
-            <Button variant={'transparent'} className='p-0'>
-              <Plus className='cursor-pointer text-gray_light w-4 h-4' />
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className='pt-2 flex flex-col'>
+      <div className='pt-6 flex flex-col'>
         <h1 className='text-2xl font-semibold mb-4 text-foreground'>Price Details</h1>
 
         {receiptDetails.map((item) => (
-          <div className='flex justify-between py-2 font-medium px-2' key={Math.random()}>
+          <div className='flex justify-between py-2 font-medium px-2' key={item.label}>
             <div className='text-gray_text text-sm'>{item.label}</div>
-            <div className=''>${Math.abs(item.price)}</div>
+            <div>${Math.abs(item.price)}</div>
           </div>
         ))}
         <div className='flex justify-between py-2 font-medium dark:bg-gray_border bg-[#F4F5F6] px-2 rounded-lg'>
@@ -341,10 +354,15 @@ const ReceiptDetails = () => {
         </div>
 
         <Button variant={'transparent'} className='flex items-center self-center pt-8 gap-2 text-xs text-gray_text'>
-          Free cancellation until 3:00 PM on May 15, 2024
+          Free cancellation until 3:00 PM on {cancelBy}
         </Button>
-        <Button className='w-min mt-6 self-center bg-blue hover:bg-blue-hover grow text-white rounded-full h-12 px-6 font-bold'>
-          Rent this car <ShoppingCart />
+        <Button
+          asChild
+          className='w-min mt-6 self-center bg-blue hover:bg-blue-hover grow text-white rounded-full h-12 px-6 font-bold'
+        >
+          <Link href={checkoutHref}>
+            Rent this car <ShoppingCart />
+          </Link>
         </Button>
       </div>
     </div>

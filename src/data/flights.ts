@@ -8,9 +8,10 @@ import {
 } from '@/lib/duffel';
 import { isDuffelTestMode, shouldUseDemoFlights } from '@/env';
 import { db } from '@/lib/db';
-import { ListingItem } from '@/types/listing';
+import { ListingItem, ListingType } from '@/types/listing';
 import { addDays, format } from 'date-fns';
 
+/** How long a cached Duffel fare stays bookable. Product pages still load after this. */
 const OFFER_TTL_MINUTES = 45;
 
 type SearchFlightsInput = {
@@ -197,29 +198,29 @@ export async function getFlightOfferById(id: string): Promise<ListingItem | null
     return null;
   }
 
-  if (record.expiresAt < new Date()) {
-    await db.flightOffer.delete({ where: { id } }).catch(() => undefined);
-    return null;
-  }
-
   const listing = record.listingData as ListingItem;
+  const offerExpired = record.expiresAt < new Date();
 
   return {
     ...listing,
     id: record.id,
+    type: ListingType.FLIGHT,
     price: record.price,
     image: record.image,
     title: record.title,
     owner: listing.owner ?? null,
+    metadata: {
+      ...(listing.metadata ?? {}),
+      offerExpired,
+    },
   };
 }
 
+/** Returns the cached offer for checkout. Includes expired fares so pricing stays flat (not nightly). */
 export async function getFlightOfferRecord(id: string) {
-  const record = await db.flightOffer.findUnique({ where: { id } });
+  return db.flightOffer.findUnique({ where: { id } });
+}
 
-  if (!record || record.expiresAt < new Date()) {
-    return null;
-  }
-
-  return record;
+export function isFlightOfferBookable(expiresAt: Date) {
+  return expiresAt >= new Date();
 }
