@@ -1,11 +1,23 @@
 import { getFlightOfferRecord } from '@/data/flights';
 import { getListingById } from '@/data/listing';
+import {
+  calculateStayPricing,
+  ensureStayDateRange,
+  parseBookingDate,
+} from '@/lib/booking-pricing';
+import { db } from '@/lib/db';
 import { getOrCreateStripeCustomer } from '@/lib/stripe-customer';
 import { getStripe } from '@/lib/stripe';
-import { db } from '@/lib/db';
-import { BookingStatus } from '@prisma/client';
+import { BookingStatus, ListingType } from '@prisma/client';
 
-export async function startCheckout(userId: string, itemId: string, guests: number = 1) {
+export type StartCheckoutOptions = {
+  guests?: number;
+  checkIn?: string;
+  checkOut?: string;
+};
+
+export async function startCheckout(userId: string, itemId: string, options: StartCheckoutOptions = {}) {
+  const guests = Math.max(1, options.guests ?? 1);
   const flightOffer = await getFlightOfferRecord(itemId);
   const listing = flightOffer ? null : await getListingById(itemId);
 
@@ -13,7 +25,42 @@ export async function startCheckout(userId: string, itemId: string, guests: numb
     return { error: 'Listing not found.' as const };
   }
 
-  const amountValue = flightOffer?.price ?? listing?.offerPrice ?? listing?.price ?? 0;
+  const checkInDate = parseBookingDate(options.checkIn);
+  const checkOutDate = parseBookingDate(options.checkOut);
+
+  let amountValue = 0;
+  let checkIn: Date | undefined;
+  let checkOut: Date | undefined;
+  let nights: number | undefined;
+
+  if (flightOffer) {
+    amountValue = flightOffer.price;
+    // Optional travel date for flights (departure)
+    checkIn = checkInDate;
+    checkOut = checkOutDate;
+  } else if (listing) {
+    const nightlyRate = listing.offerPrice ?? listing.price;
+
+    if (listing.type === ListingType.EXPERIENCE) {
+      const range = ensureStayDateRange(checkInDate, checkOutDate ?? checkInDate);
+      checkIn = range.checkIn;
+      checkOut = range.checkIn;
+      nights = 1;
+      amountValue = Math.round(nightlyRate * guests * 100) / 100;
+    } else {
+      // STAY and CAR: price per night × nights
+      const pricing = calculateStayPricing({
+        nightlyRate,
+        checkIn: checkInDate ?? new Date(),
+        checkOut: checkOutDate ?? new Date(),
+      });
+      amountValue = pricing.total;
+      checkIn = pricing.checkIn;
+      checkOut = pricing.checkOut;
+      nights = pricing.nights;
+    }
+  }
+
   const amount = Math.round(amountValue * 100);
   const currency = (flightOffer?.currency ?? 'usd').toLowerCase();
   const title = flightOffer?.title ?? listing!.title;
@@ -33,6 +80,8 @@ export async function startCheckout(userId: string, itemId: string, guests: numb
       amount: amount / 100,
       currency: currency.toUpperCase(),
       guests,
+      checkIn: checkIn ?? null,
+      checkOut: checkOut ?? null,
       status: BookingStatus.PENDING,
       title,
       image,
@@ -49,6 +98,10 @@ export async function startCheckout(userId: string, itemId: string, guests: numb
       itemId,
       userId,
       type: flightOffer ? 'flight' : 'listing',
+      guests: String(guests),
+      ...(checkIn ? { checkIn: checkIn.toISOString().slice(0, 10) } : {}),
+      ...(checkOut ? { checkOut: checkOut.toISOString().slice(0, 10) } : {}),
+      ...(nights ? { nights: String(nights) } : {}),
     },
   });
 
@@ -63,6 +116,10 @@ export async function startCheckout(userId: string, itemId: string, guests: numb
     amount: amount / 100,
     listingTitle: title,
     listingImage: image,
+    guests,
+    checkIn: checkIn?.toISOString() ?? null,
+    checkOut: checkOut?.toISOString() ?? null,
+    nights: nights ?? null,
   };
 }
 

@@ -82,10 +82,18 @@ function BookingCard({ booking }: { booking: BookingItem }) {
         </div>
 
         <div className='flex flex-wrap gap-4 text-sm text-gray_text'>
-          <span className='flex items-center gap-1'>
-            <Calendar className='w-4 h-4' />
-            Booked {format(new Date(booking.createdAt), 'MMM d, yyyy')}
-          </span>
+          {booking.checkIn ? (
+            <span className='flex items-center gap-1'>
+              <Calendar className='w-4 h-4' />
+              {format(new Date(booking.checkIn), 'MMM d, yyyy')}
+              {booking.checkOut ? ` – ${format(new Date(booking.checkOut), 'MMM d, yyyy')}` : ''}
+            </span>
+          ) : (
+            <span className='flex items-center gap-1'>
+              <Calendar className='w-4 h-4' />
+              Booked {format(new Date(booking.createdAt), 'MMM d, yyyy')}
+            </span>
+          )}
           <span className='flex items-center gap-1'>
             <Users className='w-4 h-4' />
             {booking.guests} guest{booking.guests === 1 ? '' : 's'}

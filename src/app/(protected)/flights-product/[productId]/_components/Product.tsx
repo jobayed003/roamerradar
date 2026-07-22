@@ -6,13 +6,29 @@ import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ListingItem } from '@/types/listing';
+import { buildCheckoutUrl } from '@/lib/booking-pricing';
+import { useBookingDate, useTravelers } from '@/stores/useData';
 import { Check, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 const FlightProduct = ({ listing }: { listing: ListingItem }) => {
   const legs = listing.metadata?.legs ?? [];
   const provider = listing.metadata?.provider ?? 'eDreams';
+  const { date } = useBookingDate();
+  const guests = useTravelers((state) => Math.max(1, state.adults + state.children + state.toddlers));
+
+  const checkoutHref = useMemo(
+    () =>
+      buildCheckoutUrl({
+        itemId: listing.id,
+        checkIn: date?.from,
+        checkOut: date?.to,
+        guests,
+      }),
+    [listing.id, date?.from, date?.to, guests]
+  );
 
   return (
     <>
@@ -81,7 +97,7 @@ const FlightProduct = ({ listing }: { listing: ListingItem }) => {
               <p className='text-xs text-gray_text mt-2'>Includes taxes and fees · per traveler</p>
 
               <Button asChild className='w-full mt-6 bg-blue hover:bg-blue-hover text-white rounded-full h-12 font-bold'>
-                <Link href={`/checkout/${listing.id}`}>Book flight</Link>
+                <Link href={checkoutHref}>Book flight</Link>
               </Button>
 
               <p className='text-xs text-gray_text text-center mt-4'>

@@ -182,6 +182,8 @@ model Booking {
   title                 String
   image                 String?
   guests                Int           @default(1)
+  checkIn               DateTime?
+  checkOut              DateTime?
   user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing               Listing?      @relation(fields: [listingId], references: [id], onDelete: SetNull)
   flightOffer           FlightOffer?  @relation(fields: [flightOfferId], references: [id], onDelete: SetNull)
@@ -190,6 +192,8 @@ model Booking {
   @@index([userId])
   @@index([listingId])
   @@index([flightOfferId])
+  @@index([checkIn])
+  @@index([checkOut])
 }
 
 model Conversation {

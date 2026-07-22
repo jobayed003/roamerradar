@@ -189,7 +189,7 @@ const Product = ({ listing, reviews }: { listing: ListingItem; reviews: ReviewIt
             </div>
           </div>
 
-          <ReceiptDetails />
+          <ReceiptDetails listing={listing} />
         </div>
       </Layout>
 

@@ -8,6 +8,8 @@ export type BookingItem = {
   currency: string;
   status: BookingStatus;
   guests: number;
+  checkIn: string | null;
+  checkOut: string | null;
   createdAt: string;
   listingId: string | null;
   flightOfferId: string | null;
@@ -53,10 +55,20 @@ export function getBookingCategory(booking: BookingItem): BookingCategory {
 export function matchesStatusFilter(booking: BookingItem, filter: BookingStatusFilter) {
   if (filter === 'all') return true;
   if (filter === 'pending') return booking.status === BookingStatus.PENDING;
+
+  const referenceDate = booking.checkOut ?? booking.checkIn ?? booking.createdAt;
+  const isPast = new Date(referenceDate) < new Date();
+
   if (filter === 'upcoming') {
-    return booking.status === BookingStatus.PAID;
+    return booking.status === BookingStatus.PAID && !isPast;
   }
-  return booking.status === BookingStatus.CANCELLED || booking.status === BookingStatus.FAILED;
+
+  // past
+  return (
+    (booking.status === BookingStatus.PAID && isPast) ||
+    booking.status === BookingStatus.CANCELLED ||
+    booking.status === BookingStatus.FAILED
+  );
 }
 
 export function formatBookingStatus(status: BookingStatus) {

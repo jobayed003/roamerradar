@@ -10,6 +10,8 @@ function toBookingItem(booking: {
   currency: string;
   status: BookingStatus;
   guests: number;
+  checkIn: Date | null;
+  checkOut: Date | null;
   createdAt: Date;
   listingId: string | null;
   flightOfferId: string | null;
@@ -23,6 +25,8 @@ function toBookingItem(booking: {
     currency: booking.currency,
     status: booking.status,
     guests: booking.guests,
+    checkIn: booking.checkIn?.toISOString() ?? null,
+    checkOut: booking.checkOut?.toISOString() ?? null,
     createdAt: booking.createdAt.toISOString(),
     listingId: booking.listingId,
     flightOfferId: booking.flightOfferId,

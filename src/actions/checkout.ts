@@ -1,9 +1,9 @@
 'use server';
 
-import { finalizeCheckout, startCheckout } from '@/lib/checkout';
+import { finalizeCheckout, startCheckout, type StartCheckoutOptions } from '@/lib/checkout';
 import { requireAuth } from '@/server/auth/require-auth';
 
-export async function createCheckoutPayment(listingId: string, guests: number = 1) {
+export async function createCheckoutPayment(listingId: string, options: StartCheckoutOptions = {}) {
   const authResult = await requireAuth();
 
   if (!authResult.ok) {
@@ -11,7 +11,7 @@ export async function createCheckoutPayment(listingId: string, guests: number = 
   }
 
   try {
-    return await startCheckout(authResult.user.id, listingId, guests);
+    return await startCheckout(authResult.user.id, listingId, options);
   } catch {
     return { error: 'Unable to start checkout. Check your Stripe configuration.' };
   }
