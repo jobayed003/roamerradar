@@ -35,6 +35,8 @@ model User {
   sentMessages             Message[]
   ownedListings            Listing[]                 @relation("ListingOwner")
   reviews                  Review[]
+  posts                    Post[]
+  comments                 Comment[]
   accountCreated           DateTime                  @default(now())
 }
 
@@ -96,6 +98,7 @@ model Listing {
   reviews       Review[]
   bookings      Booking[]
   conversations Conversation[]
+  posts         Post[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -224,4 +227,33 @@ model Message {
   sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
 
   @@index([conversationId, createdAt])
+}
+
+model Post {
+  id        String    @id @default(cuid())
+  authorId  String
+  body      String    @db.Text
+  image     String?   @db.Text
+  listingId String?
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  listing   Listing?  @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([authorId, createdAt])
+  @@index([listingId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  body      String   @db.Text
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([postId, createdAt])
+  @@index([authorId])
 }

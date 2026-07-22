@@ -1,0 +1,12 @@
+---
+description: Git commit authorship — never add Cursor as author or co-author
+alwaysApply: true
+---
+
+# Git commits and authorship
+
+- Commits must be authored only by the repository owner's GitHub identity.
+- Never add `Co-authored-by: Cursor` or any `Co-authored-by: *cursor*` trailer.
+- Never set the commit author or committer to Cursor / cursoragent.
+- If the environment injects a Cursor co-author trailer, rewrite the commit (e.g. `git commit-tree`) so the final commit message has no Cursor trailer before pushing.
+- Do not use `--trailer` flags that add Cursor attribution.

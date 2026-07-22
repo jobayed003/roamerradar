@@ -1,22 +1,30 @@
 import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
+import { getListingsByOwnerId } from '@/data/listing';
+import { getPostsByAuthorId } from '@/data/post';
 import { getUserById } from '@/data/user';
 import { auth } from '@/auth';
 import { Home, Link2, MessageSquare } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import CoverUpload from '../_components/CoverUpload';
 import ProfileDetails from '../_components/ProfileDetails';
-import ProfileReviews from '../_components/ProfileReviews';
+import ProfileFeed from '../_components/ProfileFeed';
 
 const Profile = async ({ params }: { params: { userId: string } }) => {
   const { userId } = params;
-  const [user, session] = await Promise.all([getUserById(userId), auth()]);
+  const [user, session, posts, listings] = await Promise.all([
+    getUserById(userId),
+    auth(),
+    getPostsByAuthorId(userId),
+    getListingsByOwnerId(userId),
+  ]);
 
   if (!user) {
     notFound();
   }
 
   const canEditCover = session?.user?.id === user.id;
+  const isOwner = session?.user?.id === user.id;
 
   const formatLanguages = () => {
     const languages = user?.speaks || [];
@@ -36,10 +44,10 @@ const Profile = async ({ params }: { params: { userId: string } }) => {
       <div className='flex flex-col lg:flex-row gap-20 py-10 lg:px-6'>
         <ProfileDetails user={user} />
 
-        <div className='flex flex-col gap-y-8 w-full'>
-          <div className='flex justify-between items-center'>
+        <div className='flex flex-col gap-y-8 w-full min-w-0'>
+          <div className='flex justify-between items-center gap-4 flex-wrap'>
             <h1 className='text-2xl font-semibold'>Hi, I&apos;m {user?.realName}</h1>
-            <LinkButton href='/account-settings' label='Edit Your Profile' />
+            {isOwner && <LinkButton href='/account-settings' label='Edit Your Profile' />}
           </div>
           <div className='text-gray_text'>{user?.bio}</div>
 
@@ -70,7 +78,12 @@ const Profile = async ({ params }: { params: { userId: string } }) => {
               <p className='font-medium'>{formatLanguages()}</p>
             </div>
           </div>
-          <ProfileReviews />
+          <ProfileFeed
+            currentUserId={session?.user?.id}
+            isOwner={isOwner}
+            posts={posts}
+            listings={listings}
+          />
         </div>
       </div>
     </Layout>
