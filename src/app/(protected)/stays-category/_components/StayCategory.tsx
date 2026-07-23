@@ -7,7 +7,7 @@ import HeroSection from '@/components/HeroSection';
 import { StayProducts } from '@/components/products/StayProducts';
 import { CarouselItem } from '@/components/ui/carousel';
 import { Input } from '@/components/ui/input';
-import { createSearchParams, getCountryByPlaceName } from '@/lib/utils';
+import { createSearchParams, countryFromMap } from '@/lib/utils';
 import { ListingItem } from '@/types/listing';
 import { useBookingDate, useStaysStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
@@ -20,7 +20,17 @@ import { useEffect } from 'react';
 const filters = ['Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
 const selectItems = ['On Sales', 'On Delivery', 'In Exchange'];
 
-const StayCategory = ({ listings, totalCount }: { listings: ListingItem[]; totalCount: number }) => {
+const StayCategory = ({
+  listings,
+  totalCount,
+  placeNames,
+  placeCountryMap,
+}: {
+  listings: ListingItem[];
+  totalCount: number;
+  placeNames: string[];
+  placeCountryMap: Record<string, string>;
+}) => {
   const router = useRouter();
   const { location } = useStaysStore();
   const { date } = useBookingDate();
@@ -33,12 +43,12 @@ const StayCategory = ({ listings, totalCount }: { listings: ListingItem[]; total
   }, [location]);
 
   const travelDates = format(date?.from ?? Date.now(), 'MMM d') + ' - ' + format(date?.to ?? Date.now(), 'MMM d');
-  const countryName = getCountryByPlaceName(location);
+  const countryName = countryFromMap(placeCountryMap, location);
 
   return (
     <div className='px-2 lg:max-w-7xl mx-auto'>
       <HeroSection img='images/main-2.jpg' className='mb-32' location={location} countryName={countryName}>
-        <Stays />
+        <Stays placeNames={placeNames} />
       </HeroSection>
 
       <CategoryShell
