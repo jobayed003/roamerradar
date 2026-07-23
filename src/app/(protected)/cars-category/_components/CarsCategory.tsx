@@ -7,7 +7,7 @@ import NearbyLocations from '@/components/NearbyLocations';
 import Panel from '@/components/Panel';
 import { CarProducts } from '@/components/products/CarProducts';
 import { CarouselItem } from '@/components/ui/carousel';
-import { createSearchParams, getCountryByPlaceName } from '@/lib/utils';
+import { createSearchParams, countryFromMap } from '@/lib/utils';
 import { ListingItem } from '@/types/listing';
 import { useBookingDate, useCarStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
@@ -20,7 +20,13 @@ import { useEffect, useMemo } from 'react';
 const filters = ['Sightseeing', 'Transportation activities', 'Art and culture'];
 const selectItems = ['Time of day', 'Time of week'];
 
-const CarsCategory = ({ listings }: { listings: ListingItem[] }) => {
+const CarsCategory = ({
+  listings,
+  placeCountryMap,
+}: {
+  listings: ListingItem[];
+  placeCountryMap: Record<string, string>;
+}) => {
   const router = useRouter();
   const { pickupLocation } = useCarStore();
   const { date } = useBookingDate();
@@ -61,7 +67,7 @@ const CarsCategory = ({ listings }: { listings: ListingItem[] }) => {
           breadcrumb={{
             backRoute: 'cars-category',
             originRoute: 'cars',
-            location: getCountryByPlaceName(pickupLocation),
+            location: countryFromMap(placeCountryMap, pickupLocation),
             searchedLocation: pickupLocation,
           }}
           title={`${listings.length || 0} cars found`}

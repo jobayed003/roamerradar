@@ -1,14 +1,24 @@
-import { env } from '@/env';
+import { isResendConfigured, env } from '@/env';
 import { Resend } from 'resend';
 
-const resend = new Resend(env.RESEND_API_KEY);
 const domain = env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const FROM_EMAIL = 'onboarding@resend.dev';
+
+function getResend() {
+  if (!isResendConfigured() || !env.RESEND_API_KEY) {
+    return null;
+  }
+  return new Resend(env.RESEND_API_KEY);
+}
 
 export const sendVerificationEmail = async (email: string, token: string) => {
+  const resend = getResend();
+  if (!resend) return { skipped: true as const };
+
   const confirmLink = `${domain}/auth/verify-email?token=${token}`;
 
   await resend.emails.send({
-    from: 'onboarding@resend.dev',
+    from: FROM_EMAIL,
     to: email,
     subject: 'Confirm your Email',
     html: `
@@ -81,4 +91,66 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     </html>
     `,
   });
+
+  return { sent: true as const };
 };
+
+export async function sendMessageNotificationEmail(input: {
+  to: string;
+  senderName: string;
+  preview: string;
+  conversationId: string;
+}) {
+  const resend = getResend();
+  if (!resend) return { skipped: true as const };
+
+  const messagesLink = `${domain}/messages/${input.conversationId}`;
+  const preview = input.preview.slice(0, 160);
+
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: input.to,
+    subject: `New message from ${input.senderName}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto;">
+        <h2>New message on RoamerRadar</h2>
+        <p><strong>${input.senderName}</strong> sent you a message:</p>
+        <p style="padding: 12px; background: #f4f4f4; border-radius: 8px;">${preview}</p>
+        <p><a href="${messagesLink}">Open conversation</a></p>
+      </div>
+    `,
+  });
+
+  return { sent: true as const };
+}
+
+export async function sendBookingConfirmedEmail(input: {
+  to: string;
+  title: string;
+  bookingId: string;
+  amount: number;
+  currency: string;
+}) {
+  const resend = getResend();
+  if (!resend) return { skipped: true as const };
+
+  const bookingsLink = `${domain}/my-bookings`;
+  const amountLabel = `${input.currency.toUpperCase()} ${input.amount.toFixed(2)}`;
+
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: input.to,
+    subject: `Booking confirmed: ${input.title}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto;">
+        <h2>Your booking is confirmed</h2>
+        <p><strong>${input.title}</strong></p>
+        <p>Total: ${amountLabel}</p>
+        <p>Booking ID: ${input.bookingId}</p>
+        <p><a href="${bookingsLink}">View my bookings</a></p>
+      </div>
+    `,
+  });
+
+  return { sent: true as const };
+}

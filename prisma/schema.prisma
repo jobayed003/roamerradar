@@ -122,6 +122,18 @@ model WishlistItem {
   @@index([listingId])
 }
 
+model PlaceSuggestion {
+  id        String   @id @default(cuid())
+  country   String
+  name      String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@unique([country, name])
+  @@index([name])
+  @@index([country])
+}
+
 model Review {
   id        String   @id @default(cuid())
   listingId String

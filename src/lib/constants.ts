@@ -30,7 +30,8 @@ export function isCategoryRouteActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`/${slug}-`) || pathname.startsWith(`${href}/`);
 }
 
-export const Places = [
+/** Seed source for PlaceSuggestion rows — prefer DB at runtime. */
+export const PLACE_SEED_DATA = [
   {
     country: 'France',
     places: ['Eiffel Tower', 'Louvre Museum', 'Mont Saint Michel'],
@@ -69,7 +70,7 @@ export const Places = [
     country: 'New Zealand',
     places: ['South Island'],
   },
-];
+] as const;
 
 export const LANGUAGES = [
   {

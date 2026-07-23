@@ -2,7 +2,6 @@ import { clsx, type ClassValue } from 'clsx';
 import { format } from 'date-fns';
 import qs from 'query-string';
 import { twMerge } from 'tailwind-merge';
-import { Places } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -20,11 +19,6 @@ export function capitalizeFirstCharacter(str: string) {
     .join(' ');
 }
 
-export function getCountryByPlaceName(placeName: string) {
-  const placeEntry = Places.find((place) => place.places.includes(placeName));
-  return placeEntry ? placeEntry.country : '';
-}
-
 export function createSearchParams({ baseUrl, params }: { baseUrl: string; params: string }) {
   const url = qs.stringifyUrl(
     {
@@ -35,6 +29,10 @@ export function createSearchParams({ baseUrl, params }: { baseUrl: string; param
   );
 
   return url;
+}
+
+export function countryFromMap(map: Record<string, string>, placeName: string) {
+  return map[placeName] ?? '';
 }
 
 export function getFirstLetters(name: string) {
