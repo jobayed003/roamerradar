@@ -1,5 +1,6 @@
 'use client';
 
+import { deleteListing } from '@/actions/listings';
 import { createComment, createPost, deleteComment, deletePost } from '@/actions/posts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,7 @@ import { resizeImageFile } from '@/lib/image-utils';
 import { cn, getFirstLetters } from '@/lib/utils';
 import type { ListingItem } from '@/types/listing';
 import { formatDistanceToNow } from 'date-fns';
-import { ImagePlus, Trash2, X } from 'lucide-react';
+import { ImagePlus, Pencil, Trash2, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -340,6 +341,26 @@ const PostCard = ({
 };
 
 const ListingsPanel = ({ listings, isOwner }: { listings: ListingItem[]; isOwner: boolean }) => {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+
+  const onDelete = (listingId: string, title: string) => {
+    if (!window.confirm(`Delete “${title}”? This cannot be undone.`)) {
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await deleteListing(listingId);
+      if ('error' in result && result.error) {
+        toast({ title: result.error, variant: 'destructive' });
+        return;
+      }
+      toast({ title: 'success' in result ? result.success : 'Listing deleted.' });
+      router.refresh();
+    });
+  };
+
   if (listings.length === 0) {
     return (
       <div className='space-y-3'>
@@ -358,26 +379,48 @@ const ListingsPanel = ({ listings, isOwner }: { listings: ListingItem[]; isOwner
   return (
     <div className='grid sm:grid-cols-2 gap-4'>
       {listings.map((listing) => (
-        <Link
+        <div
           key={listing.id}
-          href={`/stays-product/${listing.id}`}
           className='rounded-3xl border border-gray_border overflow-hidden hover:shadow-md transition'
         >
-          <div className='relative h-40 w-full'>
-            <Image
-              src={listing.image}
-              alt={listing.title}
-              fill
-              className='object-cover'
-              unoptimized={listing.image.startsWith('data:')}
-            />
-          </div>
-          <div className='p-4 space-y-1'>
-            <h3 className='font-semibold line-clamp-2'>{listing.title}</h3>
-            {listing.location && <p className='text-xs text-gray_text truncate'>{listing.location}</p>}
-            <p className='text-sm font-medium'>${listing.offerPrice ?? listing.price}</p>
-          </div>
-        </Link>
+          <Link href={`/stays-product/${listing.id}`} className='block'>
+            <div className='relative h-40 w-full'>
+              <Image
+                src={listing.image}
+                alt={listing.title}
+                fill
+                className='object-cover'
+                unoptimized={listing.image.startsWith('data:')}
+              />
+            </div>
+            <div className='p-4 space-y-1'>
+              <h3 className='font-semibold line-clamp-2'>{listing.title}</h3>
+              {listing.location && <p className='text-xs text-gray_text truncate'>{listing.location}</p>}
+              <p className='text-sm font-medium'>${listing.offerPrice ?? listing.price}</p>
+            </div>
+          </Link>
+          {isOwner && (
+            <div className='flex gap-2 px-4 pb-4'>
+              <Button asChild variant='outline' size='sm' className='rounded-full flex-1'>
+                <Link href={`/list-property?id=${listing.id}`}>
+                  <Pencil className='h-3.5 w-3.5 mr-1.5' />
+                  Edit
+                </Link>
+              </Button>
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                className='rounded-full flex-1 text-destructive'
+                disabled={isPending}
+                onClick={() => onDelete(listing.id, listing.title)}
+              >
+                <Trash2 className='h-3.5 w-3.5 mr-1.5' />
+                Delete
+              </Button>
+            </div>
+          )}
+        </div>
       ))}
     </div>
   );
