@@ -79,6 +79,22 @@ export const CreateListingSchema = z.object({
   shareOnProfile: z.boolean().optional().default(true),
 });
 
+const ListingImageSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (value) => value.startsWith('data:image/') || value.startsWith('http://') || value.startsWith('https://'),
+    { message: 'Invalid image.' }
+  );
+
+export const UpdateListingSchema = CreateListingSchema.omit({
+  images: true,
+  shareOnProfile: true,
+}).extend({
+  listingId: z.string().cuid({ message: 'Invalid listing.' }),
+  images: z.array(ListingImageSchema).min(1, { message: 'Upload at least one photo' }).max(3),
+});
+
 export const CreatePostSchema = z.object({
   body: z.string().trim().min(1, { message: 'Post cannot be empty' }).max(2000),
   image: z.string().startsWith('data:image/').optional().nullable(),

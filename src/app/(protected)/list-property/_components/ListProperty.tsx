@@ -1,6 +1,6 @@
 'use client';
 
-import { createListing } from '@/actions/listings';
+import { createListing, updateListing } from '@/actions/listings';
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import CustomInput from '@/components/CustomInput';
 import LinkButton from '@/components/LinkButton';
@@ -15,27 +15,49 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { resizeImageFile } from '@/lib/image-utils';
 import { cn } from '@/lib/utils';
+import type { ListingItem } from '@/types/listing';
 import { ArrowRight, ChevronLeft, FileUp, X } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState, useTransition } from 'react';
 import { PreviewCard } from './PreviewCard';
 
-const ListProperty = () => {
+function discountFromListing(listing: ListingItem) {
+  if (!listing.offerPrice || listing.price <= 0 || listing.offerPrice >= listing.price) {
+    return '';
+  }
+  return String(Math.round((1 - listing.offerPrice / listing.price) * 100));
+}
+
+function initialImages(listing: ListingItem) {
+  const gallery = listing.metadata?.gallery?.filter(Boolean) ?? [];
+  return [listing.image, ...gallery].filter(Boolean).slice(0, 3);
+}
+
+function padAmenities(amenities: string[]) {
+  return [...amenities.slice(0, 4), '', '', '', ''].slice(0, 4);
+}
+
+const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
   const router = useRouter();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
+  const isEditing = Boolean(initialListing);
 
-  const [title, setTitle] = useState('');
-  const [price, setPrice] = useState('');
-  const [discountPercent, setDiscountPercent] = useState('');
-  const [location, setLocation] = useState('');
-  const [description, setDescription] = useState('');
-  const [bedrooms, setBedrooms] = useState('1');
-  const [livingRooms, setLivingRooms] = useState('1');
-  const [kitchens, setKitchens] = useState('1');
-  const [amenities, setAmenities] = useState(['', '', '', '']);
-  const [images, setImages] = useState<string[]>([]);
+  const [title, setTitle] = useState(initialListing?.title ?? '');
+  const [price, setPrice] = useState(initialListing ? String(initialListing.price) : '');
+  const [discountPercent, setDiscountPercent] = useState(
+    initialListing ? discountFromListing(initialListing) : ''
+  );
+  const [location, setLocation] = useState(initialListing?.location ?? '');
+  const [description, setDescription] = useState(initialListing?.description ?? '');
+  const [bedrooms, setBedrooms] = useState(String(initialListing?.metadata?.bedrooms ?? 1));
+  const [livingRooms, setLivingRooms] = useState(String(initialListing?.metadata?.livingRooms ?? 1));
+  const [kitchens, setKitchens] = useState(String(initialListing?.metadata?.kitchens ?? 1));
+  const [amenities, setAmenities] = useState(
+    initialListing ? padAmenities(initialListing.amenities) : ['', '', '', '']
+  );
+  const [images, setImages] = useState<string[]>(initialListing ? initialImages(initialListing) : []);
   const [shareOnProfile, setShareOnProfile] = useState(true);
   const [uploading, setUploading] = useState(false);
 
@@ -70,7 +92,7 @@ const ListProperty = () => {
 
   const onSubmit = () => {
     startTransition(async () => {
-      const result = await createListing({
+      const payload = {
         title,
         price: numericPrice,
         discountPercent: numericDiscount,
@@ -81,15 +103,25 @@ const ListProperty = () => {
         kitchens: Number(kitchens),
         amenities: previewAmenities,
         images,
-        shareOnProfile,
-      });
+      };
+
+      const result = initialListing
+        ? await updateListing({ ...payload, listingId: initialListing.id })
+        : await createListing({ ...payload, shareOnProfile });
 
       if ('error' in result && result.error) {
         toast({ title: result.error, variant: 'destructive' });
         return;
       }
 
-      toast({ title: 'success' in result ? result.success : 'Listing published.' });
+      toast({
+        title:
+          'success' in result
+            ? result.success
+            : isEditing
+              ? 'Listing updated.'
+              : 'Listing published.',
+      });
 
       if ('listingId' in result && result.listingId) {
         router.push(`/stays-product/${result.listingId}`);
@@ -124,7 +156,9 @@ const ListProperty = () => {
 
         <div className='flex'>
           <div className='lg:w-[calc(100%-400px)] lg:pr-32 w-full'>
-            <h1 className='text-5xl font-bold mb-10'>List your property</h1>
+            <h1 className='text-5xl font-bold mb-10'>
+              {isEditing ? 'Edit your property' : 'List your property'}
+            </h1>
 
             <div className='flex flex-col gap-y-4 py-4'>
               <div className='font-poppins'>
@@ -285,15 +319,17 @@ const ListProperty = () => {
                 </div>
               </div>
 
-              <label className='flex items-center gap-3 text-sm font-medium cursor-pointer select-none mt-2'>
-                <input
-                  type='checkbox'
-                  className='h-4 w-4 rounded border-gray_border'
-                  checked={shareOnProfile}
-                  onChange={(event) => setShareOnProfile(event.target.checked)}
-                />
-                Share this listing on my profile feed
-              </label>
+              {!isEditing && (
+                <label className='flex items-center gap-3 text-sm font-medium cursor-pointer select-none mt-2'>
+                  <input
+                    type='checkbox'
+                    className='h-4 w-4 rounded border-gray_border'
+                    checked={shareOnProfile}
+                    onChange={(event) => setShareOnProfile(event.target.checked)}
+                  />
+                  Share this listing on my profile feed
+                </label>
+              )}
 
               <div className='my-8'>
                 <Separator className='w-full bg-gray_border my-8' />
@@ -320,11 +356,12 @@ const ListProperty = () => {
                     >
                       {isPending ? (
                         <>
-                          Publishing <LoadingSpinner className='ml-1' />
+                          {isEditing ? 'Saving' : 'Publishing'} <LoadingSpinner className='ml-1' />
                         </>
                       ) : (
                         <>
-                          Submit for Review <ArrowRight className='ml-1 w-3.5 h-3.5' />
+                          {isEditing ? 'Save changes' : 'Submit for Review'}{' '}
+                          <ArrowRight className='ml-1 w-3.5 h-3.5' />
                         </>
                       )}
                     </Button>
