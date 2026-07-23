@@ -1,6 +1,11 @@
 import { getFlightOfferRecord, isFlightOfferBookable } from '@/data/flights';
 import { getListingById } from '@/data/listing';
 import {
+  AVAILABILITY_ERROR,
+  findConflictingBooking,
+  listingNeedsDateAvailability,
+} from '@/lib/booking-availability';
+import {
   calculateStayPricing,
   ensureStayDateRange,
   parseBookingDate,
@@ -179,6 +184,23 @@ export async function startCheckout(userId: string, itemId: string, options: Sta
     return { error: 'Invalid listing price.' as const };
   }
 
+  if (
+    listing &&
+    listingNeedsDateAvailability(listing.type) &&
+    checkIn &&
+    checkOut
+  ) {
+    const conflict = await findConflictingBooking({
+      listingId: listing.id,
+      checkIn,
+      checkOut,
+    });
+
+    if (conflict) {
+      return { error: AVAILABILITY_ERROR };
+    }
+  }
+
   const existing = await findReusablePendingBooking({
     userId,
     listingId: listing?.id,
@@ -284,6 +306,26 @@ export async function finalizeCheckout(userId: string, bookingId: string) {
   const paymentIntent = await getStripe().paymentIntents.retrieve(booking.stripePaymentIntentId);
 
   if (paymentIntent.status === 'succeeded') {
+    if (booking.listingId && booking.checkIn && booking.checkOut) {
+      const listing = await getListingById(booking.listingId);
+      if (listing && listingNeedsDateAvailability(listing.type)) {
+        const conflict = await findConflictingBooking({
+          listingId: booking.listingId,
+          checkIn: booking.checkIn,
+          checkOut: booking.checkOut,
+          excludeBookingId: booking.id,
+        });
+
+        if (conflict) {
+          await db.booking.update({
+            where: { id: booking.id },
+            data: { status: BookingStatus.FAILED },
+          });
+          return { error: AVAILABILITY_ERROR };
+        }
+      }
+    }
+
     await db.booking.update({
       where: { id: booking.id },
       data: { status: BookingStatus.PAID },
