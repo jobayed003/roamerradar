@@ -3,8 +3,8 @@
 import Cars from '@/app/(browse)/cars/_components/Cars';
 import { CategoryShell } from '@/components/category/CategoryShell';
 import { CarouselProvider } from '@/components/CarouselProvider';
+import HeroSection from '@/components/HeroSection';
 import NearbyLocations from '@/components/NearbyLocations';
-import Panel from '@/components/Panel';
 import { CarProducts } from '@/components/products/CarProducts';
 import { CarouselItem } from '@/components/ui/carousel';
 import { createSearchParams, countryFromMap } from '@/lib/utils';
@@ -12,80 +12,106 @@ import { ListingItem } from '@/types/listing';
 import { useBookingDate, useCarStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
 import { CarFrontIcon } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
-const filters = ['Sightseeing', 'Transportation activities', 'Art and culture'];
-const selectItems = ['Time of day', 'Time of week'];
+const filters = ['Automatic', 'Manual', 'SUV', 'Economy'];
+const selectItems = ['Price: low to high', 'Price: high to low'];
 
 const CarsCategory = ({
   listings,
   placeCountryMap,
+  initialQuery = '',
 }: {
   listings: ListingItem[];
   placeCountryMap: Record<string, string>;
+  initialQuery?: string;
 }) => {
   const router = useRouter();
-  const { pickupLocation } = useCarStore();
+  const { pickupLocation, setLocations } = useCarStore();
   const { date } = useBookingDate();
   const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
-
-  const travelDates = format(date?.from ?? Date.now(), 'MMM d') + ' - ' + format(date?.to ?? Date.now(), 'MMM d');
+  const hydrated = useRef(false);
 
   useEffect(() => {
+    if (initialQuery) {
+      setLocations('pickupLocation', initialQuery);
+    }
+    hydrated.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuery]);
+
+  useEffect(() => {
+    if (!hydrated.current || !pickupLocation.trim()) return;
     const url = createSearchParams({ baseUrl: '/cars-category', params: pickupLocation });
-    router.push(url.toLowerCase());
+    router.replace(url);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickupLocation]);
 
+  const displayLocation = pickupLocation.trim() || initialQuery.trim() || 'London';
+  const countryName = countryFromMap(placeCountryMap, displayLocation);
+  const travelDates =
+    format(date?.from ?? Date.now(), 'MMM d') + ' - ' + format(date?.to ?? Date.now(), 'MMM d');
+
+  const filteredListings = useMemo(() => {
+    const query = displayLocation.toLowerCase();
+    if (!query) return listings;
+
+    const matched = listings.filter((listing) => {
+      const haystack = `${listing.location ?? ''} ${listing.title}`.toLowerCase();
+      return haystack.includes(query) || query.split(/[\s,]+/).some((part) => part.length > 2 && haystack.includes(part));
+    });
+
+    return matched.length > 0 ? matched : listings;
+  }, [listings, displayLocation]);
+
   const pickupLocations = useMemo(
     () =>
-      listings.slice(0, 8).map((listing) => ({
+      filteredListings.slice(0, 8).map((listing) => ({
         id: listing.id,
         label: listing.location ?? listing.title,
         price: Math.round(listing.offerPrice ?? listing.price),
       })),
-    [listings]
+    [filteredListings]
   );
 
   return (
-    <div>
-      <div className='h-60 w-full flex flex-col justify-center text-dark_russian p-20 pt-24 flex-shrink relative mt-4 mb-32'>
-        <Image src={'/images/bg-car.jpg'} fill className={'object-cover -z-10 absolute'} alt='hero image' />
-        <Panel className='lg:-bottom-16 lg:max-w-7xl 2xl:mx-auto mx-8'>
-          <div className='flex flex-col lg:p-10 p-5'>
-            <Cars />
-          </div>
-        </Panel>
-      </div>
+    <div className='px-2 lg:max-w-7xl mx-auto'>
+      <HeroSection
+        img='images/bg-car.jpg'
+        className='mb-32'
+        location={displayLocation}
+        countryName={countryName || 'Car rentals'}
+        imgClass='rounded-3xl'
+      >
+        <Cars />
+      </HeroSection>
 
-      <div className='lg:max-w-7xl mx-auto'>
-        <CategoryShell
-          contentClassName='md:px-20 px-10'
-          breadcrumb={{
-            backRoute: 'cars-category',
-            originRoute: 'cars',
-            location: countryFromMap(placeCountryMap, pickupLocation),
-            searchedLocation: pickupLocation,
-          }}
-          title={`${listings.length || 0} cars found`}
-          badge='Up to 25% off'
-          subtitle={`${travelDates}, ${totalTravelers} guests`}
-          filters={filters}
-          selectItems={selectItems}
-          footer={<NearbyLocations />}
-        >
-          <CarProducts listings={listings} />
-        </CategoryShell>
-      </div>
+      <CategoryShell
+        homeHref='/cars'
+        breadcrumb={{
+          backRoute: 'cars-category',
+          originRoute: 'cars',
+          originHref: '/cars',
+          location: countryName || undefined,
+          searchedLocation: displayLocation,
+        }}
+        title={`${filteredListings.length} cars available`}
+        badge='Free cancellation'
+        subtitle={`${travelDates} · ${totalTravelers} traveler${totalTravelers === 1 ? '' : 's'}`}
+        filters={filters}
+        selectItems={selectItems}
+        footer={<NearbyLocations />}
+      >
+        <CarProducts listings={filteredListings} location={displayLocation} />
+      </CategoryShell>
 
       {pickupLocations.length > 0 ? (
-        <div className='text-center pb-16'>
-          <h1 className='font-bold lg:text-5xl text-4xl text-wrap text-ellipsis'>Recommended pickup locations</h1>
+        <div className='text-center pb-16 px-4'>
+          <h2 className='font-bold lg:text-5xl text-4xl'>Recommended pickup spots</h2>
           <p className='lg:text-2xl md:text-md text-sm my-4 text-gray_text font-poppins'>
-            Based on cars currently available
+            Based on cars currently listed near your search
           </p>
 
           <CarouselProvider className='my-16'>

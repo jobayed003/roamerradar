@@ -14,6 +14,7 @@ export type CategoryShellProps = {
   breadcrumb: {
     backRoute: string;
     originRoute?: string;
+    originHref?: string;
     location?: string;
     searchedLocation?: string;
   };
@@ -61,6 +62,7 @@ export function CategoryShell({
         <BreadcrumbProvider
           backRoute={breadcrumb.backRoute}
           originRoute={breadcrumb.originRoute}
+          originHref={breadcrumb.originHref}
           location={breadcrumb.location}
           searchedLocation={breadcrumb.searchedLocation}
         />
