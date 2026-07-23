@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,16 +13,24 @@ import { usePathname } from 'next/navigation';
 
 const BreadcrumbProvider = ({
   originRoute = '',
+  originHref,
   searchedLocation,
   backRoute,
   location,
 }: {
   originRoute?: string;
+  /** Explicit href for the vertical landing crumb (defaults to `/${originRoute}` or `/`). */
+  originHref?: string;
   backRoute: string;
   searchedLocation?: string;
   location?: string;
 }) => {
-  const pathname = usePathname().replace('/', '');
+  const pathname = usePathname().replace(/^\//, '');
+  const originLabel = originRoute === '' ? 'Stays' : capitalizeFirstCharacter(originRoute);
+  const resolvedOriginHref = originHref ?? (originRoute === '' ? '/' : `/${originRoute}`);
+  const categoryHref = searchedLocation
+    ? `/${backRoute}?q=${encodeURIComponent(searchedLocation)}`
+    : `/${backRoute}`;
 
   return (
     <Breadcrumb>
@@ -34,31 +43,36 @@ const BreadcrumbProvider = ({
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <Link
-            href={`/${originRoute === '' ? '' : originRoute}`}
+            href={resolvedOriginHref}
             className={cn(
               'text-gray_text font-bold hover:text-blue',
-              originRoute === pathname && 'text-gray_light hover:text-gray_light'
+              (originRoute === pathname || resolvedOriginHref.replace(/^\//, '') === pathname) &&
+                'text-gray_light hover:text-gray_light'
             )}
           >
-            {originRoute === '' ? 'Stays' : ''}
-            {capitalizeFirstCharacter(originRoute)}
+            {originLabel}
           </Link>
         </BreadcrumbItem>
 
-        {location && (
+        {location ? (
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <Link href={'/' + backRoute} className='text-gray_text font-bold hover:text-blue '>
+              <Link href={categoryHref} className='text-gray_text font-bold hover:text-blue '>
                 {location}
               </Link>
             </BreadcrumbItem>
+          </>
+        ) : null}
+
+        {searchedLocation ? (
+          <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage>{searchedLocation}</BreadcrumbPage>
             </BreadcrumbItem>
           </>
-        )}
+        ) : null}
       </BreadcrumbList>
     </Breadcrumb>
   );
