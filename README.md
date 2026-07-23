@@ -133,6 +133,7 @@ Copy the webhook signing secret into `STRIPE_WEBHOOK_SECRET` in `.env.local`.
 | `npm run build` | Production build |
 | `npm run start` | Start production server |
 | `npm run lint` | Run ESLint |
+| `npm run test:e2e` | Playwright end-to-end tests |
 | `npm run db:migrate` | Run Prisma migrations (dev) |
 | `npm run db:migrate:deploy` | Deploy migrations (production) |
 | `npm run db:push` | Push schema changes without migration |
@@ -164,4 +165,3 @@ Copy the webhook signing secret into `STRIPE_WEBHOOK_SECRET` in `.env.local`.
 Planned improvements (not yet implemented):
 
 - Duffel order creation after successful Stripe payment (optional; demo fares are enough for now)
-- Expand Playwright coverage beyond public smoke tests
