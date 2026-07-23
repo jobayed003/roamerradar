@@ -8,6 +8,7 @@ import {
 } from '@/data/conversation';
 import { searchUsers } from '@/data/user';
 import { db } from '@/lib/db';
+import { notifyRecipientOfMessage } from '@/lib/notification-delivery';
 import { requireAuth } from '@/server/auth/require-auth';
 import { SendMessageInputSchema, StartConversationSchema } from '@/schemas';
 import { revalidatePath } from 'next/cache';
@@ -46,6 +47,12 @@ export async function sendMessage(conversationId: string, body: string) {
     await db.conversation.update({
       where: { id: parsed.data.conversationId },
       data: { updatedAt: new Date() },
+    });
+
+    void notifyRecipientOfMessage({
+      conversationId: parsed.data.conversationId,
+      senderId: authResult.user.id,
+      body: parsed.data.body,
     });
 
     revalidatePath('/messages');
