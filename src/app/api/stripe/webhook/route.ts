@@ -1,5 +1,6 @@
 import { env } from '@/env';
 import { db } from '@/lib/db';
+import { notifyGuestOfBookingConfirmation } from '@/lib/notification-delivery';
 import { getStripe } from '@/lib/stripe';
 import { BookingStatus } from '@prisma/client';
 import { headers } from 'next/headers';
@@ -27,10 +28,18 @@ export async function POST(req: Request) {
     const bookingId = paymentIntent.metadata.bookingId;
 
     if (bookingId) {
-      await db.booking.updateMany({
-        where: { id: bookingId, stripePaymentIntentId: paymentIntent.id },
+      const result = await db.booking.updateMany({
+        where: {
+          id: bookingId,
+          stripePaymentIntentId: paymentIntent.id,
+          status: { not: BookingStatus.PAID },
+        },
         data: { status: BookingStatus.PAID },
       });
+
+      if (result.count > 0) {
+        void notifyGuestOfBookingConfirmation(bookingId);
+      }
     }
   }
 
