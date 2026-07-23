@@ -13,7 +13,7 @@ import { CalendarRange, Navigation } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 
-const Stays = () => {
+const Stays = ({ placeNames }: { placeNames: string[] }) => {
   const [isTyping, setIsTyping] = useState(false);
 
   const ref = useRef(null);
@@ -45,7 +45,9 @@ const Stays = () => {
               onKeyUpCapture={() => setIsTyping(true)}
               onChange={(e) => setLocation(e.target.value)}
             />
-            {isTyping && <LocationsSuggestion setLocation={setLocation} location={location} />}
+            {isTyping && (
+              <LocationsSuggestion setLocation={setLocation} location={location} places={placeNames} />
+            )}
           </div>
           <p className='ml-9 text-nowrap text-muted-foreground'>Where are you going?</p>
         </div>

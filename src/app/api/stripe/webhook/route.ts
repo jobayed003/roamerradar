@@ -4,6 +4,7 @@ import {
   listingNeedsDateAvailability,
 } from '@/lib/booking-availability';
 import { db } from '@/lib/db';
+import { notifyGuestOfBookingConfirmation } from '@/lib/notification-delivery';
 import { getStripe } from '@/lib/stripe';
 import { BookingStatus, ListingType } from '@prisma/client';
 import { headers } from 'next/headers';
@@ -32,7 +33,11 @@ export async function POST(req: Request) {
 
     if (bookingId) {
       const booking = await db.booking.findFirst({
-        where: { id: bookingId, stripePaymentIntentId: paymentIntent.id },
+        where: {
+          id: bookingId,
+          stripePaymentIntentId: paymentIntent.id,
+          status: { not: BookingStatus.PAID },
+        },
         include: { listing: { select: { type: true } } },
       });
 
@@ -59,6 +64,10 @@ export async function POST(req: Request) {
           where: { id: booking.id },
           data: { status: markFailed ? BookingStatus.FAILED : BookingStatus.PAID },
         });
+
+        if (!markFailed) {
+          void notifyGuestOfBookingConfirmation(booking.id);
+        }
       }
     }
   }

@@ -5,7 +5,7 @@ import { CategoryShell } from '@/components/category/CategoryShell';
 import HeroSection from '@/components/HeroSection';
 import { ThingsProduct } from '@/components/products/ThingsProduct';
 import { Input } from '@/components/ui/input';
-import { createSearchParams, getCountryByPlaceName } from '@/lib/utils';
+import { createSearchParams, countryFromMap } from '@/lib/utils';
 import { ListingItem } from '@/types/listing';
 import { useBookingDate, useThingsStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
@@ -17,7 +17,13 @@ import { useEffect } from 'react';
 const filters = ['Sightseeing', 'Transportation', 'Art and Culture', 'City tour'];
 const selectItems = ['Times of day', 'Time of week'];
 
-const ThingsCategory = ({ listings }: { listings: ListingItem[] }) => {
+const ThingsCategory = ({
+  listings,
+  placeCountryMap,
+}: {
+  listings: ListingItem[];
+  placeCountryMap: Record<string, string>;
+}) => {
   const router = useRouter();
   const { location } = useThingsStore();
   const { date } = useBookingDate();
@@ -30,7 +36,7 @@ const ThingsCategory = ({ listings }: { listings: ListingItem[] }) => {
   }, [location]);
 
   const travelDates = format(date?.from ?? Date.now(), 'MMM d') + ' - ' + format(date?.to ?? Date.now(), 'MMM d');
-  const countryName = getCountryByPlaceName(location);
+  const countryName = countryFromMap(placeCountryMap, location);
 
   return (
     <div className='px-2 lg:max-w-7xl mx-auto'>

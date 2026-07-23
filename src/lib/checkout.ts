@@ -13,6 +13,7 @@ import {
 import { db } from '@/lib/db';
 import { getOrCreateStripeCustomer } from '@/lib/stripe-customer';
 import { getStripe } from '@/lib/stripe';
+import { notifyGuestOfBookingConfirmation } from '@/lib/notification-delivery';
 import { Booking, BookingStatus, ListingType } from '@prisma/client';
 import Stripe from 'stripe';
 
@@ -330,6 +331,8 @@ export async function finalizeCheckout(userId: string, bookingId: string) {
       where: { id: booking.id },
       data: { status: BookingStatus.PAID },
     });
+
+    void notifyGuestOfBookingConfirmation(booking.id);
 
     return { success: 'Payment successful! Your booking is confirmed.', bookingId: booking.id };
   }

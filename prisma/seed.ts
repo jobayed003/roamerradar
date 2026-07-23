@@ -1,5 +1,6 @@
 import { ListingType, PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { PLACE_SEED_DATA } from '../src/lib/constants';
 
 const prisma = new PrismaClient();
 
@@ -296,7 +297,18 @@ async function main() {
     }
   }
 
-  console.log('Seeded listings, demo users, and reviews successfully');
+  await prisma.placeSuggestion.deleteMany();
+  await prisma.placeSuggestion.createMany({
+    data: PLACE_SEED_DATA.flatMap((entry, countryIndex) =>
+      entry.places.map((name, placeIndex) => ({
+        country: entry.country,
+        name,
+        sortOrder: countryIndex * 10 + placeIndex,
+      }))
+    ),
+  });
+
+  console.log('Seeded listings, demo users, reviews, and place suggestions successfully');
 }
 
 main()

@@ -165,4 +165,3 @@ Planned improvements (not yet implemented):
 
 - Duffel order creation after successful Stripe payment (optional; demo fares are enough for now)
 - Expand Playwright coverage beyond public smoke tests
-- Move hardcoded Places suggestions into the database
