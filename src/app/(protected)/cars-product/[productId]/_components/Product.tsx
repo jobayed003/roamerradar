@@ -3,6 +3,7 @@
 import BreadcrumbProvider from '@/components/BreadcrumbProvider';
 import LinkButton from '@/components/LinkButton';
 import ListingHostRow from '@/components/ListingHostRow';
+import ListingImageGallery from '@/components/ListingImageGallery';
 import { ProfileSection } from '@/components/ProfileSection';
 import { WishlistButton } from '@/components/WishlistButton';
 import Layout from '@/components/ui/Layout';
@@ -14,7 +15,6 @@ import {
   CarFront,
   ChevronLeft,
   Flag,
-  ImageIcon,
   Navigation,
   Settings2Icon,
   Share,
@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaCheckCircle, FaSearchPlus, FaStar } from 'react-icons/fa';
+import { FaCheckCircle, FaStar } from 'react-icons/fa';
 import { ListingItem } from '@/types/listing';
 import type { ReviewItem } from '@/types/review';
 import {
@@ -38,7 +38,9 @@ import { useMemo } from 'react';
 
 const icons = [Navigation, Share, X];
 
-const galleryImages = [
+const defaultGalleryImages = [
+  '/images/car-images/gallery-2.jpg',
+  '/images/car-images/gallery-1.jpg',
   '/images/car-images/gallery-3.jpg',
   '/images/car-images/gallery-4.jpg',
   '/images/car-images/gallery-5.jpg',
@@ -85,6 +87,14 @@ const Product = ({
     checkOut: pricing.checkOut,
     guests,
   });
+  const galleryFromMetadata = listing.metadata?.gallery?.filter(Boolean) ?? [];
+  const galleryImages = [
+    listing.image,
+    ...galleryFromMetadata,
+    ...defaultGalleryImages.filter(
+      (image) => image !== listing.image && !galleryFromMetadata.includes(image)
+    ),
+  ];
 
   return (
     <>
@@ -92,15 +102,16 @@ const Product = ({
 
       <Layout className='lg:px-20 px-8'>
         <div className='md:flex hidden justify-between pb-10'>
-          <LinkButton href='/stays-category' label='Go Home'>
+          <LinkButton href='/cars-category' label='Go Home'>
             <ChevronLeft className='h-5 w-5 mr-2' />
           </LinkButton>
 
           <BreadcrumbProvider
-            backRoute='/'
-            originRoute='stays'
-            location='New Zealand'
-            searchedLocation='South Island'
+            backRoute='cars-category'
+            originRoute='cars'
+            originHref='/cars'
+            location={listing.location ?? undefined}
+            searchedLocation={listing.title}
           />
         </div>
 
@@ -110,12 +121,13 @@ const Product = ({
 
             <div className='flex items-center flex-wrap gap-3 font-poppins text-sm text-gray_text'>
               <div className='overflow-hidden rounded-full'>
-                <Image src={'/user.jpg'} alt='user img' width={25} height={25} />
+                <Image src={listing.image} alt={listing.title} width={25} height={25} />
               </div>
               <div className='flex items-center gap-x-2 ml-2'>
                 <FaStar size={22} fill='#FFD166' />
                 <p className='font-medium text-white'>
-                  4.8 <span className='ml-1 text-gray_text'>(234 reviews)</span>
+                  {listing.rating}{' '}
+                  <span className='ml-1 text-gray_text'>({listing.reviewCount} reviews)</span>
                 </p>
               </div>
 
@@ -126,7 +138,7 @@ const Product = ({
                 </div>
                 <div className='flex items-center gap-x-2 ml-2'>
                   <Flag className='w-4 h-4 ' />
-                  <p className=''>London - Kings Cross</p>
+                  <p className=''>{listing.location ?? 'Pickup location'}</p>
                 </div>
               </div>
             </div>
@@ -151,54 +163,7 @@ const Product = ({
             ))}
           </div>
         </div>
-        <div className='py-10'>
-          <div className='grid md:grid-cols-3 grid-cols-2 grid-rows-3 gap-2 max-h-[1000px]'>
-            <div className='md:col-span-2 col-span-full row-span-2 relative group cursor-pointer '>
-              <Image
-                src={'/images/car-images/gallery-2.jpg'}
-                alt='Gallery pic'
-                fill
-                className='absolute object-cover rounded-2xl '
-              />
-              <div className='bg-white rounded-full p-4 absolute z-50 top-1/2 right-1/2 invisible group-hover:visible transition-all'>
-                <FaSearchPlus size={14} className='text-gray_text' />
-              </div>
-              <Link
-                href={'/' + 'photo-grid'}
-                className='bg-white flex items-center gap-x-4 rounded-full px-3 py-2 absolute z-50 bottom-4 left-4 text-dark_bg'
-              >
-                <ImageIcon className='w-4 h-4' />
-                <span className='text-sm font-bold'>Show all photos</span>
-              </Link>
-            </div>
-            <div className='row-span-2 relative group cursor-pointer'>
-              <Image
-                src={'/images/car-images/gallery-1.jpg'}
-                alt='Gallery pic'
-                fill
-                className='absolute object-cover rounded-2xl '
-              />
-              <div className='bg-white rounded-full p-4 absolute z-50 top-1/2 right-1/2 invisible group-hover:visible transition-all'>
-                <FaSearchPlus size={14} className='text-gray_text' />
-              </div>
-            </div>
-            {galleryImages.map((img) => (
-              <div key={img} className='relative group cursor-pointer md:row-span-1 row-span-2'>
-                <Image
-                  src={img}
-                  alt='Gallery Img'
-                  width={400}
-                  height={400}
-                  className='rounded-2xl object-cover w-full h-full'
-                />
-
-                <div className='bg-white rounded-full p-4 absolute z-50 top-[40%] left-[40%] invisible group-hover:visible transition-all'>
-                  <FaSearchPlus size={14} className='text-gray_text' />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ListingImageGallery images={galleryImages} title={listing.title} />
 
         <div className='flex lg:flex-row flex-col gap-8 mt-3 py-8 '>
           <div className='basis-7/12'>
