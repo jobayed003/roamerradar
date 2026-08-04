@@ -1,4 +1,22 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/env', () => ({
+  env: {
+    NODE_ENV: 'test',
+    DATABASE_URL: 'postgresql://test',
+    DIRECT_URL: 'postgresql://test',
+    AUTH_SECRET: 'test-secret',
+  },
+  isResendConfigured: () => false,
+  isStripeConfigured: () => false,
+}));
+
+vi.mock('@/lib/db', () => ({
+  db: {
+    booking: { findMany: vi.fn() },
+  },
+}));
+
 import { dateRangesOverlap, listingNeedsDateAvailability } from '@/lib/booking-availability';
 import { ListingType } from '@prisma/client';
 
