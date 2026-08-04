@@ -77,6 +77,8 @@ Fill in the required values:
 | `DATABASE_URL` | Yes | Supabase pooler URL (port 6543, `?pgbouncer=true`) |
 | `DIRECT_URL` | Yes | Supabase direct URL (port 5432, for migrations) |
 | `AUTH_SECRET` | Yes | Random secret — `openssl rand -base64 32` |
+| `AUTH_TRUST_HOST` | Production | Set `true` on Vercel so OAuth callbacks trust the proxy host |
+| `AUTH_URL` | Recommended in prod | Exact site origin, e.g. `https://your-domain.com` (no trailing slash) |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | App URL, e.g. `http://localhost:3000` |
 | `DUFFEL_ACCESS_TOKEN` | For flights | Duffel **test** token (`duffel_test_…`) — use in production for demo/live API search |
 | `USE_DEMO_FLIGHTS` | Optional | Set to `true` only to skip Duffel and use seeded DB sample flights |
@@ -104,6 +106,20 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+### Google OAuth in production
+
+1. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), create (or edit) an OAuth 2.0 Web client.
+2. Add **Authorized JavaScript origins**: `https://YOUR_DOMAIN`
+3. Add **Authorized redirect URIs**: `https://YOUR_DOMAIN/api/auth/callback/google`
+4. In Vercel (or your host), set:
+   - `AUTH_SECRET`
+   - `AUTH_TRUST_HOST=true`
+   - `AUTH_URL=https://YOUR_DOMAIN` (optional but recommended)
+   - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`
+5. Redeploy after saving env vars.
+
+If Google sign-in still fails with `redirect_uri_mismatch`, the redirect URI in Google Cloud does not exactly match your live callback URL.
 
 ### Flights in production (Duffel test mode)
 
