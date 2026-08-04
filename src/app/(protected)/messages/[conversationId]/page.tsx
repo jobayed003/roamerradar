@@ -16,18 +16,19 @@ const ConversationPage = async ({ params }: { params: { conversationId: string }
   }
 
   const { conversationId } = params;
-  const conversation = await getConversationForUser(conversationId, session.user.id);
+
+  const [conversation, conversations, messages] = await Promise.all([
+    getConversationForUser(conversationId, session.user.id),
+    getConversationsForUser(session.user.id),
+    getMessagesForConversation(conversationId),
+  ]);
 
   if (!conversation) {
     notFound();
   }
 
-  await markConversationRead(conversationId, session.user.id);
-
-  const [conversations, messages] = await Promise.all([
-    getConversationsForUser(session.user.id),
-    getMessagesForConversation(conversationId),
-  ]);
+  // Non-blocking: client also marks read on open; avoid delaying first paint.
+  void markConversationRead(conversationId, session.user.id);
 
   const otherUser = conversation.participants.find((p) => p.userId !== session.user.id)?.user;
 

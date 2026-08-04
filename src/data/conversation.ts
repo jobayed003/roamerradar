@@ -19,6 +19,8 @@ const listingSelect = {
   location: true,
 } as const;
 
+const DEFAULT_MESSAGE_WINDOW = 100;
+
 export async function getConversationsForUser(userId: string): Promise<ConversationPreview[]> {
   const conversations = await db.conversation.findMany({
     where: {
@@ -86,10 +88,29 @@ export async function getConversationForUser(conversationId: string, userId: str
   return conversation;
 }
 
-export async function getMessagesForConversation(conversationId: string): Promise<ChatMessage[]> {
-  const messages = await db.message.findMany({
+export async function getMessagesForConversation(
+  conversationId: string,
+  options: { limit?: number; since?: Date } = {}
+): Promise<ChatMessage[]> {
+  const limit = options.limit ?? DEFAULT_MESSAGE_WINDOW;
+
+  if (options.since) {
+    return db.message.findMany({
+      where: { conversationId, createdAt: { gt: options.since } },
+      orderBy: { createdAt: 'asc' },
+      select: {
+        id: true,
+        body: true,
+        senderId: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  const latest = await db.message.findMany({
     where: { conversationId },
-    orderBy: { createdAt: 'asc' },
+    orderBy: { createdAt: 'desc' },
+    take: limit,
     select: {
       id: true,
       body: true,
@@ -98,7 +119,7 @@ export async function getMessagesForConversation(conversationId: string): Promis
     },
   });
 
-  return messages;
+  return latest.reverse();
 }
 
 export async function getOrCreateConversation(
@@ -149,6 +170,7 @@ export async function markConversationRead(conversationId: string, userId: strin
 export async function isConversationParticipant(conversationId: string, userId: string) {
   const participant = await db.conversationParticipant.findFirst({
     where: { conversationId, userId },
+    select: { id: true },
   });
 
   return !!participant;
