@@ -4,6 +4,7 @@ import {
   listingNeedsDateAvailability,
 } from '@/lib/booking-availability';
 import { db } from '@/lib/db';
+import { fulfillFlightBookingIfNeeded } from '@/lib/flight-fulfillment';
 import { notifyGuestOfBookingConfirmation } from '@/lib/notification-delivery';
 import { getStripe } from '@/lib/stripe';
 import { BookingStatus, ListingType } from '@prisma/client';
@@ -66,7 +67,9 @@ export async function POST(req: Request) {
         });
 
         if (!markFailed) {
-          void notifyGuestOfBookingConfirmation(booking.id);
+          void fulfillFlightBookingIfNeeded(booking.id).then(() =>
+            notifyGuestOfBookingConfirmation(booking.id)
+          );
         }
       }
     }

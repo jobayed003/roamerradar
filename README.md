@@ -194,4 +194,12 @@ Copy the webhook signing secret into `STRIPE_WEBHOOK_SECRET` in `.env.local`.
 
 Planned improvements (not yet implemented):
 
-- Duffel order creation after successful Stripe payment (optional; demo fares are enough for now)
+- (optional) Instant-pay Duffel sandbox orders instead of holds; seats/baggage extras
+
+### Duffel flight test bookings
+
+After Stripe payment succeeds for a cached Duffel fare, RoamerRadar creates a **Duffel sandbox hold** (`type: hold`) when `DUFFEL_ACCESS_TOKEN` starts with `duffel_test_`.
+
+- **Never** creates live airline tickets — live tokens and `live_mode` offers are blocked.
+- Seeded/demo flights skip Duffel entirely (Stripe booking only).
+- Checkout collects passenger details required by Duffel before payment.

@@ -1,6 +1,9 @@
-import { env, isDuffelConfigured } from '@/env';
+import { env, isDuffelConfigured, isDuffelTestMode } from '@/env';
+import { isDuffelOfferId } from '@/lib/duffel-offer-id';
 import { format, parseISO } from 'date-fns';
 import { FlightLeg, ListingItem, ListingType } from '@/types/listing';
+
+export { isDuffelOfferId };
 
 const DUFFEL_API_BASE = 'https://api.duffel.com';
 
@@ -28,17 +31,55 @@ type DuffelSlice = {
   segments: DuffelSegment[];
 };
 
+export type DuffelOfferPassenger = {
+  id: string;
+  type?: string;
+  given_name?: string | null;
+  family_name?: string | null;
+};
+
 export type DuffelFlightOffer = {
   id: string;
   total_amount: string;
   total_currency: string;
+  live_mode?: boolean;
   slices: DuffelSlice[];
+  passengers?: DuffelOfferPassenger[];
   owner?: { name?: string };
+  payment_requirements?: {
+    requires_instant_payment?: boolean;
+  };
+};
+
+export type FlightPassengerInput = {
+  id: string;
+  title: 'mr' | 'mrs' | 'ms' | 'miss' | 'dr';
+  givenName: string;
+  familyName: string;
+  email: string;
+  phoneNumber: string;
+  bornOn: string;
+  gender: 'm' | 'f';
 };
 
 type DuffelOfferRequestResponse = {
   data?: {
     offers?: DuffelFlightOffer[];
+    passengers?: DuffelOfferPassenger[];
+  };
+  errors?: { title?: string; message?: string }[];
+};
+
+type DuffelOfferResponse = {
+  data?: DuffelFlightOffer;
+  errors?: { title?: string; message?: string }[];
+};
+
+type DuffelOrderResponse = {
+  data?: {
+    id: string;
+    booking_reference?: string;
+    live_mode?: boolean;
   };
   errors?: { title?: string; message?: string }[];
 };
@@ -48,6 +89,19 @@ type DuffelPlacesResponse = {
 };
 
 export { isDuffelConfigured };
+
+/** RoamerRadar never creates live airline tickets — only Duffel sandbox (`duffel_test_`). */
+export function assertDuffelTestModeForOrders() {
+  if (!isDuffelConfigured()) {
+    throw new Error('Duffel is not configured.');
+  }
+
+  if (!isDuffelTestMode()) {
+    throw new Error(
+      'Live Duffel tokens cannot create airline orders. Use a duffel_test_ token for sandbox bookings only.'
+    );
+  }
+}
 
 export function airlineLogo(carrierCode: string) {
   return `https://images.kiwi.com/airlines/64/${carrierCode}.png`;
@@ -154,6 +208,98 @@ export function mapDuffelOfferToListing(offer: DuffelFlightOffer): Omit<ListingI
   };
 }
 
+export function parseCachedDuffelOffer(offerData: unknown): DuffelFlightOffer | null {
+  if (!offerData || typeof offerData !== 'object') return null;
+  const offer = offerData as DuffelFlightOffer;
+  if (!isDuffelOfferId(offer.id)) return null;
+  return offer;
+}
+
+export async function getDuffelOffer(offerId: string) {
+  assertDuffelTestModeForOrders();
+
+  const response = await duffelFetch<DuffelOfferResponse>(`/air/offers/${offerId}`);
+
+  if (response.errors?.length) {
+    const message = response.errors.map((error) => error.message ?? error.title).filter(Boolean).join(' ');
+    throw new Error(message || 'Unable to refresh this fare.');
+  }
+
+  if (!response.data) {
+    throw new Error('Offer not found.');
+  }
+
+  if (response.data.live_mode === true) {
+    throw new Error('Refusing to book a live-mode offer. Test bookings only.');
+  }
+
+  return response.data;
+}
+
+/**
+ * Creates a Duffel sandbox hold order (not a real airline ticket).
+ * Hard-blocked unless the access token is `duffel_test_…`.
+ */
+export async function createDuffelTestHoldOrder({
+  offerId,
+  passengers,
+}: {
+  offerId: string;
+  passengers: FlightPassengerInput[];
+}) {
+  assertDuffelTestModeForOrders();
+
+  if (!isDuffelOfferId(offerId)) {
+    throw new Error('Invalid Duffel offer id.');
+  }
+
+  const offer = await getDuffelOffer(offerId);
+
+  if (offer.payment_requirements?.requires_instant_payment) {
+    throw new Error('This fare requires instant airline payment and cannot be held as a test booking.');
+  }
+
+  const response = await duffelFetch<DuffelOrderResponse>('/air/orders', {
+    method: 'POST',
+    body: JSON.stringify({
+      data: {
+        // Hold = sandbox reservation only; omit payments so we never charge Duffel balance.
+        type: 'hold',
+        selected_offers: [offer.id],
+        passengers: passengers.map((passenger) => ({
+          id: passenger.id,
+          title: passenger.title,
+          gender: passenger.gender,
+          given_name: passenger.givenName,
+          family_name: passenger.familyName,
+          email: passenger.email,
+          phone_number: passenger.phoneNumber,
+          born_on: passenger.bornOn,
+        })),
+      },
+    }),
+  });
+
+  if (response.errors?.length) {
+    const message = response.errors.map((error) => error.message ?? error.title).filter(Boolean).join(' ');
+    throw new Error(message || 'Unable to create Duffel test order.');
+  }
+
+  if (!response.data?.id) {
+    throw new Error('Duffel did not return an order id.');
+  }
+
+  if (response.data.live_mode === true) {
+    throw new Error('Refusing to keep a live-mode airline order. Test bookings only.');
+  }
+
+  return {
+    orderId: response.data.id,
+    bookingReference: response.data.booking_reference ?? null,
+    liveMode: false as const,
+  };
+}
+
 export async function searchFlightOffers({
   originCode,
   destinationCode,
@@ -190,7 +336,7 @@ export async function searchFlightOffers({
     body: JSON.stringify({
       data: {
         slices,
-        passengers: Array.from({ length: adults }, () => ({ type: 'adult' })),
+        passengers: Array.from({ length: Math.max(1, adults) }, () => ({ type: 'adult' })),
         cabin_class: 'economy',
       },
     }),
@@ -201,7 +347,12 @@ export async function searchFlightOffers({
     throw new Error(message || 'No flights found for this route.');
   }
 
+  const requestPassengers = response.data?.passengers ?? [];
   const offers = response.data?.offers ?? [];
 
-  return offers.slice(0, max);
+  return offers.slice(0, max).map((offer) => ({
+    ...offer,
+    passengers:
+      offer.passengers && offer.passengers.length > 0 ? offer.passengers : requestPassengers,
+  }));
 }

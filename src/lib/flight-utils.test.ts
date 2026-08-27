@@ -108,6 +108,8 @@ describe('booking helpers', () => {
     flightOfferId: null,
     listingType: PrismaListingType.STAY,
     location: 'NZ',
+    duffelBookingReference: null,
+    duffelFulfillmentStatus: null,
   };
 
   it('maps listing types to categories', () => {

@@ -15,6 +15,8 @@ function toBookingItem(booking: {
   createdAt: Date;
   listingId: string | null;
   flightOfferId: string | null;
+  duffelBookingReference: string | null;
+  duffelFulfillmentStatus: string | null;
   listing: { type: import('@prisma/client').ListingType; location: string | null } | null;
 }): BookingItem {
   return {
@@ -32,6 +34,8 @@ function toBookingItem(booking: {
     flightOfferId: booking.flightOfferId,
     listingType: booking.listing?.type ?? null,
     location: booking.listing?.location ?? null,
+    duffelBookingReference: booking.duffelBookingReference,
+    duffelFulfillmentStatus: booking.duffelFulfillmentStatus,
   };
 }
 

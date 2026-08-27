@@ -11,6 +11,11 @@ import {
   parseBookingDate,
 } from '@/lib/booking-pricing';
 import { db } from '@/lib/db';
+import { parseCachedDuffelOffer, type FlightPassengerInput } from '@/lib/duffel';
+import {
+  fulfillFlightBookingIfNeeded,
+  passengerDetailsToJson,
+} from '@/lib/flight-fulfillment';
 import { getOrCreateStripeCustomer } from '@/lib/stripe-customer';
 import { getStripe } from '@/lib/stripe';
 import { notifyGuestOfBookingConfirmation } from '@/lib/notification-delivery';
@@ -21,6 +26,7 @@ export type StartCheckoutOptions = {
   guests?: number;
   checkIn?: string;
   checkOut?: string;
+  passengers?: FlightPassengerInput[];
 };
 
 type CheckoutSuccess = {
@@ -138,6 +144,29 @@ export async function startCheckout(userId: string, itemId: string, options: Sta
     };
   }
 
+  const cachedOffer = flightOffer ? parseCachedDuffelOffer(flightOffer.offerData) : null;
+  if (cachedOffer) {
+    const expectedPassengerIds = (cachedOffer.passengers ?? []).map((passenger) => passenger.id);
+    const passengers = options.passengers ?? [];
+
+    if (expectedPassengerIds.length === 0) {
+      return {
+        error: 'This fare is missing passenger slots. Search again for a fresh offer.' as const,
+      };
+    }
+
+    if (passengers.length !== expectedPassengerIds.length) {
+      return {
+        error: `Enter details for all ${expectedPassengerIds.length} passenger(s) before paying.` as const,
+      };
+    }
+
+    const providedIds = new Set(passengers.map((passenger) => passenger.id));
+    if (expectedPassengerIds.some((id) => !providedIds.has(id))) {
+      return { error: 'Passenger details do not match this fare. Refresh and try again.' as const };
+    }
+  }
+
   const checkInDate = parseBookingDate(options.checkIn);
   const checkOutDate = parseBookingDate(options.checkOut);
 
@@ -223,6 +252,12 @@ export async function startCheckout(userId: string, itemId: string, options: Sta
         });
       } else if (REUSABLE_PI_STATUSES.has(paymentIntent.status) && paymentIntent.client_secret) {
         if (paymentIntent.amount === amount && paymentIntent.currency === currency) {
+          if (cachedOffer && options.passengers) {
+            await db.booking.update({
+              where: { id: existing.id },
+              data: { passengerDetails: passengerDetailsToJson(options.passengers) },
+            });
+          }
           return toCheckoutResult(existing, paymentIntent.client_secret, nights ?? null);
         }
 
@@ -253,6 +288,10 @@ export async function startCheckout(userId: string, itemId: string, options: Sta
       status: BookingStatus.PENDING,
       title,
       image,
+      passengerDetails:
+        cachedOffer && options.passengers
+          ? passengerDetailsToJson(options.passengers)
+          : undefined,
     },
   });
 
@@ -332,7 +371,25 @@ export async function finalizeCheckout(userId: string, bookingId: string) {
       data: { status: BookingStatus.PAID },
     });
 
+    const fulfillment = await fulfillFlightBookingIfNeeded(booking.id);
     void notifyGuestOfBookingConfirmation(booking.id);
+
+    if (fulfillment.status === 'test_hold') {
+      return {
+        success: fulfillment.bookingReference
+          ? `Payment successful! Test flight hold confirmed (ref ${fulfillment.bookingReference}).`
+          : 'Payment successful! Duffel sandbox test hold created (not a real airline ticket).',
+        bookingId: booking.id,
+      };
+    }
+
+    if (fulfillment.status === 'blocked_live') {
+      return {
+        success:
+          'Payment successful! Flight was not sent to the airline — live Duffel bookings are disabled (test mode only).',
+        bookingId: booking.id,
+      };
+    }
 
     return { success: 'Payment successful! Your booking is confirmed.', bookingId: booking.id };
   }
