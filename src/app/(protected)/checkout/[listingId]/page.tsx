@@ -1,12 +1,16 @@
-import { getFlightOfferById } from '@/data/flights';
+import { getFlightOfferById, getFlightOfferRecord, isFlightOfferBookable } from '@/data/flights';
 import { getListingById } from '@/data/listing';
+import { getUserById } from '@/data/user';
 import { parseBookingDate } from '@/lib/booking-pricing';
 import { startCheckout } from '@/lib/checkout';
+import { parseCachedDuffelOffer } from '@/lib/duffel';
+import { isDuffelTestMode } from '@/env';
 import { isStripeConfigured } from '@/lib/stripe';
 import { requireAuth } from '@/server/auth/require-auth';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import CheckoutClient from './_components/CheckoutClient';
+import FlightCheckoutClient from './_components/FlightCheckoutClient';
 
 type CheckoutPageProps = {
   params: { listingId: string };
@@ -51,6 +55,7 @@ const CheckoutPage = async ({ params, searchParams }: CheckoutPageProps) => {
     redirect('/auth/login');
   }
 
+  const flightRecord = await getFlightOfferRecord(params.listingId);
   const listing =
     (await getFlightOfferById(params.listingId)) ?? (await getListingById(params.listingId));
 
@@ -72,6 +77,48 @@ const CheckoutPage = async ({ params, searchParams }: CheckoutPageProps) => {
   const guests = Math.max(1, Number.parseInt(searchParams.guests ?? '1', 10) || 1);
   const checkIn = parseBookingDate(searchParams.checkIn);
   const checkOut = parseBookingDate(searchParams.checkOut);
+  const cachedOffer =
+    flightRecord && isFlightOfferBookable(flightRecord.expiresAt)
+      ? parseCachedDuffelOffer(flightRecord.offerData)
+      : null;
+
+  if (cachedOffer) {
+    const passengerSlots = (cachedOffer.passengers ?? []).map((passenger, index) => ({
+      id: passenger.id,
+      label: `Passenger ${index + 1}`,
+    }));
+
+    if (passengerSlots.length === 0) {
+      return (
+        <CheckoutMessage
+          title='Checkout unavailable'
+          description='This fare is missing passenger slots. Search again for a fresh offer.'
+          actionHref='/flights-category'
+          actionLabel='Search flights again'
+        />
+      );
+    }
+
+    const user = await getUserById(authResult.user.id);
+    const nameParts = (user?.displayName || user?.realName || user?.name || '').trim().split(/\s+/);
+
+    return (
+      <FlightCheckoutClient
+        itemId={params.listingId}
+        listingTitle={listing.title}
+        listingImage={listing.image}
+        amountPreview={flightRecord?.price ?? listing.price}
+        guests={Math.max(guests, passengerSlots.length)}
+        checkIn={checkIn?.toISOString() ?? null}
+        checkOut={checkOut?.toISOString() ?? null}
+        passengerSlots={passengerSlots}
+        defaultEmail={user?.email ?? undefined}
+        defaultGivenName={nameParts[0]}
+        defaultFamilyName={nameParts.length > 1 ? nameParts.slice(1).join(' ') : undefined}
+        testMode={isDuffelTestMode()}
+      />
+    );
+  }
 
   try {
     const checkout = await startCheckout(authResult.user.id, params.listingId, {
@@ -111,7 +158,7 @@ const CheckoutPage = async ({ params, searchParams }: CheckoutPageProps) => {
         title='Checkout unavailable'
         description='Unable to start payment right now. Check your connection and try again, or contact support if it keeps happening.'
         actionHref='/support'
-        actionLabel='Contact support'
+        actionLabel='Get help'
       />
     );
   }

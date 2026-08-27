@@ -124,6 +124,22 @@ export const CancelBookingSchema = z.object({
 
 export const CuidSchema = z.string().cuid({ message: 'Invalid id.' });
 
+export const FlightPassengerSchema = z.object({
+  id: z.string().min(1, { message: 'Passenger id is required.' }),
+  title: z.enum(['mr', 'mrs', 'ms', 'miss', 'dr']),
+  givenName: z.string().trim().min(1, { message: 'First name is required.' }).max(80),
+  familyName: z.string().trim().min(1, { message: 'Last name is required.' }).max(80),
+  email: z.string().trim().email({ message: 'Valid email is required.' }),
+  phoneNumber: z
+    .string()
+    .trim()
+    .min(8, { message: 'Phone number is required.' })
+    .max(20)
+    .regex(/^\+?[0-9\s\-()]+$/, { message: 'Enter a valid phone number.' }),
+  bornOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Date of birth must be YYYY-MM-DD.' }),
+  gender: z.enum(['m', 'f']),
+});
+
 export const StartCheckoutSchema = z.object({
   itemId: z.string().cuid({ message: 'Invalid listing.' }),
   guests: z.coerce.number().int().min(1).max(20).optional().default(1),
@@ -135,6 +151,7 @@ export const StartCheckoutSchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid check-out date.' })
     .optional(),
+  passengers: z.array(FlightPassengerSchema).max(9).optional(),
 });
 
 export const CoverImageSchema = z
