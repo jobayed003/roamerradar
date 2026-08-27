@@ -4,7 +4,18 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { ReactNode } from 'react';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!, {
+  // Hide the Stripe sandbox assistant badge in production while still using test keys.
+  ...(process.env.NODE_ENV === 'production'
+    ? {
+        developerTools: {
+          assistant: {
+            enabled: false,
+          },
+        },
+      }
+    : {}),
+});
 
 type StripeElementsProviderProps = {
   clientSecret: string;
