@@ -2,16 +2,15 @@
 
 import { sendMessage } from '@/actions/messages';
 import ListingPreviewCard from '@/components/ListingPreviewCard';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { cn, dateFormat, getFirstLetters } from '@/lib/utils';
 import type { ChatMessage, ConversationListing, ConversationUser } from '@/types/conversation';
 import { format } from 'date-fns';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useRef, useState, useTransition } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FormEvent, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 
 type ChatboxProps = {
   className?: string;
@@ -20,14 +19,25 @@ type ChatboxProps = {
   currentUserId: string;
   otherUser: ConversationUser | null;
   listing: ConversationListing | null;
+  onLocalMessagesChange?: (messages: ChatMessage[]) => void;
 };
 
-const Chatbox = ({ className, conversationId, messages, currentUserId, otherUser, listing }: ChatboxProps) => {
+const Chatbox = ({
+  className,
+  conversationId,
+  messages,
+  currentUserId,
+  otherUser,
+  listing,
+  onLocalMessagesChange,
+}: ChatboxProps) => {
   const [draft, setDraft] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const groupedMessages = useMemo(() => groupMessagesByDate(messages), [messages]);
+  const displayName = otherUser?.displayName ?? otherUser?.name ?? 'User';
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -46,31 +56,56 @@ const Chatbox = ({ className, conversationId, messages, currentUserId, otherUser
     );
   }
 
-  const displayName = otherUser?.displayName ?? otherUser?.name ?? 'User';
-
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    if (!draft.trim() || isPending) {
+    const text = draft.trim();
+    if (!text || isPending) {
       return;
     }
 
     setError(null);
 
-    startTransition(async () => {
-      const result = await sendMessage(conversationId, draft);
+    const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const optimistic: ChatMessage = {
+      id: tempId,
+      body: text,
+      senderId: currentUserId,
+      createdAt: new Date(),
+    };
 
-      if (result.error) {
+    const previous = messages;
+    const next = [...messages, optimistic];
+    onLocalMessagesChange?.(next);
+    setDraft('');
+    queueMicrotask(() => inputRef.current?.focus());
+
+    startTransition(async () => {
+      const result = await sendMessage(conversationId, text);
+
+      if ('error' in result && result.error) {
+        onLocalMessagesChange?.(previous);
+        setDraft(text);
         setError(result.error);
         return;
       }
 
-      setDraft('');
-      router.refresh();
+      if ('message' in result && result.message) {
+        onLocalMessagesChange?.(
+          next.map((message) =>
+            message.id === tempId
+              ? {
+                  id: result.message.id,
+                  body: result.message.body,
+                  senderId: result.message.senderId,
+                  createdAt: new Date(result.message.createdAt),
+                }
+              : message
+          )
+        );
+      }
     });
   };
-
-  const groupedMessages = groupMessagesByDate(messages);
 
   return (
     <div
@@ -117,6 +152,7 @@ const Chatbox = ({ className, conversationId, messages, currentUserId, otherUser
                   createdAt={message.createdAt}
                   senderImage={otherUser?.image}
                   senderName={displayName}
+                  pending={message.id.startsWith('temp-')}
                 />
               ))}
             </div>
@@ -125,17 +161,20 @@ const Chatbox = ({ className, conversationId, messages, currentUserId, otherUser
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className='shrink-0 px-4 sm:px-6 py-3 flex w-full items-center gap-2 border-t dark:border-gray_border bg-background dark:bg-dark_bg'>
+      <form
+        onSubmit={handleSubmit}
+        className='shrink-0 px-4 sm:px-6 py-3 flex w-full items-center gap-2 border-t dark:border-gray_border bg-background dark:bg-dark_bg'
+      >
         <Input
+          ref={inputRef}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
           placeholder='Enter your message'
-          disabled={isPending}
           className='dark:border-gray_border bg-transparent rounded-full py-5 min-w-0'
         />
         <button
           type='submit'
-          disabled={isPending || !draft.trim()}
+          disabled={!draft.trim()}
           className='shrink-0 p-2 bg-blue hover:bg-blue-hover disabled:opacity-50 text-white rounded-full transition-all cursor-pointer'
         >
           <ArrowRight className='w-5 h-5' />
@@ -152,15 +191,17 @@ const MessageBox = ({
   createdAt,
   senderImage,
   senderName,
+  pending = false,
 }: {
   isSender?: boolean;
   message: string;
   createdAt: Date;
   senderImage?: string | null;
   senderName: string;
+  pending?: boolean;
 }) => {
   return (
-    <div className={cn('flex flex-col w-full', isSender ? 'items-end' : 'items-start')}>
+    <div className={cn('flex flex-col w-full', isSender ? 'items-end' : 'items-start', pending && 'opacity-70')}>
       <div className={cn('flex gap-x-2 sm:gap-x-3 max-w-[85%] sm:max-w-[75%]', isSender && 'flex-row-reverse')}>
         {!isSender &&
           (senderImage ? (
@@ -180,7 +221,7 @@ const MessageBox = ({
         </div>
       </div>
       <div className={cn('mt-1 text-gray_light font-semibold text-xs', isSender ? 'pr-1' : 'pl-10')}>
-        {format(new Date(createdAt), 'h:mm aaa')}
+        {pending ? 'Sending…' : format(new Date(createdAt), 'h:mm aaa')}
       </div>
     </div>
   );

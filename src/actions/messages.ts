@@ -13,6 +13,20 @@ import { requireAuth } from '@/server/auth/require-auth';
 import { SendMessageInputSchema, StartConversationSchema } from '@/schemas';
 import { revalidatePath } from 'next/cache';
 
+function serializeMessage(message: {
+  id: string;
+  body: string;
+  senderId: string;
+  createdAt: Date;
+}) {
+  return {
+    id: message.id,
+    body: message.body,
+    senderId: message.senderId,
+    createdAt: message.createdAt.toISOString(),
+  };
+}
+
 export async function sendMessage(conversationId: string, body: string) {
   const authResult = await requireAuth();
 
@@ -36,17 +50,21 @@ export async function sendMessage(conversationId: string, body: string) {
   }
 
   try {
-    const message = await db.message.create({
-      data: {
-        conversationId: parsed.data.conversationId,
-        senderId: authResult.user.id,
-        body: parsed.data.body,
-      },
-    });
+    const message = await db.$transaction(async (tx) => {
+      const created = await tx.message.create({
+        data: {
+          conversationId: parsed.data.conversationId,
+          senderId: authResult.user.id,
+          body: parsed.data.body,
+        },
+      });
 
-    await db.conversation.update({
-      where: { id: parsed.data.conversationId },
-      data: { updatedAt: new Date() },
+      await tx.conversation.update({
+        where: { id: parsed.data.conversationId },
+        data: { updatedAt: new Date() },
+      });
+
+      return created;
     });
 
     void notifyRecipientOfMessage({
@@ -55,17 +73,13 @@ export async function sendMessage(conversationId: string, body: string) {
       body: parsed.data.body,
     });
 
+    // Soft cache bust for conversation list without forcing a full client remount.
     revalidatePath('/messages');
     revalidatePath(`/messages/${parsed.data.conversationId}`);
 
     return {
       success: true,
-      message: {
-        id: message.id,
-        body: message.body,
-        senderId: message.senderId,
-        createdAt: message.createdAt,
-      },
+      message: serializeMessage(message),
     };
   } catch {
     return { error: 'Failed to send message' };
@@ -120,7 +134,7 @@ export async function startConversation(otherUserId: string, listingId?: string)
   }
 }
 
-export async function fetchMessages(conversationId: string) {
+export async function fetchMessages(conversationId: string, since?: string) {
   const authResult = await requireAuth();
 
   if (!authResult.ok) {
@@ -133,9 +147,17 @@ export async function fetchMessages(conversationId: string) {
     return { error: 'Conversation not found' };
   }
 
-  const messages = await getMessagesForConversation(conversationId);
+  const sinceDate = since ? new Date(since) : undefined;
+  const validSince = sinceDate && !Number.isNaN(sinceDate.getTime()) ? sinceDate : undefined;
 
-  return { messages };
+  const messages = await getMessagesForConversation(conversationId, {
+    since: validSince,
+    limit: validSince ? undefined : 100,
+  });
+
+  return {
+    messages: messages.map(serializeMessage),
+  };
 }
 
 export async function markAsRead(conversationId: string) {
@@ -152,8 +174,6 @@ export async function markAsRead(conversationId: string) {
   }
 
   await markConversationRead(conversationId, authResult.user.id);
-  revalidatePath('/messages');
-  revalidatePath(`/messages/${conversationId}`);
 
   return { success: true };
 }

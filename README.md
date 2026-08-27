@@ -97,6 +97,20 @@ npm run db:migrate    # Apply migrations
 npm run db:seed       # Seed sample listings
 ```
 
+#### Supabase security (RLS)
+
+RoamerRadar uses Supabase **only as PostgreSQL** via Prisma — not the Supabase JS client. Supabase still exposes tables through its Data API unless Row Level Security (RLS) is enabled.
+
+Migration `20260805000000_enable_rls` turns on RLS for all app tables with **no public policies**, which blocks anonymous/API access while Prisma (direct Postgres connection) keeps working.
+
+After deploying, re-run migrations against production:
+
+```bash
+npm run db:migrate
+```
+
+In the Supabase dashboard, security alerts for `rls_disabled_in_public` and `sensitive_columns_exposed` should clear once RLS is applied. **Do not** put `SUPABASE_SERVICE_ROLE_KEY` or anon keys in the Next.js app unless you add explicit RLS policies.
+
 ### 4. Run the dev server
 
 ```bash
