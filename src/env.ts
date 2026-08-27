@@ -91,3 +91,11 @@ export function isResendConfigured() {
 export function isMapboxConfigured() {
   return Boolean(env.NEXT_PUBLIC_MAPBOXGL_ACCESS_TOKEN);
 }
+
+export function isGoogleConfigured() {
+  return Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
+}
+
+export function isGithubConfigured() {
+  return Boolean(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET);
+}

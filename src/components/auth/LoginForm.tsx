@@ -17,8 +17,21 @@ const LoginForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
+  const oauthError = searchParams.get('error');
 
-  const [error, setError] = useState<string | undefined>('');
+  const [error, setError] = useState<string | undefined>(() => {
+    if (!oauthError) return '';
+    if (oauthError === 'OAuthAccountNotLinked') {
+      return 'This email is already registered. Sign in with your password, or use the same Google account that matches this email.';
+    }
+    if (oauthError === 'Configuration') {
+      return 'Google sign-in is not configured correctly. Check AUTH_SECRET and Google OAuth credentials.';
+    }
+    if (oauthError === 'AccessDenied') {
+      return 'Google sign-in was cancelled or denied.';
+    }
+    return 'Unable to sign in with Google. Please try again.';
+  });
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
 

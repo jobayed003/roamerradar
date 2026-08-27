@@ -1,39 +1,36 @@
-import { env } from '@/env';
-import { LoginSchema } from '@/schemas';
-
-import bcrypt from 'bcryptjs';
+import { env, isGithubConfigured, isGoogleConfigured } from '@/env';
 import { type NextAuthConfig } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
 import Github from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
-import { getUserByEmail } from './data/user';
-export default {
-  providers: [
-    Github({
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
-    }),
+
+/**
+ * Edge-safe Auth.js config used by middleware.
+ * Keep Node-only providers (Credentials + bcrypt/DB) out of this file.
+ */
+const providers: NextAuthConfig['providers'] = [];
+
+if (isGoogleConfigured()) {
+  providers.push(
     Google({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-    }),
-    Credentials({
-      async authorize(credentials, request) {
-        const validateFields = LoginSchema.safeParse(credentials);
+      clientId: env.GOOGLE_CLIENT_ID!,
+      clientSecret: env.GOOGLE_CLIENT_SECRET!,
+      // Allow linking Google to an existing email/password account with the same verified email.
+      allowDangerousEmailAccountLinking: true,
+    })
+  );
+}
 
-        if (validateFields.success) {
-          const { email, password } = validateFields.data;
+if (isGithubConfigured()) {
+  providers.push(
+    Github({
+      clientId: env.GITHUB_CLIENT_ID!,
+      clientSecret: env.GITHUB_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
+    })
+  );
+}
 
-          const user = await getUserByEmail(email);
-
-          if (!user || !user.password || !user.emailVerified) return null;
-
-          const passwordsMatch = await bcrypt.compare(password, user.password);
-
-          if (passwordsMatch) return user;
-        }
-        return null;
-      },
-    }),
-  ],
+export default {
+  providers,
+  trustHost: true,
 } satisfies NextAuthConfig;
