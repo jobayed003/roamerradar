@@ -59,11 +59,14 @@ describe('pref gating helpers', () => {
     vi.doMock('@/data/notification-preference', () => ({
       getNotificationPreferences: async () => ({ messageEmail: false, remindersEmail: true }),
     }));
+    vi.doMock('@/data/notification', () => ({
+      createNotification: vi.fn(),
+    }));
     vi.doMock('@/data/user', () => ({
       getUserById: async (id: string) =>
         id === 'sender'
-          ? { id, displayName: 'Sender', name: null, realName: null, email: 's@example.com' }
-          : { id, displayName: 'Recipient', name: null, realName: null, email: 'r@example.com' },
+          ? { id, displayName: 'Sender', name: null, realName: null, email: 's@example.com', image: null }
+          : { id, displayName: 'Recipient', name: null, realName: null, email: 'r@example.com', image: null },
     }));
     vi.doMock('@/lib/db', () => ({
       db: {
@@ -73,9 +76,13 @@ describe('pref gating helpers', () => {
       },
     }));
     const mailSend = vi.fn();
+    const createNotification = vi.fn();
     vi.doMock('@/lib/mail', () => ({
       sendMessageNotificationEmail: mailSend,
       sendBookingConfirmedEmail: vi.fn(),
+    }));
+    vi.doMock('@/data/notification', () => ({
+      createNotification,
     }));
 
     const { notifyRecipientOfMessage } = await import('@/lib/notification-delivery');
@@ -85,6 +92,7 @@ describe('pref gating helpers', () => {
       body: 'hi',
     });
 
+    expect(createNotification).toHaveBeenCalledOnce();
     expect(mailSend).not.toHaveBeenCalled();
   });
 });
