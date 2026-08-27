@@ -15,6 +15,8 @@ export type BookingItem = {
   flightOfferId: string | null;
   listingType: ListingType | null;
   location: string | null;
+  duffelBookingReference: string | null;
+  duffelFulfillmentStatus: string | null;
 };
 
 export type BookingCategory = 'all' | 'stays' | 'flights' | 'cars' | 'things';

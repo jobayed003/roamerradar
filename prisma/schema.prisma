@@ -223,25 +223,32 @@ model FlightOffer {
 }
 
 model Booking {
-  id                    String        @id @default(cuid())
-  userId                String
-  listingId             String?
-  flightOfferId         String?
-  status                BookingStatus @default(PENDING)
-  amount                Float
-  currency              String        @default("USD")
-  stripePaymentIntentId String?       @unique
-  stripeRefundId        String?
-  title                 String
-  image                 String?
-  guests                Int           @default(1)
-  checkIn               DateTime?
-  checkOut              DateTime?
-  cancelledAt           DateTime?
-  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing               Listing?      @relation(fields: [listingId], references: [id], onDelete: SetNull)
-  flightOffer           FlightOffer?  @relation(fields: [flightOfferId], references: [id], onDelete: SetNull)
-  createdAt             DateTime      @default(now())
+  id                      String        @id @default(cuid())
+  userId                  String
+  listingId               String?
+  flightOfferId           String?
+  status                  BookingStatus @default(PENDING)
+  amount                  Float
+  currency                String        @default("USD")
+  stripePaymentIntentId   String?       @unique
+  stripeRefundId          String?
+  title                   String
+  image                   String?
+  guests                  Int           @default(1)
+  checkIn                 DateTime?
+  checkOut                DateTime?
+  cancelledAt             DateTime?
+  /// Passenger details collected at flight checkout (for Duffel test orders).
+  passengerDetails        Json?
+  /// Duffel sandbox order id (`ord_…`). Only set for test-token holds — never live airline tickets.
+  duffelOrderId           String?       @unique
+  duffelBookingReference  String?
+  /// test_hold | skipped_demo | blocked_live | error
+  duffelFulfillmentStatus String?
+  user                    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing                 Listing?      @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  flightOffer             FlightOffer?  @relation(fields: [flightOfferId], references: [id], onDelete: SetNull)
+  createdAt               DateTime      @default(now())
 
   @@index([userId])
   @@index([listingId])

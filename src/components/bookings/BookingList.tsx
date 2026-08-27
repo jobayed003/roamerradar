@@ -103,6 +103,20 @@ function BookingCard({ booking }: { booking: BookingItem }) {
           </span>
         </div>
 
+        {booking.duffelFulfillmentStatus === 'test_hold' && (
+          <p className='text-sm text-amber-500'>
+            Duffel sandbox test hold
+            {booking.duffelBookingReference ? ` · ref ${booking.duffelBookingReference}` : ''}
+            {' '}
+            (not a real airline ticket)
+          </p>
+        )}
+        {booking.duffelFulfillmentStatus === 'blocked_live' && (
+          <p className='text-sm text-gray_text'>
+            Airline ticket not created — live Duffel bookings are disabled.
+          </p>
+        )}
+
         <div className='flex flex-wrap gap-4 text-sm text-gray_text'>
           {booking.checkIn ? (
             <span className='flex items-center gap-1'>
