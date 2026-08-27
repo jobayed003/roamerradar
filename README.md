@@ -194,6 +194,8 @@ Copy the webhook signing secret into `STRIPE_WEBHOOK_SECRET` in `.env.local`.
 
 Planned improvements (not yet implemented):
 
+- Host calendar / blocked dates for stays and cars
+- SMS + browser push notifications and trip reminders
 - (optional) Instant-pay Duffel sandbox orders instead of holds; seats/baggage extras
 
 ### Duffel flight test bookings

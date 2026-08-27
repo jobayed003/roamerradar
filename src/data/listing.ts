@@ -1,4 +1,5 @@
 import { getFlightOfferById } from '@/data/flights';
+import { applyListingBrowseOptions } from '@/lib/listing-filters';
 import { db } from '@/lib/db';
 import { parseListingMetadata } from '@/schemas';
 import type { UserSummary } from '@/types/review';
@@ -50,18 +51,43 @@ const nearbyDestinationFilter = {
   placesCount: { not: null },
 } as const;
 
-export async function getListingsByType(type: ListingType, location?: string) {
+export type ListingBrowseOptions = {
+  location?: string;
+  /** Soft location match (contains). Used for cars/experiences. */
+  locationQuery?: string;
+  filter?: string;
+  sort?: string;
+  /** When true, use exact location equality (legacy stays behavior). */
+  exactLocation?: boolean;
+};
+
+export async function getListingsByType(type: ListingType, locationOrOptions?: string | ListingBrowseOptions) {
+  const options: ListingBrowseOptions =
+    typeof locationOrOptions === 'string' || locationOrOptions === undefined
+      ? { location: locationOrOptions, exactLocation: type === ListingType.STAY }
+      : locationOrOptions;
+
   try {
+    const location = options.location?.trim();
     const listings = await db.listing.findMany({
       where: {
         type,
         ...(type === ListingType.STAY ? stayListingFilter : {}),
-        ...(location ? { location } : {}),
+        ...(location && options.exactLocation
+          ? { location }
+          : location
+            ? { location: { contains: location, mode: 'insensitive' } }
+            : {}),
       },
       orderBy: { createdAt: 'desc' },
     });
 
-    return listings.map(toListingItem);
+    const items = listings.map(toListingItem);
+    return applyListingBrowseOptions(items, {
+      filter: options.filter,
+      sort: options.sort,
+      locationQuery: options.exactLocation ? undefined : options.locationQuery ?? options.location,
+    });
   } catch (error) {
     console.error('[getListingsByType]', error);
     return [];

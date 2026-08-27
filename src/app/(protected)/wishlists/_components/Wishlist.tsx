@@ -58,7 +58,13 @@ const Wishlist = ({ listings }: WishlistProps) => {
           </p>
         </div>
 
-        <CategoryFilter filters={wishlistsFilter} selectItems={['Recently saved']} />
+        <CategoryFilter
+          filters={wishlistsFilter}
+          selectItems={['Recently saved']}
+          filterParam='q'
+          sortParam={null}
+          preserveQuery={false}
+        />
 
         {listings.length === 0 ? (
           <div className='rounded-3xl border dark:border-gray_border p-8 sm:p-12 text-center mt-8'>

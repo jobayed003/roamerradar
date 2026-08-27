@@ -5,7 +5,7 @@ import Guests from '@/components/Guests';
 import SearchIcon from '@/components/Search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cn, dateFormat } from '@/lib/utils';
+import { createSearchParams, cn, dateFormat } from '@/lib/utils';
 import { useBookingDate, useThingsStore } from '@/stores/useData';
 import { CalendarRange, Navigation } from 'lucide-react';
 
@@ -52,7 +52,7 @@ const Things = () => {
         <Guests />
       </div>
 
-      <SearchIcon link='/things-category' />
+      <SearchIcon link={createSearchParams({ baseUrl: '/things-category', params: location || 'South Island' })} />
     </div>
   );
 };

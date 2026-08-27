@@ -57,7 +57,7 @@ const ProifleOptions = ({ ref }: ProfileProps) => {
         <LinkProvider key={item.href} {...item} />
       ))}
       <Separator />
-      <LinkProvider href='/list-property' icon={<Building2 />} label='List your property' />
+      <LinkProvider href='/list-property' icon={<Building2 />} label='List a stay, car, or experience' />
 
       <div className='flex justify-center gap-x-2 mt-4'>
         <Link href='/account-settings'>

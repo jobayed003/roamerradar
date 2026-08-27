@@ -9,6 +9,7 @@ import { useToast } from '@/components/ui/use-toast';
 import type { PostWithDetails } from '@/data/post';
 import type { ProfileReviewItem } from '@/data/review';
 import { resizeImageFile } from '@/lib/image-utils';
+import { getListingProductPath } from '@/lib/listing-filters';
 import { cn, getFirstLetters } from '@/lib/utils';
 import type { ListingItem } from '@/types/listing';
 import { formatDistanceToNow } from 'date-fns';
@@ -259,7 +260,7 @@ const PostCard = ({
 
       {post.listing && (
         <Link
-          href={`/stays-product/${post.listing.id}`}
+          href={getListingProductPath(post.listing.type, post.listing.id)}
           className='flex gap-3 rounded-2xl border border-gray_border overflow-hidden hover:bg-muted/40 transition'
         >
           <div className='relative h-24 w-24 shrink-0'>
@@ -383,7 +384,7 @@ const ListingsPanel = ({ listings, isOwner }: { listings: ListingItem[]; isOwner
           key={listing.id}
           className='rounded-3xl border border-gray_border overflow-hidden hover:shadow-md transition'
         >
-          <Link href={`/stays-product/${listing.id}`} className='block'>
+          <Link href={getListingProductPath(listing.type, listing.id)} className='block'>
             <div className='relative h-40 w-full'>
               <Image
                 src={listing.image}

@@ -7,18 +7,19 @@ import HeroSection from '@/components/HeroSection';
 import { StayProducts } from '@/components/products/StayProducts';
 import { CarouselItem } from '@/components/ui/carousel';
 import { Input } from '@/components/ui/input';
-import { createSearchParams, countryFromMap } from '@/lib/utils';
+import { countryFromMap } from '@/lib/utils';
 import { ListingItem } from '@/types/listing';
 import { useBookingDate, useStaysStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
 import { ArrowRight, Home } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import qs from 'query-string';
 import { useEffect } from 'react';
 
-const filters = ['Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
-const selectItems = ['On Sales', 'On Delivery', 'In Exchange'];
+const filters = ['All', 'Entire homes', 'Cancellation flexibility', 'Closest beach', 'For long stays'];
+const selectItems = ['Newest', 'Price: low to high', 'Price: high to low', 'On sale'];
 
 const StayCategory = ({
   listings,
@@ -32,13 +33,18 @@ const StayCategory = ({
   placeCountryMap: Record<string, string>;
 }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { location } = useStaysStore();
   const { date } = useBookingDate();
   const totalTravelers = useTravelers((state) => state.adults + state.children + state.toddlers);
 
   useEffect(() => {
-    const url = createSearchParams({ baseUrl: '/stays-category', params: location });
-    router.push(url);
+    const query: Record<string, string> = {};
+    searchParams.forEach((value, key) => {
+      query[key] = value;
+    });
+    query.q = location;
+    router.push(qs.stringifyUrl({ url: '/stays-category', query }, { skipEmptyString: true }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 

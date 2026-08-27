@@ -1,7 +1,8 @@
+import { getListingProductPath } from '@/lib/listing-filters';
+import { cn } from '@/lib/utils';
+import type { ConversationListing } from '@/types/conversation';
 import Image from 'next/image';
 import Link from 'next/link';
-import type { ConversationListing } from '@/types/conversation';
-import { cn } from '@/lib/utils';
 
 type ListingPreviewCardProps = {
   listing: ConversationListing;
@@ -10,14 +11,7 @@ type ListingPreviewCardProps = {
 };
 
 const ListingPreviewCard = ({ listing, className, compact = false }: ListingPreviewCardProps) => {
-  const productPath =
-    listing.type === 'STAY'
-      ? `/stays-product/${listing.id}`
-      : listing.type === 'CAR'
-        ? `/cars-product/${listing.id}`
-        : listing.type === 'FLIGHT'
-          ? `/flights-product/${listing.id}`
-          : `/things-product/${listing.id}`;
+  const productPath = getListingProductPath(listing.type, listing.id);
 
   const displayPrice = listing.offerPrice ?? listing.price;
 

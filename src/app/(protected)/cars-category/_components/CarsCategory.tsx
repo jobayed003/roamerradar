@@ -7,16 +7,17 @@ import HeroSection from '@/components/HeroSection';
 import NearbyLocations from '@/components/NearbyLocations';
 import { CarProducts } from '@/components/products/CarProducts';
 import { CarouselItem } from '@/components/ui/carousel';
-import { createSearchParams, countryFromMap } from '@/lib/utils';
+import { countryFromMap } from '@/lib/utils';
 import { ListingItem } from '@/types/listing';
 import { useBookingDate, useCarStore, useTravelers } from '@/stores/useData';
 import { format } from 'date-fns';
 import { CarFrontIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import qs from 'query-string';
 import { useEffect, useMemo, useRef } from 'react';
 
-const filters = ['Automatic', 'Manual', 'SUV', 'Economy'];
+const filters = ['All', 'Automatic', 'Manual', 'SUV', 'Economy'];
 const selectItems = ['Price: low to high', 'Price: high to low'];
 
 const CarsCategory = ({
@@ -44,8 +45,13 @@ const CarsCategory = ({
 
   useEffect(() => {
     if (!hydrated.current || !pickupLocation.trim()) return;
-    const url = createSearchParams({ baseUrl: '/cars-category', params: pickupLocation });
-    router.replace(url);
+    const params = new URLSearchParams(window.location.search);
+    const query: Record<string, string> = {};
+    params.forEach((value, key) => {
+      query[key] = value;
+    });
+    query.q = pickupLocation;
+    router.replace(qs.stringifyUrl({ url: '/cars-category', query }, { skipEmptyString: true }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickupLocation]);
 
@@ -54,17 +60,7 @@ const CarsCategory = ({
   const travelDates =
     format(date?.from ?? Date.now(), 'MMM d') + ' - ' + format(date?.to ?? Date.now(), 'MMM d');
 
-  const filteredListings = useMemo(() => {
-    const query = displayLocation.toLowerCase();
-    if (!query) return listings;
-
-    const matched = listings.filter((listing) => {
-      const haystack = `${listing.location ?? ''} ${listing.title}`.toLowerCase();
-      return haystack.includes(query) || query.split(/[\s,]+/).some((part) => part.length > 2 && haystack.includes(part));
-    });
-
-    return matched.length > 0 ? matched : listings;
-  }, [listings, displayLocation]);
+  const filteredListings = listings;
 
   const pickupLocations = useMemo(
     () =>

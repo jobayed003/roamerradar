@@ -29,7 +29,7 @@ import { IoCloseCircle } from 'react-icons/io5';
 import { useMediaQuery } from 'usehooks-ts';
 import { TripOptions } from '../../../../../types';
 
-const selectItems = ['Recommended', 'Popular', 'In exchange'];
+const selectItems = ['Recommended', 'Cheapest', 'Popular'];
 const filters = ['Cheapest', 'Best', 'With transfers'];
 
 const FlightsCategory = ({
@@ -51,6 +51,8 @@ const FlightsCategory = ({
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [stopFilters, setStopFilters] = useState<StopFilter[]>([]);
+  const [chipFilter, setChipFilter] = useState(filters[0]);
+  const [chipSort, setChipSort] = useState(selectItems[0]);
 
   const priceBounds = useMemo(() => getFlightPriceBounds(listings), [listings]);
   const lowestByStop = useMemo(() => getLowestPriceByStop(listings), [listings]);
@@ -82,16 +84,28 @@ const FlightsCategory = ({
   const landingStart = addMinutes(new Date(landingNextDay).setHours(0, 0, 0, 0), landingMinutesToAddStart);
   const landingEnd = addMinutes(new Date(landingNextDay).setHours(0, 0, 0, 0), landingMinutesToAddEnd);
 
-  const filteredListings = useMemo(
-    () =>
-      filterFlightListings(listings, {
-        priceRange,
-        stopFilters,
-        flyingFrom,
-        flyingTo,
-      }),
-    [listings, priceRange, stopFilters, flyingFrom, flyingTo]
-  );
+  const filteredListings = useMemo(() => {
+    const nextStopFilters =
+      chipFilter === 'With transfers'
+        ? (['oneStop', 'twoPlusStops'] as StopFilter[])
+        : stopFilters;
+
+    const base = filterFlightListings(listings, {
+      priceRange,
+      stopFilters: nextStopFilters,
+      flyingFrom,
+      flyingTo,
+    });
+
+    const sorted = [...base];
+    if (chipFilter === 'Cheapest' || chipSort === 'Cheapest') {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (chipFilter === 'Best' || chipSort === 'Popular') {
+      sorted.sort((a, b) => b.rating - a.rating || a.price - b.price);
+    }
+
+    return sorted;
+  }, [listings, priceRange, stopFilters, flyingFrom, flyingTo, chipFilter, chipSort]);
 
   const originLabel = flyingFrom.trim() || 'Departure';
   const destinationLabel = flyingTo.trim() || 'Arrival';
@@ -210,7 +224,14 @@ const FlightsCategory = ({
           )}
         </div>
 
-        <CategoryFilter filters={filters} selectItems={selectItems} className='md:flex-row-reverse flex-col-reverse' />
+        <CategoryFilter
+          filters={filters}
+          selectItems={selectItems}
+          className='md:flex-row-reverse flex-col-reverse'
+          clientOnly
+          onFilterChange={setChipFilter}
+          onSortChange={setChipSort}
+        />
 
         <Button
           className='md:hidden w-full hover:bg-[#353945] py-6 rounded-full dark:shadow-[inset_0_0_0_2px_#353945] shadow-[inset_0_0_0_2px_#e6e8ec] mt-4'

@@ -24,7 +24,9 @@ const ListPropertyPage = async ({ searchParams }: ListPropertyPageProps) => {
 
   if (
     !listing ||
-    listing.type !== ListingType.STAY ||
+    (listing.type !== ListingType.STAY &&
+      listing.type !== ListingType.CAR &&
+      listing.type !== ListingType.EXPERIENCE) ||
     !listing.owner ||
     listing.owner.id !== authResult.user.id
   ) {
