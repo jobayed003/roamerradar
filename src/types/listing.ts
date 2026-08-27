@@ -23,6 +23,15 @@ export type ListingMetadata = {
   livingRooms?: number;
   kitchens?: number;
   gallery?: string[];
+  stayKind?: 'entire' | 'private' | 'shared';
+  flexibleCancellation?: boolean;
+  beachNearby?: boolean;
+  longStays?: boolean;
+  transmission?: 'automatic' | 'manual';
+  vehicleClass?: 'suv' | 'economy' | 'sedan' | 'van';
+  categories?: string[];
+  durationHours?: number;
+  capacity?: number;
 };
 
 export type ListingItem = {

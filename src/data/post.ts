@@ -20,6 +20,7 @@ export type PostWithDetails = {
     price: number;
     offerPrice: number | null;
     location: string | null;
+    type: import('@prisma/client').ListingType;
   } | null;
   comments: {
     id: string;
@@ -59,6 +60,7 @@ export async function getPostsByAuthorId(authorId: string): Promise<PostWithDeta
             price: true,
             offerPrice: true,
             location: true,
+            type: true,
           },
         },
         comments: {

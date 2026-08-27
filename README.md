@@ -194,4 +194,5 @@ Copy the webhook signing secret into `STRIPE_WEBHOOK_SECRET` in `.env.local`.
 
 Planned improvements (not yet implemented):
 
+- Host calendar / blocked dates for stays and cars
 - Duffel order creation after successful Stripe payment (optional; demo fares are enough for now)

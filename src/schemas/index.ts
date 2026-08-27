@@ -63,6 +63,7 @@ export const SendMessageSchema = z.object({
 });
 
 export const CreateListingSchema = z.object({
+  type: z.enum(['STAY', 'CAR', 'EXPERIENCE']).default('STAY'),
   title: z.string().trim().min(3, { message: 'Title is required' }).max(120),
   price: z.coerce.number().positive({ message: 'Price must be greater than 0' }),
   discountPercent: z.coerce.number().min(0).max(100).optional().default(0),
@@ -71,6 +72,11 @@ export const CreateListingSchema = z.object({
   bedrooms: z.coerce.number().int().min(1).max(20).optional().default(1),
   livingRooms: z.coerce.number().int().min(0).max(20).optional().default(1),
   kitchens: z.coerce.number().int().min(0).max(20).optional().default(1),
+  transmission: z.enum(['automatic', 'manual']).optional().default('automatic'),
+  vehicleClass: z.enum(['suv', 'economy', 'sedan', 'van']).optional().default('economy'),
+  categories: z.array(z.string().trim().min(1)).max(4).optional().default([]),
+  durationHours: z.coerce.number().min(1).max(72).optional().default(12),
+  capacity: z.coerce.number().int().min(1).max(50).optional().default(10),
   amenities: z.array(z.string().trim().min(1)).max(4).optional().default([]),
   images: z
     .array(z.string().startsWith('data:image/'))
@@ -159,6 +165,15 @@ export const ListingMetadataSchema = z
     livingRooms: z.number().int().optional(),
     kitchens: z.number().int().optional(),
     gallery: z.array(z.string()).optional(),
+    stayKind: z.enum(['entire', 'private', 'shared']).optional(),
+    flexibleCancellation: z.boolean().optional(),
+    beachNearby: z.boolean().optional(),
+    longStays: z.boolean().optional(),
+    transmission: z.enum(['automatic', 'manual']).optional(),
+    vehicleClass: z.enum(['suv', 'economy', 'sedan', 'van']).optional(),
+    categories: z.array(z.string()).optional(),
+    durationHours: z.number().optional(),
+    capacity: z.number().int().optional(),
   })
   .passthrough();
 

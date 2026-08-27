@@ -16,11 +16,16 @@ import { useToast } from '@/components/ui/use-toast';
 import { resizeImageFile } from '@/lib/image-utils';
 import { cn } from '@/lib/utils';
 import type { ListingItem } from '@/types/listing';
+import { ListingType } from '@prisma/client';
 import { ArrowRight, ChevronLeft, FileUp, X } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState, useTransition } from 'react';
 import { PreviewCard } from './PreviewCard';
+
+type HostListingType = 'STAY' | 'CAR' | 'EXPERIENCE';
+
+const EXPERIENCE_CATEGORY_OPTIONS = ['Sightseeing', 'Transportation', 'Art and Culture', 'City tour'];
 
 function discountFromListing(listing: ListingItem) {
   if (!listing.offerPrice || listing.price <= 0 || listing.offerPrice >= listing.price) {
@@ -45,6 +50,13 @@ const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
   const isEditing = Boolean(initialListing);
 
   const [title, setTitle] = useState(initialListing?.title ?? '');
+  const [listingType, setListingType] = useState<HostListingType>(
+    initialListing?.type === ListingType.CAR
+      ? 'CAR'
+      : initialListing?.type === ListingType.EXPERIENCE
+        ? 'EXPERIENCE'
+        : 'STAY'
+  );
   const [price, setPrice] = useState(initialListing ? String(initialListing.price) : '');
   const [discountPercent, setDiscountPercent] = useState(
     initialListing ? discountFromListing(initialListing) : ''
@@ -54,12 +66,22 @@ const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
   const [bedrooms, setBedrooms] = useState(String(initialListing?.metadata?.bedrooms ?? 1));
   const [livingRooms, setLivingRooms] = useState(String(initialListing?.metadata?.livingRooms ?? 1));
   const [kitchens, setKitchens] = useState(String(initialListing?.metadata?.kitchens ?? 1));
+  const [transmission, setTransmission] = useState(initialListing?.metadata?.transmission ?? 'automatic');
+  const [vehicleClass, setVehicleClass] = useState(initialListing?.metadata?.vehicleClass ?? 'economy');
+  const [experienceCategory, setExperienceCategory] = useState(
+    initialListing?.metadata?.categories?.[0] ?? 'Sightseeing'
+  );
+  const [durationHours, setDurationHours] = useState(String(initialListing?.metadata?.durationHours ?? 12));
+  const [capacity, setCapacity] = useState(String(initialListing?.metadata?.capacity ?? 10));
   const [amenities, setAmenities] = useState(
     initialListing ? padAmenities(initialListing.amenities) : ['', '', '', '']
   );
   const [images, setImages] = useState<string[]>(initialListing ? initialImages(initialListing) : []);
   const [shareOnProfile, setShareOnProfile] = useState(true);
   const [uploading, setUploading] = useState(false);
+
+  const priceUnit =
+    listingType === 'STAY' ? 'per Night' : listingType === 'CAR' ? 'per Day' : 'per Guest';
 
   const numericPrice = Number(price) || 0;
   const numericDiscount = Math.min(100, Math.max(0, Number(discountPercent) || 0));
@@ -93,6 +115,7 @@ const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
   const onSubmit = () => {
     startTransition(async () => {
       const payload = {
+        type: listingType,
         title,
         price: numericPrice,
         discountPercent: numericDiscount,
@@ -101,6 +124,11 @@ const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
         bedrooms: Number(bedrooms),
         livingRooms: Number(livingRooms),
         kitchens: Number(kitchens),
+        transmission,
+        vehicleClass,
+        categories: listingType === 'EXPERIENCE' ? [experienceCategory] : [],
+        durationHours: Number(durationHours),
+        capacity: Number(capacity),
         amenities: previewAmenities,
         images,
       };
@@ -124,7 +152,11 @@ const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
       });
 
       if ('listingId' in result && result.listingId) {
-        router.push(`/stays-product/${result.listingId}`);
+        router.push(
+          'productPath' in result && result.productPath
+            ? result.productPath
+            : `/stays-product/${result.listingId}`
+        );
         router.refresh();
       }
     });
@@ -157,7 +189,7 @@ const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
         <div className='flex'>
           <div className='lg:w-[calc(100%-400px)] lg:pr-32 w-full'>
             <h1 className='text-5xl font-bold mb-10'>
-              {isEditing ? 'Edit your property' : 'List your property'}
+              {isEditing ? 'Edit your listing' : 'List your property'}
             </h1>
 
             <div className='flex flex-col gap-y-4 py-4'>
@@ -201,8 +233,19 @@ const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
                 </div>
               )}
 
-              <div className='font-poppins font-medium'>Property details</div>
+              <div className='font-poppins font-medium'>Listing details</div>
               <div className='flex flex-col gap-y-4'>
+                {!isEditing && (
+                  <>
+                    <div className='text-xs font-bold text-gray_light uppercase'>Listing type</div>
+                    <FieldSelect
+                      value={listingType}
+                      onChange={(value) => setListingType(value as HostListingType)}
+                      selectItems={['STAY', 'CAR', 'EXPERIENCE']}
+                    />
+                  </>
+                )}
+
                 <div className='text-xs font-bold text-gray_light uppercase'>Title</div>
                 <CustomInput
                   placeholder='e.g. "Spectacular views of Queenstown'
@@ -225,7 +268,7 @@ const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
                       <Separator orientation='vertical' className='h-9 bg-border' />
                       <span className='text-sm font-bold px-2'>$ USD</span>
                       <Separator orientation='vertical' className='h-9 bg-border' />
-                      <span className='text-sm font-bold px-2'>per Night</span>
+                      <span className='text-sm font-bold px-2'>{priceUnit}</span>
                     </div>
                   </div>
                   <div className='relative h-10 basis-1/3'>
@@ -252,20 +295,74 @@ const ListProperty = ({ initialListing }: { initialListing?: ListingItem }) => {
                   onChange={(event) => setLocation(event.target.value)}
                 />
 
-                <div className='flex gap-x-4'>
-                  <div className='w-full'>
-                    <div className='text-xs font-bold text-gray_light uppercase my-2'>Bed Room</div>
-                    <FieldSelect value={bedrooms} onChange={setBedrooms} selectItems={['1', '2', '3', '4']} />
+                {listingType === 'STAY' && (
+                  <div className='flex gap-x-4'>
+                    <div className='w-full'>
+                      <div className='text-xs font-bold text-gray_light uppercase my-2'>Bed Room</div>
+                      <FieldSelect value={bedrooms} onChange={setBedrooms} selectItems={['1', '2', '3', '4']} />
+                    </div>
+                    <div className='w-full'>
+                      <div className='text-xs font-bold text-gray_light uppercase my-2'>Living Room</div>
+                      <FieldSelect value={livingRooms} onChange={setLivingRooms} selectItems={['1', '2', '3', '4']} />
+                    </div>
+                    <div className='w-full'>
+                      <div className='text-xs font-bold text-gray_light uppercase my-2'>Kitchen</div>
+                      <FieldSelect value={kitchens} onChange={setKitchens} selectItems={['1', '2', '3', '4']} />
+                    </div>
                   </div>
-                  <div className='w-full'>
-                    <div className='text-xs font-bold text-gray_light uppercase my-2'>Living Room</div>
-                    <FieldSelect value={livingRooms} onChange={setLivingRooms} selectItems={['1', '2', '3', '4']} />
+                )}
+
+                {listingType === 'CAR' && (
+                  <div className='flex gap-x-4'>
+                    <div className='w-full'>
+                      <div className='text-xs font-bold text-gray_light uppercase my-2'>Transmission</div>
+                      <FieldSelect
+                        value={transmission}
+                        onChange={(value) => setTransmission(value as 'automatic' | 'manual')}
+                        selectItems={['automatic', 'manual']}
+                      />
+                    </div>
+                    <div className='w-full'>
+                      <div className='text-xs font-bold text-gray_light uppercase my-2'>Vehicle class</div>
+                      <FieldSelect
+                        value={vehicleClass}
+                        onChange={(value) =>
+                          setVehicleClass(value as 'suv' | 'economy' | 'sedan' | 'van')
+                        }
+                        selectItems={['economy', 'suv', 'sedan', 'van']}
+                      />
+                    </div>
                   </div>
-                  <div className='w-full'>
-                    <div className='text-xs font-bold text-gray_light uppercase my-2'>Kitchen</div>
-                    <FieldSelect value={kitchens} onChange={setKitchens} selectItems={['1', '2', '3', '4']} />
+                )}
+
+                {listingType === 'EXPERIENCE' && (
+                  <div className='flex flex-col md:flex-row gap-4'>
+                    <div className='w-full'>
+                      <div className='text-xs font-bold text-gray_light uppercase my-2'>Category</div>
+                      <FieldSelect
+                        value={experienceCategory}
+                        onChange={setExperienceCategory}
+                        selectItems={[...EXPERIENCE_CATEGORY_OPTIONS]}
+                      />
+                    </div>
+                    <div className='w-full'>
+                      <div className='text-xs font-bold text-gray_light uppercase my-2'>Duration (hours)</div>
+                      <FieldSelect
+                        value={durationHours}
+                        onChange={setDurationHours}
+                        selectItems={['2', '4', '6', '8', '12', '24']}
+                      />
+                    </div>
+                    <div className='w-full'>
+                      <div className='text-xs font-bold text-gray_light uppercase my-2'>Capacity</div>
+                      <FieldSelect
+                        value={capacity}
+                        onChange={setCapacity}
+                        selectItems={['2', '4', '6', '8', '10', '20']}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div>
                   <div className='text-xs font-bold text-gray_light uppercase my-2'>Description</div>
