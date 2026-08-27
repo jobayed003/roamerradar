@@ -55,3 +55,6 @@ export async function findConflictingBooking(input: {
 
 export const AVAILABILITY_ERROR =
   'Those dates are no longer available. Choose different dates and try again.' as const;
+
+export const BLOCKED_DATE_ERROR =
+  'Those dates are blocked by the host. Choose different dates and try again.' as const;

@@ -400,13 +400,18 @@ const ListingsPanel = ({ listings, isOwner }: { listings: ListingItem[]; isOwner
             </div>
           </Link>
           {isOwner && (
-            <div className='flex gap-2 px-4 pb-4'>
+            <div className='flex gap-2 px-4 pb-4 flex-wrap'>
               <Button asChild variant='outline' size='sm' className='rounded-full flex-1'>
                 <Link href={`/list-property?id=${listing.id}`}>
                   <Pencil className='h-3.5 w-3.5 mr-1.5' />
                   Edit
                 </Link>
               </Button>
+              {(listing.type === 'STAY' || listing.type === 'CAR') && (
+                <Button asChild variant='outline' size='sm' className='rounded-full flex-1'>
+                  <Link href={`/list-property/calendar?id=${listing.id}`}>Calendar</Link>
+                </Button>
+              )}
               <Button
                 type='button'
                 variant='outline'

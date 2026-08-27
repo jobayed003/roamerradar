@@ -154,3 +154,32 @@ export async function sendBookingConfirmedEmail(input: {
 
   return { sent: true as const };
 }
+
+export async function sendTripReminderEmail(input: {
+  to: string;
+  title: string;
+  checkInLabel: string;
+  bookingId: string;
+}) {
+  const resend = getResend();
+  if (!resend) return { skipped: true as const };
+
+  const bookingsLink = `${domain}/my-bookings`;
+
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: input.to,
+    subject: `Trip reminder: ${input.title}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto;">
+        <h2>Your trip is coming up</h2>
+        <p><strong>${input.title}</strong></p>
+        <p>Check-in / departure: ${input.checkInLabel}</p>
+        <p>Booking ID: ${input.bookingId}</p>
+        <p><a href="${bookingsLink}">View my bookings</a></p>
+      </div>
+    `,
+  });
+
+  return { sent: true as const };
+}

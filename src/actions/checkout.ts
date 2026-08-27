@@ -21,8 +21,8 @@ export async function createCheckoutPayment(listingId: string, options: unknown 
   }
 
   try {
-    const { itemId, guests, checkIn, checkOut } = parsed.data;
-    return await startCheckout(authResult.user.id, itemId, { guests, checkIn, checkOut });
+    const { itemId, guests, checkIn, checkOut, extras } = parsed.data;
+    return await startCheckout(authResult.user.id, itemId, { guests, checkIn, checkOut, extras });
   } catch {
     return { error: 'Unable to start checkout. Check your Stripe configuration.' };
   }

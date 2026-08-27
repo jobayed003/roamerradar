@@ -60,4 +60,13 @@ describe('buildCheckoutUrl', () => {
     expect(href).toContain('checkOut=2026-08-03');
     expect(href).toContain('guests=2');
   });
+
+  it('includes flight extras when provided', () => {
+    const href = buildCheckoutUrl({
+      itemId: 'cmrtest000000000000000001',
+      extras: ['cabin_bag', 'seat'],
+    });
+
+    expect(href).toContain('extras=cabin_bag%2Cseat');
+  });
 });

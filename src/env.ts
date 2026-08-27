@@ -26,6 +26,13 @@ const serverEnvSchema = z.object({
   STRIPE_WEBHOOK_SECRET: optionalString,
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: optionalString,
   NEXT_PUBLIC_MAPBOXGL_ACCESS_TOKEN: optionalString,
+  TWILIO_ACCOUNT_SID: optionalString,
+  TWILIO_AUTH_TOKEN: optionalString,
+  TWILIO_FROM_NUMBER: optionalString,
+  WEB_PUSH_PUBLIC_KEY: optionalString,
+  WEB_PUSH_PRIVATE_KEY: optionalString,
+  WEB_PUSH_SUBJECT: optionalString,
+  CRON_SECRET: optionalString,
 });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
@@ -98,4 +105,12 @@ export function isGoogleConfigured() {
 
 export function isGithubConfigured() {
   return Boolean(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET);
+}
+
+export function isTwilioConfigured() {
+  return Boolean(env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_FROM_NUMBER);
+}
+
+export function isWebPushConfigured() {
+  return Boolean(env.WEB_PUSH_PUBLIC_KEY && env.WEB_PUSH_PRIVATE_KEY);
 }

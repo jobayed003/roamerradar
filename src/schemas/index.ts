@@ -129,6 +129,7 @@ export const StartCheckoutSchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid check-out date.' })
     .optional(),
+  extras: z.array(z.enum(['cabin_bag', 'checked_bag', 'seat'])).max(3).optional().default([]),
 });
 
 export const CoverImageSchema = z

@@ -77,17 +77,20 @@ export function buildCheckoutUrl({
   checkIn,
   checkOut,
   guests,
+  extras,
 }: {
   itemId: string;
   checkIn?: Date;
   checkOut?: Date;
   guests?: number;
+  extras?: string[];
 }) {
   const query: Record<string, string | number> = {};
 
   if (checkIn) query.checkIn = toDateParam(checkIn);
   if (checkOut) query.checkOut = toDateParam(checkOut);
   if (guests && guests > 0) query.guests = guests;
+  if (extras?.length) query.extras = extras.join(',');
 
   return qs.stringifyUrl({ url: `/checkout/${itemId}`, query }, { skipNull: true, skipEmptyString: true });
 }

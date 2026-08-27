@@ -1,6 +1,7 @@
 'use client';
 
 import { updateNotificationPreferences } from '@/actions/notificationPreferences';
+import { EnableBrowserPushButton } from '@/components/notifications/EnableBrowserPushButton';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/components/ui/use-toast';
@@ -70,6 +71,15 @@ const NotificationForm = ({ preferences }: NotificationFormProps) => {
           <Separator className='dark:bg-gray_border' />
         </div>
       ))}
+
+      <div className='mt-10 rounded-2xl border dark:border-gray_border p-5 space-y-2'>
+        <p className='font-semibold'>Delivery notes</p>
+        <p className='text-sm text-gray_text'>
+          Text messages require a phone number on your profile and Twilio env keys on the server.
+          Browser push requires enabling it on this device below (and VAPID keys on the server).
+        </p>
+        <EnableBrowserPushButton />
+      </div>
     </div>
   );
 };

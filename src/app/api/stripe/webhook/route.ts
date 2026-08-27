@@ -1,8 +1,5 @@
 import { env } from '@/env';
-import {
-  findConflictingBooking,
-  listingNeedsDateAvailability,
-} from '@/lib/booking-availability';
+import { assertListingDatesAvailable } from '@/lib/listing-availability';
 import { db } from '@/lib/db';
 import { notifyGuestOfBookingConfirmation } from '@/lib/notification-delivery';
 import { getStripe } from '@/lib/stripe';
@@ -41,34 +38,29 @@ export async function POST(req: Request) {
         include: { listing: { select: { type: true } } },
       });
 
-      if (booking) {
-        let markFailed = false;
+        if (booking) {
+          let markFailed = false;
 
-        if (
-          booking.listingId &&
-          booking.checkIn &&
-          booking.checkOut &&
-          booking.listing &&
-          listingNeedsDateAvailability(booking.listing.type as ListingType)
-        ) {
-          const conflict = await findConflictingBooking({
-            listingId: booking.listingId,
-            checkIn: booking.checkIn,
-            checkOut: booking.checkOut,
-            excludeBookingId: booking.id,
+          if (booking.listingId && booking.checkIn && booking.checkOut && booking.listing) {
+            const availability = await assertListingDatesAvailable({
+              listingId: booking.listingId,
+              listingType: booking.listing.type as ListingType,
+              checkIn: booking.checkIn,
+              checkOut: booking.checkOut,
+              excludeBookingId: booking.id,
+            });
+            markFailed = !availability.ok;
+          }
+
+          await db.booking.update({
+            where: { id: booking.id },
+            data: { status: markFailed ? BookingStatus.FAILED : BookingStatus.PAID },
           });
-          markFailed = Boolean(conflict);
-        }
 
-        await db.booking.update({
-          where: { id: booking.id },
-          data: { status: markFailed ? BookingStatus.FAILED : BookingStatus.PAID },
-        });
-
-        if (!markFailed) {
-          void notifyGuestOfBookingConfirmation(booking.id);
+          if (!markFailed) {
+            void notifyGuestOfBookingConfirmation(booking.id);
+          }
         }
-      }
     }
   }
 

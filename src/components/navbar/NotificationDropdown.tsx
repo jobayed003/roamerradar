@@ -20,7 +20,7 @@ import { useOnClickOutside } from 'usehooks-ts';
 
 type ClientNotification = {
   id: string;
-  type: 'MESSAGE' | 'BOOKING';
+  type: 'MESSAGE' | 'BOOKING' | 'REMINDER';
   title: string;
   body: string;
   href: string | null;

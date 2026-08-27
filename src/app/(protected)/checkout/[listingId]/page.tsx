@@ -2,6 +2,7 @@ import { getFlightOfferById } from '@/data/flights';
 import { getListingById } from '@/data/listing';
 import { parseBookingDate } from '@/lib/booking-pricing';
 import { startCheckout } from '@/lib/checkout';
+import { parseFlightExtrasParam } from '@/lib/flight-extras';
 import { isStripeConfigured } from '@/lib/stripe';
 import { requireAuth } from '@/server/auth/require-auth';
 import Link from 'next/link';
@@ -14,6 +15,7 @@ type CheckoutPageProps = {
     checkIn?: string;
     checkOut?: string;
     guests?: string;
+    extras?: string;
   };
 };
 
@@ -72,12 +74,14 @@ const CheckoutPage = async ({ params, searchParams }: CheckoutPageProps) => {
   const guests = Math.max(1, Number.parseInt(searchParams.guests ?? '1', 10) || 1);
   const checkIn = parseBookingDate(searchParams.checkIn);
   const checkOut = parseBookingDate(searchParams.checkOut);
+  const extras = parseFlightExtrasParam(searchParams.extras);
 
   try {
     const checkout = await startCheckout(authResult.user.id, params.listingId, {
       guests,
       checkIn: checkIn?.toISOString().slice(0, 10),
       checkOut: checkOut?.toISOString().slice(0, 10),
+      extras,
     });
 
     if ('error' in checkout) {

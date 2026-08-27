@@ -5,20 +5,38 @@ import LinkButton from '@/components/LinkButton';
 import Layout from '@/components/ui/Layout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { WishlistButton } from '@/components/WishlistButton';
 import { ListingItem } from '@/types/listing';
 import { buildCheckoutUrl } from '@/lib/booking-pricing';
+import { FLIGHT_EXTRA_OPTIONS, type FlightExtraId } from '@/lib/flight-extras';
 import { useBookingDate, useTravelers } from '@/stores/useData';
 import { Check, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
-const FlightProduct = ({ listing }: { listing: ListingItem }) => {
+const FlightProduct = ({
+  listing,
+  wishlisted = false,
+}: {
+  listing: ListingItem;
+  wishlisted?: boolean;
+}) => {
   const legs = listing.metadata?.legs ?? [];
   const provider = listing.metadata?.provider ?? 'eDreams';
   const offerExpired = Boolean(listing.metadata?.offerExpired);
   const { date } = useBookingDate();
   const guests = useTravelers((state) => Math.max(1, state.adults + state.children + state.toddlers));
+  const [extras, setExtras] = useState<FlightExtraId[]>([]);
+
+  const extrasTotal = useMemo(
+    () =>
+      FLIGHT_EXTRA_OPTIONS.filter((option) => extras.includes(option.id)).reduce(
+        (sum, option) => sum + option.price,
+        0
+      ),
+    [extras]
+  );
 
   const checkoutHref = useMemo(
     () =>
@@ -27,9 +45,16 @@ const FlightProduct = ({ listing }: { listing: ListingItem }) => {
         checkIn: date?.from,
         checkOut: date?.to,
         guests,
+        extras,
       }),
-    [listing.id, date?.from, date?.to, guests]
+    [listing.id, date?.from, date?.to, guests, extras]
   );
+
+  const toggleExtra = (id: FlightExtraId) => {
+    setExtras((current) =>
+      current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
+    );
+  };
 
   return (
     <>
@@ -40,7 +65,10 @@ const FlightProduct = ({ listing }: { listing: ListingItem }) => {
           <LinkButton href='/flights-category' label='Back to flights'>
             <ChevronLeft className='h-5 w-5 mr-2' />
           </LinkButton>
-          <BreadcrumbProvider backRoute='flights-category' originRoute='flights' />
+          <div className='flex items-center gap-3'>
+            <WishlistButton listingId={listing.id} initialSaved={wishlisted} />
+            <BreadcrumbProvider backRoute='flights-category' originRoute='flights' />
+          </div>
         </div>
 
         <div className='flex flex-col lg:flex-row gap-10'>
@@ -89,13 +117,50 @@ const FlightProduct = ({ listing }: { listing: ListingItem }) => {
                 </div>
               ))}
             </div>
+
+            {!offerExpired && (
+              <div className='mt-10 rounded-3xl border dark:border-gray_border p-6 space-y-4'>
+                <h2 className='text-xl font-bold'>Optional extras</h2>
+                <p className='text-sm text-gray_text'>
+                  Demo add-ons priced in RoamerRadar (not airline ancillaries API).
+                </p>
+                {FLIGHT_EXTRA_OPTIONS.map((option) => {
+                  const selected = extras.includes(option.id);
+                  return (
+                    <button
+                      type='button'
+                      key={option.id}
+                      onClick={() => toggleExtra(option.id)}
+                      className={`w-full text-left rounded-2xl border p-4 transition ${
+                        selected
+                          ? 'border-blue bg-blue/5'
+                          : 'dark:border-gray_border hover:border-blue/50'
+                      }`}
+                    >
+                      <div className='flex items-center justify-between gap-3'>
+                        <div>
+                          <p className='font-semibold'>{option.label}</p>
+                          <p className='text-sm text-gray_text'>{option.description}</p>
+                        </div>
+                        <p className='font-bold shrink-0'>+${option.price}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <aside className='lg:w-80 w-full shrink-0'>
             <div className='sticky top-24 rounded-3xl border dark:border-gray_border p-6 sm:p-8'>
               <p className='text-gray_text text-sm'>Total price</p>
-              <p className='text-4xl font-bold mt-1'>${listing.price.toLocaleString()}</p>
-              <p className='text-xs text-gray_text mt-2'>Includes taxes and fees · per traveler</p>
+              <p className='text-4xl font-bold mt-1'>
+                ${(listing.price + extrasTotal).toLocaleString()}
+              </p>
+              <p className='text-xs text-gray_text mt-2'>
+                Fare ${listing.price.toLocaleString()}
+                {extrasTotal > 0 ? ` + extras $${extrasTotal}` : ''} · per traveler
+              </p>
 
               {offerExpired ? (
                 <>

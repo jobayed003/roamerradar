@@ -40,6 +40,7 @@ model User {
   wishlistItems            WishlistItem[]
   notifications            Notification[]            @relation("NotificationRecipient")
   triggeredNotifications   Notification[]            @relation("NotificationActor")
+  pushSubscriptions        PushSubscription[]
   accountCreated           DateTime                  @default(now())
 }
 
@@ -103,12 +104,37 @@ model Listing {
   conversations Conversation[]
   posts         Post[]
   wishlistItems WishlistItem[]
+  blockedRanges ListingBlockedRange[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
   @@index([type])
   @@index([location])
   @@index([ownerId])
+}
+
+model ListingBlockedRange {
+  id        String   @id @default(cuid())
+  listingId String
+  startDate DateTime
+  endDate   DateTime
+  note      String?
+  createdAt DateTime @default(now())
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId, startDate, endDate])
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model WishlistItem {
@@ -165,6 +191,7 @@ model NotificationPreference {
 enum NotificationType {
   MESSAGE
   BOOKING
+  REMINDER
 }
 
 model Notification {
@@ -238,6 +265,8 @@ model Booking {
   checkIn               DateTime?
   checkOut              DateTime?
   cancelledAt           DateTime?
+  reminderSentAt        DateTime?
+  extras                Json?
   user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing               Listing?      @relation(fields: [listingId], references: [id], onDelete: SetNull)
   flightOffer           FlightOffer?  @relation(fields: [flightOfferId], references: [id], onDelete: SetNull)

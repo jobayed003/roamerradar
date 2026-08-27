@@ -80,6 +80,13 @@ describe('pref gating helpers', () => {
     vi.doMock('@/lib/mail', () => ({
       sendMessageNotificationEmail: mailSend,
       sendBookingConfirmedEmail: vi.fn(),
+      sendTripReminderEmail: vi.fn(),
+    }));
+    vi.doMock('@/lib/sms', () => ({
+      sendSms: vi.fn(),
+    }));
+    vi.doMock('@/lib/web-push', () => ({
+      sendWebPushToUser: vi.fn(),
     }));
     vi.doMock('@/data/notification', () => ({
       createNotification,

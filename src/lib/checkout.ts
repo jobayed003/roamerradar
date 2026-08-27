@@ -2,14 +2,14 @@ import { getFlightOfferRecord, isFlightOfferBookable } from '@/data/flights';
 import { getListingById } from '@/data/listing';
 import {
   AVAILABILITY_ERROR,
-  findConflictingBooking,
-  listingNeedsDateAvailability,
-} from '@/lib/booking-availability';
+  assertListingDatesAvailable,
+} from '@/lib/listing-availability';
+import { calculateStayPricing, ensureStayDateRange, parseBookingDate } from '@/lib/booking-pricing';
 import {
-  calculateStayPricing,
-  ensureStayDateRange,
-  parseBookingDate,
-} from '@/lib/booking-pricing';
+  calculateFlightExtrasTotal,
+  flightExtrasPayload,
+  parseFlightExtras,
+} from '@/lib/flight-extras';
 import { db } from '@/lib/db';
 import { getOrCreateStripeCustomer } from '@/lib/stripe-customer';
 import { getStripe } from '@/lib/stripe';
@@ -21,6 +21,7 @@ export type StartCheckoutOptions = {
   guests?: number;
   checkIn?: string;
   checkOut?: string;
+  extras?: string[];
 };
 
 type CheckoutSuccess = {
@@ -147,7 +148,7 @@ export async function startCheckout(userId: string, itemId: string, options: Sta
   let nights: number | undefined;
 
   if (flightOffer) {
-    amountValue = flightOffer.price;
+    amountValue = flightOffer.price + calculateFlightExtrasTotal(parseFlightExtras(options.extras));
     checkIn = checkInDate;
     checkOut = checkOutDate;
   } else if (listing) {
@@ -185,20 +186,16 @@ export async function startCheckout(userId: string, itemId: string, options: Sta
     return { error: 'Invalid listing price.' as const };
   }
 
-  if (
-    listing &&
-    listingNeedsDateAvailability(listing.type) &&
-    checkIn &&
-    checkOut
-  ) {
-    const conflict = await findConflictingBooking({
+  if (listing && checkIn && checkOut) {
+    const availability = await assertListingDatesAvailable({
       listingId: listing.id,
+      listingType: listing.type,
       checkIn,
       checkOut,
     });
 
-    if (conflict) {
-      return { error: AVAILABILITY_ERROR };
+    if (!availability.ok) {
+      return { error: availability.error };
     }
   }
 
@@ -253,6 +250,9 @@ export async function startCheckout(userId: string, itemId: string, options: Sta
       status: BookingStatus.PENDING,
       title,
       image,
+      extras: flightOffer
+        ? flightExtrasPayload(parseFlightExtras(options.extras))
+        : undefined,
     },
   });
 
@@ -309,20 +309,21 @@ export async function finalizeCheckout(userId: string, bookingId: string) {
   if (paymentIntent.status === 'succeeded') {
     if (booking.listingId && booking.checkIn && booking.checkOut) {
       const listing = await getListingById(booking.listingId);
-      if (listing && listingNeedsDateAvailability(listing.type)) {
-        const conflict = await findConflictingBooking({
+      if (listing) {
+        const availability = await assertListingDatesAvailable({
           listingId: booking.listingId,
+          listingType: listing.type,
           checkIn: booking.checkIn,
           checkOut: booking.checkOut,
           excludeBookingId: booking.id,
         });
 
-        if (conflict) {
+        if (!availability.ok) {
           await db.booking.update({
             where: { id: booking.id },
             data: { status: BookingStatus.FAILED },
           });
-          return { error: AVAILABILITY_ERROR };
+          return { error: availability.error };
         }
       }
     }

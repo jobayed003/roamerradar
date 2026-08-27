@@ -155,6 +155,25 @@ stripe listen --forward-to localhost:3000/api/stripe/webhook
 
 Copy the webhook signing secret into `STRIPE_WEBHOOK_SECRET` in `.env.local`.
 
+### SMS, browser push, and trip reminders (optional)
+
+```bash
+# Twilio — text channel for messages / booking / reminders
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_FROM_NUMBER=
+
+# VAPID keys — browser push (npx web-push generate-vapid-keys)
+WEB_PUSH_PUBLIC_KEY=
+WEB_PUSH_PRIVATE_KEY=
+WEB_PUSH_SUBJECT=mailto:support@roamerradar.com
+
+# Protects GET /api/cron/trip-reminders (daily on Vercel when CRON_SECRET is set)
+CRON_SECRET=
+```
+
+Users opt in under Account settings → Notifications. Hosts manage blocked dates via **Calendar** on their profile listings (`/list-property/calendar?id=`).
+
 ## Scripts
 
 | Command | Description |
